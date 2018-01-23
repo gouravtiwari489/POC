@@ -47,6 +47,94 @@ db.domain.insert(
 				"dept_no": "int",
 				"proj_title": "int"
 			}
+		},
+		{
+			"d_calendar": {
+				"DATE_KEY": "int",
+				"DATE": "date",
+				"DAY_NAME": "String",
+				"YEAR": "String",
+				"MONTH": "String",
+				"MONTH_NAME": "String",
+				"QUARTER": "String",
+				"WEEK": "String"
+			}
+		},
+		{
+			"d_campus": {
+				"CAMPUS_ID": "int",
+				"CAMPUS_NAME": "String"
+			}
+		},
+		{
+			"d_exam": {
+				"EXAM_ID": "int",
+				"EXAM_MODEL": "String",
+				"EXAM_TYPE": "String",
+				"EXAM_NAME": "String",
+				"EXAM_DATE":"date"
+			}
+		},
+		{
+			"d_section": {
+				"SECTION_ID": "int",
+				"SECTION_NAME": "int"
+			}
+		},
+		{
+			"d_student": {
+				"STUDENT_ID": "int",
+				"STUDENT_FULL_NAME": "String",
+				"STUDENT_SHORT_NAME": "String"
+			}
+		},
+		{
+			"d_subject": {
+				"SUBJECT_ID": "int",
+				"SUBJECT_NAME": "String",
+				"STUDENT_SHORT_NAME": "String"
+			}
+		},
+		{
+			"exam_result_stg": {
+				"OMR_ID": "int",
+				"NAME OF THE STUDENT": "String",
+				"MAT_120": "String",
+				"MATHS_RANK": "String",
+				"MATHS_PERCENTAGE": "String",
+			}
+		},
+		{
+			"f_exam_result": {
+				"EXAM_RESULT_ID": "int",
+				"MAX_MATHS_MAKRS": "String",
+				"MAX_PHYSICS_MARKS": "String",
+				"MAX_CHEMISTRY_MARKS": "String",
+				"PHYSICS_MARKS": "String",
+				"CHEMISTRY_MARKS": "String",
+				"MATHS_MARKS": "String",
+				"MATHS_RANK": "String",
+				"ALL_INDIA_RANK": "String",
+				"PHYSICS_RANK": "String",
+				"CHEMISTRY_RANK": "String",
+				"STATE_RANK": "String",
+				"CAMPUS_ID_FK":"int",
+				"STUDENT_ID_FK":"int",
+				"DATE_KEY_FK":"int",
+				"SECTION_ID_FK":"int",
+				"EXAM_ID_FK":"int"
+			}
+		},
+		{
+			"f_ques_ans": {
+				"QUES_ANS_ID": "int",
+				"QUESTION_NUM": "String",
+				"ANSWER_RESULT": "String",
+				"SUBJECT_ID_FK": "int",
+				"STUDENT_ID_FK": "int",
+				"CAMPUS_ID_FK": "int",
+				"SECTION_ID_FK": "int",
+			}
 		}
 
 ]});
@@ -104,4 +192,3 @@ db.domain.insert(
 	 }
 
 ]});
-

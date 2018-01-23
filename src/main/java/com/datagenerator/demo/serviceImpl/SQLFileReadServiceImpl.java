@@ -1,9 +1,7 @@
 package com.datagenerator.demo.serviceImpl;
 
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
