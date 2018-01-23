@@ -1,4 +1,4 @@
-package datagenerator;
+package com.datagenerator.demo.domain;
 
 import java.util.List;
 
