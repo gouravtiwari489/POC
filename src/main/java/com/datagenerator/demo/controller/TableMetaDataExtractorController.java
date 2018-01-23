@@ -12,8 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.datagenerator.demo.utils.TableStructureExtractor;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RestController
 @RequestMapping("/extractor")
+@Slf4j
 public class TableMetaDataExtractorController {
 
 	@Autowired
