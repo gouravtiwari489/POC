@@ -16,9 +16,9 @@ public class DomainRepository {
 	@Autowired
 	private MongoOperations mongoOperations;
 	
-	public List<Domain> retrieveUserByRole(String role) {
+	public List<Domain> retrieveDomainByName(String name) {
 		Query query = new Query();
-		query.addCriteria(Criteria.where("_id").is("HRMS"));
+		query.addCriteria(Criteria.where("_id").is(name));
 		return mongoOperations.find(query, Domain.class);
 	}
 }
