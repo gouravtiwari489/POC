@@ -13,15 +13,14 @@ public class TableStructureExtractor {
 
 	public Map<String, Map<String,String>> searchforTableName() throws FileNotFoundException {
 		Map<String, Map<String,String>> tableMap = new HashMap<>();
-		File file = new File("C:\\Users\\dthorat\\Downloads\\Dump20180122.sql");
+		ClassLoader classLoader = getClass().getClassLoader();
+		File file = new File(classLoader.getResource("Dump20180122.sql").getFile());
 		final Scanner scanner = new Scanner(file);
-		String tableName = "";
-		String primaryKey = "";
+		String tableName = "",primaryKey = "";
 		Map<String, String> fieldMap = null;
 		int count = 0;
 		while (scanner.hasNextLine()) {
 			final String lineFromFile = scanner.nextLine();
-			// Table Name Search
 			if (lineFromFile.contains("CREATE TABLE ")) {
 				fieldMap = new HashMap<>();
 				tableName = "";
@@ -29,7 +28,6 @@ public class TableStructureExtractor {
 				tableName = matchString[1].split(" ")[0].replace("`", "");
 				count = 1;
 			} else if (lineFromFile.contains("PRIMARY KEY ")) {
-				// Primary Key Search
 				primaryKey = "";
 				count =0;
 				String[] pkString = lineFromFile.split("PRIMARY KEY ");
@@ -57,8 +55,11 @@ public class TableStructureExtractor {
 			tableMap.put(tableName, fieldMap);
 		}
 		scanner.close();
-
-		/*System.out.println("List of Table Names : ");
+		return tableMap;
+	}
+	
+	/*private void printMetaData(Map<String, Map<String,String>> tableMap) {
+		System.out.println("List of Table Names : ");
 		Set set = tableMap.entrySet();
 		Iterator itr = set.iterator();
 		while (itr.hasNext()) {
@@ -75,7 +76,6 @@ public class TableStructureExtractor {
 				}
 			}
 			System.out.println("###################### Table ####################### "); 
-		}*/
-		return tableMap;
-	}
+		}
+	}*/
 }

@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: data-generator
+  data:
+    mongodb:
+      database: datagenerator
+      host: localhost
+      port: 27017
+
+server:
+  context-path: /datagenerator
+  port: 9080      
