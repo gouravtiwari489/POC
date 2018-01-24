@@ -1,24 +1,11 @@
 package com.datagenerator.demo.repository;
 
 import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.stereotype.Repository;
-
+import org.springframework.data.mongodb.repository.MongoRepository;
 import com.datagenerator.demo.domain.Domain;
 
-@Repository
-public class DomainRepository {
+public interface DomainRepository extends MongoRepository<Domain, String>{
 
-	@Autowired
-	private MongoOperations mongoOperations;
 	
-	public List<Domain> retrieveDomainByName(String name) {
-		Query query = new Query();
-		query.addCriteria(Criteria.where("_id").is(name));
-		return mongoOperations.find(query, Domain.class);
-	}
+	public List<Domain> getDomainByDomainId(String name) ;
 }

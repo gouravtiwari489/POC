@@ -1,4 +1,4 @@
-package com.datagenerator.demo.configuration;
+/*package com.datagenerator.demo.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,13 +16,13 @@ import com.mongodb.MongoClient;
 @Configuration
 public class MongoConfig extends AbstractMongoConfiguration {
 
-	@Value("${mongodb.hosts}")
+	@Value("${data.mongodb.host}")
 	private String mongoHost;
 
-	@Value("${mongodb.port}")
+	@Value("${data.mongodb.port}")
 	private String mongoPort;
 	
-	@Value("${mongodb.dbname}")
+	@Value("${data.mongodb.database}")
 	private String mongoDB;
 	
 	@Override
@@ -45,4 +45,4 @@ public class MongoConfig extends AbstractMongoConfiguration {
 		return mongoTemplate;
 
 	}
-}
+}*/

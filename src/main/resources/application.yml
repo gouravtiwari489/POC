@@ -3,6 +3,8 @@ spring:
     name: data-generator
   data:
     mongodb:
+      repositories:
+        enabled: true
       database: datagenerator
       host: localhost
       port: 27017

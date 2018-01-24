@@ -40,8 +40,9 @@ public class TableStructureExtractor {
 				String[] fieldString = lineFromFile.split("FOREIGN KEY ");
 				String field = fieldString[1].split(" ")[0].replace("`", "");
 				String fkRelationship = fieldString[0].split(" ")[3].replace("`", "");
-				fieldMap.put("FK"+fkCount,field.substring(1, field.length() - 1));
+				fieldMap.put("FK"+fkCount+"->"+tableName,field.substring(1, field.length() - 1));
 				count =0;
+				fkCount++;
 			}else if(lineFromFile.contains("ENGINE")) {
 				count =0;
 			} 
