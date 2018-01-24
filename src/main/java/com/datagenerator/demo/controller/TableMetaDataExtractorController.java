@@ -1,6 +1,7 @@
 package com.datagenerator.demo.controller;
 
 import java.io.FileNotFoundException;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +24,8 @@ public class TableMetaDataExtractorController {
 	private TableStructureExtractor tableStructureExtractor;
 	
 	@GetMapping
-	public ResponseEntity<Map<String, Map<String,String>>> extractTableMetaData() throws FileNotFoundException {
-		Map<String, Map<String,String>> tableMap = tableStructureExtractor.searchforTableName();
-		return new ResponseEntity<Map<String, Map<String,String>>>(tableMap, HttpStatus.OK);
+	public ResponseEntity<LinkedHashMap<String, LinkedHashMap<String,String>>> extractTableMetaData() throws FileNotFoundException {
+		LinkedHashMap<String, LinkedHashMap<String,String>> tableMap = tableStructureExtractor.searchforTableName();
+		return new ResponseEntity<LinkedHashMap<String, LinkedHashMap<String,String>>>(tableMap, HttpStatus.OK);
 	}
 }

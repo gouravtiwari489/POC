@@ -3,6 +3,7 @@ package com.datagenerator.demo.utils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -11,18 +12,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class TableStructureExtractor {
 
-	public Map<String, Map<String,String>> searchforTableName() throws FileNotFoundException {
-		Map<String, Map<String,String>> tableMap = new HashMap<>();
+	public LinkedHashMap<String, LinkedHashMap<String,String>> searchforTableName() throws FileNotFoundException {
+		LinkedHashMap<String, LinkedHashMap<String,String>> tableMap = new LinkedHashMap<>();
 		ClassLoader classLoader = getClass().getClassLoader();
 		File file = new File(classLoader.getResource("Dump20180122.sql").getFile());
 		final Scanner scanner = new Scanner(file);
 		String tableName = "",primaryKey = "";
-		Map<String, String> fieldMap = null;
+		LinkedHashMap<String, String> fieldMap = null;
 		int count = 0, fkCount = 1;
 		while (scanner.hasNextLine()) {
 			final String lineFromFile = scanner.nextLine();
 			if (lineFromFile.contains("CREATE TABLE ")) {
-				fieldMap = new HashMap<>();
+				fieldMap = new LinkedHashMap<>();
 				tableName = "";
 				fkCount = 1;
 				String[] matchString = lineFromFile.split("CREATE TABLE ");
@@ -54,7 +55,7 @@ public class TableStructureExtractor {
 					fieldMap.put(field,fieldType);
 				}
 			}
-			if(tableName != "" || null != tableName)
+			if(tableName != "" || null != tableName && fieldMap!=null)
 				tableMap.put(tableName, fieldMap);
 		}
 		scanner.close();
