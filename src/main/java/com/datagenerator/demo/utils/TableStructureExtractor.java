@@ -18,15 +18,16 @@ public class TableStructureExtractor {
 		final Scanner scanner = new Scanner(file);
 		String tableName = "",primaryKey = "";
 		Map<String, String> fieldMap = null;
-		int count = 0;
+		int count = 0, fkCount = 1;
 		while (scanner.hasNextLine()) {
 			final String lineFromFile = scanner.nextLine();
 			if (lineFromFile.contains("CREATE TABLE ")) {
 				fieldMap = new HashMap<>();
 				tableName = "";
+				fkCount = 1;
 				String[] matchString = lineFromFile.split("CREATE TABLE ");
 				tableName = matchString[1].split(" ")[0].replace("`", "");
-				count = 1;
+				count = 1;				
 			} else if (lineFromFile.contains("PRIMARY KEY ")) {
 				primaryKey = "";
 				count =0;
@@ -39,7 +40,7 @@ public class TableStructureExtractor {
 				String[] fieldString = lineFromFile.split("FOREIGN KEY ");
 				String field = fieldString[1].split(" ")[0].replace("`", "");
 				String fkRelationship = fieldString[0].split(" ")[3].replace("`", "");
-				fieldMap.put("FK->"+fkRelationship,field.substring(1, field.length() - 1));
+				fieldMap.put("FK"+fkCount,field.substring(1, field.length() - 1));
 				count =0;
 			}else if(lineFromFile.contains("ENGINE")) {
 				count =0;
@@ -52,7 +53,8 @@ public class TableStructureExtractor {
 					fieldMap.put(field,fieldType);
 				}
 			}
-			tableMap.put(tableName, fieldMap);
+			if(tableName != "" || null != tableName)
+				tableMap.put(tableName, fieldMap);
 		}
 		scanner.close();
 		return tableMap;
