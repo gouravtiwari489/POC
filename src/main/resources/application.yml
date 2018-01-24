@@ -11,4 +11,11 @@ spring:
 
 server:
   context-path: /datagenerator
-  port: 9080      
+  port: 9080   
+  
+security:
+  user:
+    name: admin
+    password: admin
+  basic:
+    enabled: true   

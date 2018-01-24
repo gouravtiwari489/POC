@@ -1,7 +1,7 @@
 .gradle
 /build/
 !gradle/wrapper/gradle-wrapper.jar
-
+/bin/
 ### STS ###
 .apt_generated
 .classpath
@@ -23,3 +23,9 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+/bin/
+/data/irecruitsearch
+/.DS_Store
+/data/
+/.cache-main
+/.cache-tests
