@@ -17,7 +17,7 @@ public class SQLFileReadController extends BaseController{
 	SQLFileReadService sqlFileReadService;
 	
 	@PostMapping
-	public ResponseEntity<String> createPosition() throws Exception {
+	public ResponseEntity<String> createParser() throws Exception {
 		sqlFileReadService.readSQLfile();
 		return new ResponseEntity<>("uploaded successfully", HttpStatus.OK);
 	}

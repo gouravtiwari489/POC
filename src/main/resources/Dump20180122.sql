@@ -124,7 +124,7 @@ DROP TABLE IF EXISTS `exam_result_stg`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `exam_result_stg` (
   `OMR_ID` int(11) DEFAULT NULL,
-  `NAME OF THE STUDENT` varchar(50) DEFAULT NULL,
+  `STUDENT_NAME` varchar(50) DEFAULT NULL,
   `MAT_120` int(11) DEFAULT NULL,
   `MATHS_RANK` int(11) DEFAULT NULL,
   `MATHS_PERCENTAGE` decimal(28,16) DEFAULT NULL,
