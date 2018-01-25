@@ -39,6 +39,8 @@ public class TableStructureExtractor {
 			} 
 			else if (lineFromFile.contains("FOREIGN KEY ")) {
 				String[] fieldString = lineFromFile.split("FOREIGN KEY ");
+				String[] fieldString2 = fieldString[1].split("REFERENCES ");
+				System.out.println("fieldString for fk is::"+fieldString.toString());
 				String field = fieldString[1].split(" ")[0].replace("`", "");
 				String fkRelationship = fieldString[0].split(" ")[3].replace("`", "");
 				fieldMap.put("FK"+fkCount+"->"+tableName,field.substring(1, field.length() - 1));

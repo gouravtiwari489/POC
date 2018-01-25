@@ -72,20 +72,14 @@ public class SQLFileReadServiceImpl implements SQLFileReadService{
 				    System.out.println("tableMatched : " + tableMatched + " fieldsMatched : " + fieldsMatched);
 				    System.out.println("final input table : " + inputTableName + " final input columns : " + inputTableFields);
 				    System.out.println("final available table : " + tablekey + " final available columns : " + fieldsvalue);
+				    finalInputMap.put(inputTableName, inputTableFields);
 				    if(tableMatched && fieldsMatched){
-				    	finalInputMap.put(inputTableName, inputTableFields);
 				    	finalMappedMap.put(tablekey, fieldsvalue);
 				    }
-				    	
-					
 				}
-			    
 			}
-			
-			
 		}
 		System.out.println("final input---"+finalInputMap.toString());
 		System.out.println("final available---"+finalMappedMap.toString());
 	}
-
 }
