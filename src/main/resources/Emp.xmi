@@ -1,0 +1,100 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<XMI xmi.version = "1.1" xmlns:UML="href://org.omg/UML/1.3" timestamp = "Thu Jan 25 12:30:23 2018">
+<XMI.header>
+  <XMI.documentation>
+    <XMI.owner></XMI.owner>
+    <XMI.contact></XMI.contact>
+    <XMI.exporter>StarUML.XMI-Addin</XMI.exporter>
+    <XMI.exporterVersion>1.0</XMI.exporterVersion>
+    <XMI.notice></XMI.notice>
+  </XMI.documentation>
+  <XMI.metamodel xmi.name = "UML" xmi.version = "1.3"/>
+ </XMI.header>
+<XMI.content>
+<UML:Model xmi.id="UMLProject.1">
+  <UML:Namespace.ownedElement>
+    <UML:Model xmi.id="UMLModel.2" name="Use Case Model" visibility="public" isSpecification="false" namespace="UMLProject.1" isRoot="false" isLeaf="false" isAbstract="false">
+      <UML:Namespace.ownedElement>
+        <UML:Stereotype xmi.id="X.28" name="useCaseModel" extendedElement="UMLModel.2"/>
+      </UML:Namespace.ownedElement>
+    </UML:Model>
+    <UML:Model xmi.id="UMLModel.4" name="Analysis Model" visibility="public" isSpecification="false" namespace="UMLProject.1" isRoot="false" isLeaf="false" isAbstract="false">
+      <UML:Namespace.ownedElement>
+        <UML:Stereotype xmi.id="X.29" name="analysisModel" extendedElement="UMLModel.4"/>
+      </UML:Namespace.ownedElement>
+    </UML:Model>
+    <UML:Model xmi.id="UMLModel.6" constraint="X.31" name="Design Model" visibility="public" isSpecification="false" namespace="UMLProject.1" isRoot="false" isLeaf="false" isAbstract="false">
+      <UML:Namespace.ownedElement>
+        <UML:Class xmi.id="UMLClass.11" constraint="X.33 X.35" name="Employee" visibility="public" isSpecification="false" namespace="UMLModel.6" isRoot="false" isLeaf="false" isAbstract="false" participant="UMLAssociationEnd.22" isActive="false">
+          <UML:Classifier.feature>
+            <UML:Attribute xmi.id="UMLAttribute.12" name="EId" visibility="public" isSpecification="false" ownerScope="instance" changeability="changeable" targetScope="instance" type="" owner="UMLClass.11"/>
+            <UML:Attribute xmi.id="UMLAttribute.13" name="Name" visibility="public" isSpecification="false" ownerScope="instance" changeability="changeable" targetScope="instance" type="" owner="UMLClass.11"/>
+            <UML:Attribute xmi.id="UMLAttribute.14" name="Age" visibility="public" isSpecification="false" ownerScope="instance" changeability="changeable" targetScope="instance" type="" owner="UMLClass.11"/>
+          </UML:Classifier.feature>
+        </UML:Class>
+        <UML:Class xmi.id="UMLClass.15" name="EmpDetails" visibility="public" isSpecification="false" namespace="UMLModel.6" isRoot="false" isLeaf="false" isAbstract="false" participant="UMLAssociationEnd.23" isActive="false">
+          <UML:Classifier.feature>
+            <UML:Attribute xmi.id="UMLAttribute.16" name="EId" visibility="public" isSpecification="false" ownerScope="instance" changeability="changeable" targetScope="instance" type="" owner="UMLClass.15"/>
+            <UML:Attribute xmi.id="UMLAttribute.17" name="Address1" visibility="public" isSpecification="false" ownerScope="instance" changeability="changeable" targetScope="instance" type="" owner="UMLClass.15"/>
+            <UML:Attribute xmi.id="UMLAttribute.18" name="Address2" visibility="public" isSpecification="false" ownerScope="instance" changeability="changeable" targetScope="instance" type="" owner="UMLClass.15"/>
+            <UML:Attribute xmi.id="UMLAttribute.19" name="Phone" visibility="public" isSpecification="false" ownerScope="instance" changeability="changeable" targetScope="instance" type="" owner="UMLClass.15"/>
+            <UML:Attribute xmi.id="UMLAttribute.20" name="Pin" visibility="public" isSpecification="false" ownerScope="instance" changeability="changeable" targetScope="instance" type="" owner="UMLClass.15"/>
+          </UML:Classifier.feature>
+        </UML:Class>
+        <UML:Association xmi.id="UMLAssociation.21" constraint="X.46" name="" visibility="public" isSpecification="false" namespace="UMLModel.6">
+          <UML:Association.connection>
+            <UML:AssociationEnd xmi.id="UMLAssociationEnd.22" name="" visibility="public" isSpecification="false" isNavigable="true" ordering="unordered" aggregation="none" targetScope="instance" changeability="changeable" association="UMLAssociation.21" type="UMLClass.11"/>
+            <UML:AssociationEnd xmi.id="UMLAssociationEnd.23" name="" visibility="public" isSpecification="false" isNavigable="true" ordering="unordered" aggregation="none" targetScope="instance" changeability="changeable" association="UMLAssociation.21" type="UMLClass.15"/>
+          </UML:Association.connection>
+        </UML:Association>
+        <UML:Stereotype xmi.id="X.30" name="designModel" extendedElement="UMLModel.6"/>
+        <UML:Constraint xmi.id="X.31" name="FK" visibility="public" isSpecification="false" constrainedElement="UMLModel.6">
+          <UML:Constraint.body>
+            <UML:BooleanExpression xmi.id="X.32" body="EmployeeDetails - EId"/>
+          </UML:Constraint.body>
+        </UML:Constraint>
+        <UML:Constraint xmi.id="X.33" name="PK" visibility="public" isSpecification="false" constrainedElement="UMLClass.11">
+          <UML:Constraint.body>
+            <UML:BooleanExpression xmi.id="X.34" body="EId"/>
+          </UML:Constraint.body>
+        </UML:Constraint>
+        <UML:Constraint xmi.id="X.35" name="FK" visibility="public" isSpecification="false" constrainedElement="UMLClass.11">
+          <UML:Constraint.body>
+            <UML:BooleanExpression xmi.id="X.36" body="EmpDetails-EId"/>
+          </UML:Constraint.body>
+        </UML:Constraint>
+         </UML:Namespace.ownedElement>
+    </UML:Model>
+    <UML:Model xmi.id="UMLModel.24" name="Implementation Model" visibility="public" isSpecification="false" namespace="UMLProject.1" isRoot="false" isLeaf="false" isAbstract="false">
+      <UML:Namespace.ownedElement>
+        <UML:Stereotype xmi.id="X.48" name="implementationModel" extendedElement="UMLModel.24"/>
+      </UML:Namespace.ownedElement>
+    </UML:Model>
+    <UML:Model xmi.id="UMLModel.26" name="Deployment Model" visibility="public" isSpecification="false" namespace="UMLProject.1" isRoot="false" isLeaf="false" isAbstract="false">
+      <UML:Namespace.ownedElement>
+        <UML:Stereotype xmi.id="X.49" name="deploymentModel" extendedElement="UMLModel.26"/>
+      </UML:Namespace.ownedElement>
+    </UML:Model>
+  </UML:Namespace.ownedElement>
+</UML:Model>
+<UML:Diagram xmi.id="UMLUseCaseDiagram.3" name="Main" diagramType="UseCaseDiagram" toolName="Rational Rose 98" owner="UMLModel.2"/>
+<UML:Diagram xmi.id="UMLClassDiagram.5" name="Main" diagramType="ClassDiagram" toolName="Rational Rose 98" owner="UMLModel.4"/>
+<UML:Diagram xmi.id="UMLClassDiagram.7" name="Main" diagramType="ClassDiagram" toolName="Rational Rose 98" owner="UMLModel.6"/>
+<UML:Diagram xmi.id="UMLClassDiagram.8" name="ER(IE) Diagram1" diagramType="ClassDiagram" toolName="Rational Rose 98" owner="UMLModel.6">
+  <UML:Diagram.element>
+    <UML:DiagramElement xmi.id="UMLClassView.9" geometry="456, 444, 240, 216," style="LineColor.Red=128,LineColor.Green=0,LineColor.Blue=0,FillColor.Red=255,FillColor.Green=255,FillColor.Blue=185,Font.Red=0,Font.Green=0,Font.Blue=0,Font.FaceName=Tahoma,Font.Size=8,Font.Bold=0,Font.Italic=0,Font.Underline=0,Font.Strikethrough=0,AutomaticResize=0,ShowAllAttributes=1,SuppressAttributes=0,ShowAllOperations=1,SuppressOperations=1,ShowOperationSignature=0," subject="UMLClass.11"/>
+    <UML:DiagramElement xmi.id="UMLClassView.10" geometry="921, 483, 258, 294," style="LineColor.Red=128,LineColor.Green=0,LineColor.Blue=0,FillColor.Red=255,FillColor.Green=255,FillColor.Blue=185,Font.Red=0,Font.Green=0,Font.Blue=0,Font.FaceName=Tahoma,Font.Size=8,Font.Bold=0,Font.Italic=0,Font.Underline=0,Font.Strikethrough=0,AutomaticResize=0,ShowAllAttributes=1,SuppressAttributes=0,ShowAllOperations=1,SuppressOperations=1,ShowOperationSignature=0," subject="UMLClass.15"/>
+  </UML:Diagram.element>
+</UML:Diagram>
+<UML:Diagram xmi.id="UMLComponentDiagram.25" name="Main" diagramType="ModuleDiagram" toolName="Rational Rose 98" owner="UMLModel.24"/>
+<UML:Diagram xmi.id="UMLDeploymentDiagram.27" name="Main" diagramType="DeploymentDiagram" toolName="Rational Rose 98" owner="UMLModel.26"/>
+<UML:TaggedValue xmi.id="X.37" tag="ordering" value="unordered" modelElement="UMLAttribute.12"/>
+<UML:TaggedValue xmi.id="X.38" tag="ordering" value="unordered" modelElement="UMLAttribute.13"/>
+<UML:TaggedValue xmi.id="X.39" tag="ordering" value="unordered" modelElement="UMLAttribute.14"/>
+<UML:TaggedValue xmi.id="X.40" tag="ordering" value="unordered" modelElement="UMLAttribute.16"/>
+<UML:TaggedValue xmi.id="X.41" tag="ordering" value="unordered" modelElement="UMLAttribute.17"/>
+<UML:TaggedValue xmi.id="X.42" tag="ordering" value="unordered" modelElement="UMLAttribute.18"/>
+<UML:TaggedValue xmi.id="X.43" tag="ordering" value="unordered" modelElement="UMLAttribute.19"/>
+<UML:TaggedValue xmi.id="X.44" tag="ordering" value="unordered" modelElement="UMLAttribute.20"/>
+</XMI.content>
+</XMI>
