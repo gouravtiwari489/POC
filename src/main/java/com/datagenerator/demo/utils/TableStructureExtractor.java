@@ -3,8 +3,12 @@ package com.datagenerator.demo.utils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
+import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -38,10 +42,13 @@ public class TableStructureExtractor {
 			else if (lineFromFile.contains("FOREIGN KEY ")) {
 				String[] fieldString = lineFromFile.split("FOREIGN KEY ");
 				String[] fieldString2 = fieldString[1].split("REFERENCES ");
-				System.out.println("fieldString for fk is::"+fieldString.toString());
-				String field = fieldString[1].split(" ")[0].replace("`", "");
-				String fkRelationship = fieldString[0].split(" ")[3].replace("`", "");
-				fieldMap.put("FK"+fkCount+"->"+tableName,field.substring(1, field.length() - 1));
+				System.out.println("fieldString for fk is::"+fieldString2[0]+"--"+fieldString2[1]);
+		//		String field = fieldString[1].split(" ")[0].replace("`", "");
+		//		String fkRelationship = fieldString[0].split(" ")[3].replace("`", "");
+				String test1 = fieldString2[0].replace("(", "").replace(")", "").replace("`", "").replace(" ", "");
+				String test2 = fieldString2[1].replace(" ", "").replace("`", "").replace(",", "").replace("ONUPDATECASCADE", "");
+				fieldMap.put("FK"+fkCount+"->"+test1,test2);
+		//		fkList.add(test1+"-"+test2);
 				count =0;
 				fkCount++;
 			}else if(lineFromFile.contains("ENGINE")) {
@@ -59,7 +66,56 @@ public class TableStructureExtractor {
 				tableMap.put(tableName, fieldMap);
 		}
 		scanner.close();
+		reOrderTableStructure(tableMap);
 		return tableMap;
+	}
+	
+	private void reOrderTableStructure(LinkedHashMap<String, LinkedHashMap<String,String>> tableMap){
+		LinkedHashMap<String, LinkedHashMap<String,String>>  fkMap = new LinkedHashMap<>();
+		LinkedHashMap<String, List<String>>  fkListMap = new LinkedHashMap<>();
+		for (Map.Entry<String, LinkedHashMap<String,String>> entry : tableMap.entrySet()) {
+			String tableName = entry.getKey();
+		    LinkedHashMap<String,String> tableFields = entry.getValue();
+		    List<String> list = new LinkedList();
+		    for (String inputColumnName : tableFields.keySet()) {
+		    	System.out.println("inputColumnName is ---"+inputColumnName);
+		    	if(inputColumnName.startsWith("FK")){
+		    		String[] fieldString = inputColumnName.split("->");
+		    		String field = fieldString[1];
+		    		String association = tableFields.get(inputColumnName);
+		    		System.out.println("tblName is ---"+field);
+		    		System.out.println("association is ---"+association);
+		    		String[] associationSplit = association.split("\\(");
+		    		String tblName  = associationSplit[0];
+		    		String colName  = associationSplit[1].replace(")", "");
+		    		System.out.println("tblName is ---"+tblName+"---colName--"+colName);
+		    		
+		    		LinkedHashMap<String,String> tableFields2 = tableMap.get(tblName);
+		    		for (String inputColumnName2 : tableFields2.keySet()) {
+		    			if(inputColumnName2.startsWith("FK")){
+		    				String[] fieldString2 = inputColumnName2.split("->");
+				    		String field2 = fieldString2[1];
+				    		String association2 = tableFields2.get(inputColumnName2);
+				    		System.out.println("tblName is ---"+field2);
+				    		System.out.println("association is ---"+association2);
+				    		String[] associationSplit2 = association2.split("\\(");
+				    		String tblName2  = associationSplit2[0];
+				    		String colName2  = associationSplit2[1].replace(")", "");
+				    		System.out.println("tblName2 is ---"+tblName2+"---colName2--"+colName2);
+		    				
+		    			}
+		    		}
+		    		//list.add(inputColumnName+"-"+tableFields.get(inputColumnName));
+		    		list.add(tblName);
+		    	}
+		    }
+		    fkListMap.put(tableName, list);
+			
+		}
+		System.out.println(fkListMap.toString()); 
+		JSONObject json1 = new JSONObject(fkListMap);
+		System.out.println(json1); 
+		
 	}
 	
 	/*private void printMetaData(Map<String, Map<String,String>> tableMap) {
