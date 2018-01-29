@@ -28,8 +28,9 @@ public class TableMetaDataExtractorController {
 	
 	@GetMapping
 	public ResponseEntity<LinkedHashMap<String, LinkedHashMap<String,String>>> extractTableMetaData() throws FileNotFoundException {
-		LinkedHashMap<String, LinkedHashMap<String,String>> tableMap = tableStructureExtractor.searchforTableName();
-		XmiTableStructureExtractor.searchforTableName();
-		return new ResponseEntity<LinkedHashMap<String, LinkedHashMap<String,String>>>(tableMap, HttpStatus.OK);
+		//LinkedHashMap<String, LinkedHashMap<String,String>> tableMap = tableStructureExtractor.searchforTableName();
+		//XmiTableStructureExtractor.searchforTableName();
+		//return new ResponseEntity<LinkedHashMap<String, LinkedHashMap<String,String>>>(tableMap, HttpStatus.OK);
+		return null;
 	}
 }

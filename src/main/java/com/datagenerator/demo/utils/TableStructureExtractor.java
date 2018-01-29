@@ -12,10 +12,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class TableStructureExtractor {
 
-	public LinkedHashMap<String, LinkedHashMap<String,String>> searchforTableName() throws FileNotFoundException {
+	public LinkedHashMap<String, LinkedHashMap<String,String>> searchforTableName(File file) throws FileNotFoundException {
 		LinkedHashMap<String, LinkedHashMap<String,String>> tableMap = new LinkedHashMap<>();
-		ClassLoader classLoader = getClass().getClassLoader();
-		File file = new File(classLoader.getResource("Dump20180122.sql").getFile());
+		/*ClassLoader classLoader = getClass().getClassLoader();
+		File file = new File(classLoader.getResource("Dump20180122.sql").getFile());*/
 		final Scanner scanner = new Scanner(file);
 		String tableName = "",primaryKey = "";
 		LinkedHashMap<String, String> fieldMap = null;

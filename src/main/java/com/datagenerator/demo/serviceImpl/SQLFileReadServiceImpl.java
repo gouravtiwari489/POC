@@ -1,10 +1,14 @@
 package com.datagenerator.demo.serviceImpl;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.datagenerator.demo.domain.Domain;
 import com.datagenerator.demo.repository.DomainRepository;
 import com.datagenerator.demo.service.SQLFileReadService;
@@ -18,10 +22,12 @@ public class SQLFileReadServiceImpl implements SQLFileReadService{
 	@Autowired
 	private TableStructureExtractor tableStructureExtractor;
 	
-	@Override
-	public void readSQLfile() throws Exception {
-		
-		LinkedHashMap<String, LinkedHashMap<String,String>> inputTableMap = tableStructureExtractor.searchforTableName();
+	public void readSQLfile(MultipartFile multiFile) throws Exception {
+		File convFile = new File(multiFile.getOriginalFilename());
+		convFile.createNewFile();
+		FileOutputStream fos = new FileOutputStream(convFile);
+		fos.write(multiFile.getBytes());
+		LinkedHashMap<String, LinkedHashMap<String,String>> inputTableMap = tableStructureExtractor.searchforTableName(convFile);
 		System.out.println("inputTableMap--"+inputTableMap);
 		Map<String, LinkedHashMap<String, String>> finalInputMap = new LinkedHashMap<>();
 		Map<String, LinkedHashMap<String, String>> finalMappedMap = new LinkedHashMap<>();
@@ -81,5 +87,7 @@ public class SQLFileReadServiceImpl implements SQLFileReadService{
 		}
 		System.out.println("final input---"+finalInputMap.toString());
 		System.out.println("final available---"+finalMappedMap.toString());
+		fos.close();
 	}
+	
 }
