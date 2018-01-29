@@ -2,9 +2,7 @@ package com.datagenerator.demo.utils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Scanner;
 
 import org.springframework.stereotype.Component;
