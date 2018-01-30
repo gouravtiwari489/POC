@@ -2,11 +2,15 @@ package com.datagenerator.demo.utils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Scanner;
+import java.util.Set;
+
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
@@ -112,14 +116,14 @@ public class TableStructureExtractor {
 		    		list.add(tblName);
 		    	}
 		    }
-		    if(list != null && !list.isEmpty())
+//		    if(list != null && !list.isEmpty())
 		         fkListMap.put(tableName, list);
-		    else
-		    	noForeignList.add(tableName);
+//		    else
+//		    	noForeignList.add(tableName);
 			
 		}
 		
-		fkListMap.put("NOFK", noForeignList);
+//		fkListMap.put("NOFK", noForeignList);
 		LinkedHashMap<String, List<String>> sorted = fkListMap.entrySet().stream()
 		        .sorted(comparingInt(e->e.getValue().size()))
 		        .collect(toMap(
@@ -129,12 +133,41 @@ public class TableStructureExtractor {
 		                LinkedHashMap::new
 		        ));
 		
-		System.out.println(sorted.toString()); 
+		System.out.println(sorted.toString());
+		doPairing(sorted);
 		JSONObject json1 = new JSONObject(sorted);
 		System.out.println(json1); 
 		
 	}
 	
+	
+	
+	
+	private void doPairing(LinkedHashMap<String, List<String>> sorted) {
+		LinkedHashMap<String, List<String>> paired=new LinkedHashMap<>();
+		ArrayList<String> lst=new ArrayList<>();
+		Set<Entry<String,List<String>>> set=sorted.entrySet();
+		for(Entry<String,List<String>> s:set) {
+		   List<String> lst1=s.getValue();
+		if(lst1.isEmpty()) {
+			paired.put(s.getKey(),new ArrayList<String>());
+		}else {
+			for(String str:lst1) {
+			   List<String> val=new ArrayList<>();
+			   if(paired.get(str)!=null)
+			       val=paired.get(str);
+			   val.add(s.getKey());
+			   paired.put(str, val);
+		   }}
+		   
+		   
+			
+		}
+		
+		
+		System.out.println("paired Map-----------------"+paired);
+		
+	}
 	/*private void printMetaData(Map<String, Map<String,String>> tableMap) {
 		System.out.println("List of Table Names : ");
 		Set set = tableMap.entrySet();
