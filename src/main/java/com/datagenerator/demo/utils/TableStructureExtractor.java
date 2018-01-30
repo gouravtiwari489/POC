@@ -7,9 +7,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
+
+import static java.util.Comparator.comparingInt;
+import static java.util.stream.Collectors.toMap;
 
 @Component
 public class TableStructureExtractor {
@@ -116,9 +118,19 @@ public class TableStructureExtractor {
 		    	noForeignList.add(tableName);
 			
 		}
+		
 		fkListMap.put("NOFK", noForeignList);
-		System.out.println(fkListMap.toString()); 
-		JSONObject json1 = new JSONObject(fkListMap);
+		LinkedHashMap<String, List<String>> sorted = fkListMap.entrySet().stream()
+		        .sorted(comparingInt(e->e.getValue().size()))
+		        .collect(toMap(
+		                Map.Entry::getKey,
+		                Map.Entry::getValue,
+		                (a,b) -> {throw new AssertionError();},
+		                LinkedHashMap::new
+		        ));
+		
+		System.out.println(sorted.toString()); 
+		JSONObject json1 = new JSONObject(sorted);
 		System.out.println(json1); 
 		
 	}
