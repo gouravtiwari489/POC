@@ -71,12 +71,13 @@ public class TableStructureExtractor {
 	}
 	
 	private void reOrderTableStructure(LinkedHashMap<String, LinkedHashMap<String,String>> tableMap){
-		LinkedHashMap<String, LinkedHashMap<String,String>>  fkMap = new LinkedHashMap<>();
 		LinkedHashMap<String, List<String>>  fkListMap = new LinkedHashMap<>();
+		
+		  List<String> noForeignList = new LinkedList<String>();
 		for (Map.Entry<String, LinkedHashMap<String,String>> entry : tableMap.entrySet()) {
 			String tableName = entry.getKey();
 		    LinkedHashMap<String,String> tableFields = entry.getValue();
-		    List<String> list = new LinkedList();
+		    List<String> list = new LinkedList<String>();
 		    for (String inputColumnName : tableFields.keySet()) {
 		    	System.out.println("inputColumnName is ---"+inputColumnName);
 		    	if(inputColumnName.startsWith("FK")){
@@ -90,7 +91,7 @@ public class TableStructureExtractor {
 		    		String colName  = associationSplit[1].replace(")", "");
 		    		System.out.println("tblName is ---"+tblName+"---colName--"+colName);
 		    		
-		    		LinkedHashMap<String,String> tableFields2 = tableMap.get(tblName);
+		    		/*LinkedHashMap<String,String> tableFields2 = tableMap.get(tblName);
 		    		for (String inputColumnName2 : tableFields2.keySet()) {
 		    			if(inputColumnName2.startsWith("FK")){
 		    				String[] fieldString2 = inputColumnName2.split("->");
@@ -104,14 +105,18 @@ public class TableStructureExtractor {
 				    		System.out.println("tblName2 is ---"+tblName2+"---colName2--"+colName2);
 		    				
 		    			}
-		    		}
+		    		}*/
 		    		//list.add(inputColumnName+"-"+tableFields.get(inputColumnName));
 		    		list.add(tblName);
 		    	}
 		    }
-		    fkListMap.put(tableName, list);
+		    if(list != null && !list.isEmpty())
+		         fkListMap.put(tableName, list);
+		    else
+		    	noForeignList.add(tableName);
 			
 		}
+		fkListMap.put("NOFK", noForeignList);
 		System.out.println(fkListMap.toString()); 
 		JSONObject json1 = new JSONObject(fkListMap);
 		System.out.println(json1); 
