@@ -250,10 +250,10 @@ public class TableStructureExtractor {
 				}, LinkedHashMap::new));
 
 		System.out.println(sorted.toString());
-		LinkedHashMap<String, List<String>> paired = new LinkedHashMap<>();
-		paired = doPairing(sorted);
-		return paired;
-
+	//	LinkedHashMap<String, List<String>> paired = new LinkedHashMap<>();
+	//	paired = doPairing(sorted);
+	//	return paired;
+		return sorted;
 	}
 	/*private void printMetaData(Map<String, Map<String,String>> tableMap) {
 		System.out.println("List of Table Names : ");
