@@ -124,15 +124,7 @@ public class TableStructureExtractor {
 		}
 		
 //		fkListMap.put("NOFK", noForeignList);
-		LinkedHashMap<String, List<String>> sorted = fkListMap.entrySet().stream()
-		        .sorted(comparingInt(e->e.getValue().size()))
-		        .collect(toMap(
-		                Map.Entry::getKey,
-		                Map.Entry::getValue,
-		                (a,b) -> {throw new AssertionError();},
-		                LinkedHashMap::new
-		        ));
-		
+		LinkedHashMap<String, List<String>> sorted = sortMap(fkListMap);
 		System.out.println(sorted.toString());
 		doPairing(sorted);
 		JSONObject json1 = new JSONObject(sorted);
@@ -145,29 +137,40 @@ public class TableStructureExtractor {
 	
 	private LinkedHashMap<String, List<String>> doPairing(LinkedHashMap<String, List<String>> sorted) {
 		LinkedHashMap<String, List<String>> paired=new LinkedHashMap<>();
-		ArrayList<String> lst=new ArrayList<>();
-		Set<Entry<String,List<String>>> set=sorted.entrySet();
-		for(Entry<String,List<String>> s:set) {
-		   List<String> lst1=s.getValue();
-		if(lst1.isEmpty()) {
-			paired.put(s.getKey(),new ArrayList<String>());
-		}else {
-			for(String str:lst1) {
-			   List<String> val=new ArrayList<>();
-			   if(paired.get(str)!=null)
-			       val=paired.get(str);
-			   val.add(s.getKey());
-			   paired.put(str, val);
-		   }}
-		   
-		   
 			
-		}
+		sorted.forEach((k,v)->{
+			
+			paired.put(k,new ArrayList<String>());
+			
+			if(v.isEmpty()) {
+				paired.put(k,new ArrayList<String>());
+			}else {				
+				v.stream().forEach(index->{
+					 List<String> val=new ArrayList<>();
+					 if(paired.get(index)!=null)
+					       val=paired.get(index);
+					   val.add(k);
+					   paired.put(index, val);
+				});
+			}
+			
+		});
 		
-		System.out.println("paired Map-----------------"+paired);
-		return paired;
+		return sortMap(paired);
 	}
 	
+	private LinkedHashMap<String, List<String>> sortMap(LinkedHashMap<String, List<String>> inputMap){
+		return inputMap.entrySet().stream()
+        .sorted(comparingInt(e->e.getValue().size()))
+        .collect(toMap(
+                Map.Entry::getKey,
+                Map.Entry::getValue,
+                (a,b) -> {throw new AssertionError();},
+                LinkedHashMap::new
+        ));
+		
+		
+	}
 	public LinkedHashMap<String, List<String>> getFKMap() throws FileNotFoundException {
 		LinkedHashMap<String, LinkedHashMap<String, String>> tableMap = new LinkedHashMap<>();
 		ClassLoader classLoader = getClass().getClassLoader();
