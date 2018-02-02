@@ -7,20 +7,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.function.Consumer;
 
 import org.springframework.stereotype.Component;
 
 @Component
 public class FindWordMatchingPossibilities {
 
-	/*public static void main(String[] args) throws FileNotFoundException {
+	/*public  void main(String[] args) throws FileNotFoundException {
 		String wordToFind = "dId";
 		findMathingWord(wordToFind);
 	}*/
 
-	public Map<String,String> findMatchingWord(String wordToFind) throws FileNotFoundException {
+	public Map<String,List<String>> findMatchingWord(String wordToFind) throws FileNotFoundException {
+		System.out.println("Word to Find : "+wordToFind);
 		String wordArr[] = null;
-		Map<String,String> matchingMap = null;
+		Map<String,List<String>> matchingMap = null;
 		ClassLoader classLoader = getClass().getClassLoader();
 		File file = new File(classLoader.getResource("emp-dataset.txt").getFile());
 		Scanner scanner = new Scanner(file);
@@ -29,10 +31,10 @@ public class FindWordMatchingPossibilities {
 		wordArr = removeNullValues(wordArr);
 		
 	    matchingMap = findMatchingWords(wordArr, matchingMap, scanner);
-		System.out.println("First time match #################################");
+		/*System.out.println("First time match #################################");
 	    for(Map.Entry<String, String> elem : matchingMap.entrySet()){
 			System.out.println(elem.getKey()+" :: "+elem.getValue());
-		}
+		}*/
 	    
 	    int splitLength = 3, len=wordArr.length;
 		while(matchingMap.size() >1){
@@ -41,19 +43,27 @@ public class FindWordMatchingPossibilities {
 			scanner = new Scanner(file);
 			matchingMap = findMatchingWords(wordArr, matchingMap, scanner);
 			splitLength++;
-			if(len == wordArr.length){
+			if(len >= wordArr.length && splitLength >5){
 				break;
 			}
 		}
 		System.out.println("Second time match #################################");
-		for(Map.Entry<String, String> elem : matchingMap.entrySet()){
+		for(Map.Entry<String, List<String>> elem : matchingMap.entrySet()){
 			System.out.println(elem.getKey()+" :: "+elem.getValue());
+			List<String> list = elem.getValue();
+			list.forEach(new Consumer<String>() {
+
+				@Override
+				public void accept(String matchField) {
+					computeProbability(wordToFind,matchField);
+				}
+			});			
 		}
 		scanner.close();
 		return matchingMap;
 	}
 
-	private static String[] removeNullValues(String[] wordArr) {
+	private  String[] removeNullValues(String[] wordArr) {
 		List<String> list = new ArrayList<String>();
 
 	    for(String s : wordArr) {
@@ -66,27 +76,44 @@ public class FindWordMatchingPossibilities {
 		return wordArr;
 	}
 
-	private static Map<String, String> findMatchingWords(String[] wordArr, Map<String, String> matchingMap, final Scanner scanner) {
+	private Map<String, List<String>> findMatchingWords(String[] wordArr, Map<String, List<String>> matchingMap, final Scanner scanner) {
 		matchingMap = new HashMap<>();
 		while(scanner.hasNextLine()){
 			final String lineFromFile = scanner.nextLine();
-			
 			for(int i=0; i<wordArr.length; i++){
 				if (lineFromFile.toLowerCase().contains(wordArr[i].toLowerCase())) {
+					List<String> list= new ArrayList<>();
 					String arr[]= lineFromFile.split(" ");
-					for(int a=0; a<arr.length; a++){
-						//System.out.println(arr[a]+" :: "+wordArr[i]);
+					for(int a=1; a<arr.length; a++){
 						if(arr[a].toLowerCase().contains(wordArr[i].toLowerCase())){
-							matchingMap.put(arr[0],arr[a]);
+							list.add(arr[a]);
 						}	
-					}	
+					}
+					matchingMap.put(arr[0],list);
 				}
 			}
 		}
 		return matchingMap;
 	}
+	
+	private float computeProbability(String word1, String word2){
+		float hits=0, match=0;
+		for(int i=0; i<word1.length(); i++){
+			hits=0;
+			for(int j=0; j<word2.length(); j++){
+				if(word1.charAt(i) == word2.charAt(j)){
+					match++;
+					if(i<word1.length()-1)
+						i++;
+				}
+				hits++;
+			}
+		}
+		System.out.println("Probability for "+word1+" = "+word2+" is : "+Math.abs(match/hits));
+		return Math.abs(match/hits);
+	}
 
-	private static String[] splitWordToFind(String wordToFind, String[] wordArr, int splitLength) {
+	private  String[] splitWordToFind(String wordToFind, String[] wordArr, int splitLength) {
 		wordArr = new String[50];
 		int j=0;
 		if(wordToFind.length() <= splitLength){
