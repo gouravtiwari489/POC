@@ -174,7 +174,7 @@ public class TableStructureExtractor {
 	public LinkedHashMap<String, List<String>> getFKMap() throws FileNotFoundException {
 		LinkedHashMap<String, LinkedHashMap<String, String>> tableMap = new LinkedHashMap<>();
 		ClassLoader classLoader = getClass().getClassLoader();
-		File file = new File(classLoader.getResource("Dump20180117-1.sql").getFile());
+		File file = new File(classLoader.getResource("mysqlsampledatabase.sql").getFile());
 		final Scanner scanner = new Scanner(file);
 		String tableName = "", primaryKey = "";
 		LinkedHashMap<String, String> fieldMap = null;
@@ -238,6 +238,7 @@ public class TableStructureExtractor {
 					System.out.println("tblName is ---" + tblName + "---colName--" + colName);
 
 					list.add(tblName);
+					//list.add(inputColumnName+"-"+tableFields.get(inputColumnName));
 				}
 			}
 			fkListMap.put(tableName2, list);
