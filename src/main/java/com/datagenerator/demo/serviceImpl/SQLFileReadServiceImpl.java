@@ -26,7 +26,7 @@ public class SQLFileReadServiceImpl implements SQLFileReadService{
 	private TableStructureExtractor tableStructureExtractor;
 	
 	@Override
-	public List<LinkedHashMap<String, LinkedHashMap<String,String>>> readSQLfile(MultipartFile multiFile) throws Exception {
+	public List<LinkedHashMap<String, LinkedHashMap<String,String>>> readSQLfile(MultipartFile multiFile,String domainType) throws Exception {
 		
 		File convFile = new File(multiFile.getOriginalFilename());
 		convFile.createNewFile();
@@ -37,7 +37,7 @@ public class SQLFileReadServiceImpl implements SQLFileReadService{
 		System.out.println("inputTableMap--"+inputTableMap);
 		LinkedHashMap<String, LinkedHashMap<String, String>> finalInputMap = new LinkedHashMap<>();
 		LinkedHashMap<String, LinkedHashMap<String, String>> finalMappedMap = new LinkedHashMap<>();
-		List<Domain>  domains = domainRepository.getDomainByDomainId("HRMS");
+		List<Domain>  domains = domainRepository.getDomainByDomainId(domainType);
 		List<Object> tables = domains.get(0).getTables();
 		Map<String, LinkedHashMap<String, String>> availableTables = new LinkedHashMap<>();
 		for(Object table:tables){

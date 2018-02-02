@@ -26,12 +26,12 @@ public class UploadController {
 	SQLFileReadService sqlFileReadService;
 	
 	@PostMapping("/upload")
-	public ResponseEntity<List<LinkedHashMap<String, LinkedHashMap<String,String>>>> uploadProfile(@RequestParam(name = "file", required = true) MultipartFile multipartFile) throws Exception {
+	public ResponseEntity<List<LinkedHashMap<String, LinkedHashMap<String,String>>>> uploadProfile(@RequestParam(name = "file", required = true) MultipartFile multipartFile,@RequestParam(name = "domainType", required = true)String domainType) throws Exception {
 		/*if (null == multipartFile) {
 			return new ResponseEntity<String>("Please select file for upload.!", HttpStatus.BAD_REQUEST);
 		}*/
 		uploadService.uploadFile(multipartFile);
-		List<LinkedHashMap<String, LinkedHashMap<String,String>>> list = sqlFileReadService.readSQLfile(multipartFile);
+		List<LinkedHashMap<String, LinkedHashMap<String,String>>> list = sqlFileReadService.readSQLfile(multipartFile,domainType);
 		return new ResponseEntity<List<LinkedHashMap<String, LinkedHashMap<String,String>>>>(list,HttpStatus.OK);
 	}
 	
