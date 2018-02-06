@@ -9,11 +9,15 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.function.Consumer;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class FindWordMatchingPossibilities {
-
+	
+	@Value("${match.threshold}")
+	String threshold;
+	
 	/*public  void main(String[] args) throws FileNotFoundException {
 		String wordToFind = "dId";
 		findMathingWord(wordToFind);
@@ -24,7 +28,7 @@ public class FindWordMatchingPossibilities {
 		String wordArr[] = null;
 		Map<String,List<String>> matchingMap = null;
 		ClassLoader classLoader = getClass().getClassLoader();
-		File file = new File(classLoader.getResource("emp-dataset.txt").getFile());
+		File file = new File(classLoader.getResource("HRMS-dataset.txt").getFile());
 		Scanner scanner = new Scanner(file);
 		
 		wordArr = splitWordToFind(wordToFind, wordArr, 2);
@@ -48,19 +52,25 @@ public class FindWordMatchingPossibilities {
 			}
 		}
 		System.out.println("Second time match #################################");
+		Map<String,List<String>> matchingProbMap = new HashMap<>();
 		for(Map.Entry<String, List<String>> elem : matchingMap.entrySet()){
 			System.out.println(elem.getKey()+" :: "+elem.getValue());
 			List<String> list = elem.getValue();
+			List<String> matchList = new ArrayList<>();
 			list.forEach(new Consumer<String>() {
-
 				@Override
 				public void accept(String matchField) {
-					computeProbability(wordToFind,matchField);
+					Float matchProb = computeProbability(wordToFind,matchField);
+					if(matchProb.compareTo(Float.valueOf(threshold))>=0.0f){
+						matchList.add(matchField);
+					}
 				}
-			});			
+			});
+			if(!matchList.isEmpty() && null != matchList)
+				matchingProbMap.put(elem.getKey(), matchList);
 		}
 		scanner.close();
-		return matchingMap;
+		return matchingProbMap;
 	}
 
 	private  String[] removeNullValues(String[] wordArr) {
