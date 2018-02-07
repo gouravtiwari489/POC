@@ -19,16 +19,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @EnableWebMvc
 public class WebConfig extends WebMvcConfigurerAdapter  {
 	
-@Bean
- public MappingJackson2HttpMessageConverter customJackson2HttpMessageConverter() {
-  MappingJackson2HttpMessageConverter jsonConverter = new MappingJackson2HttpMessageConverter();
-  ObjectMapper objectMapper = new ObjectMapper();
-  objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-  jsonConverter.setObjectMapper(objectMapper);
-  return jsonConverter;
- }
- 
- @Bean
+	/*@Bean
+	 public MappingJackson2HttpMessageConverter customJackson2HttpMessageConverter() {
+	  MappingJackson2HttpMessageConverter jsonConverter = new MappingJackson2HttpMessageConverter();
+	  ObjectMapper objectMapper = new ObjectMapper();
+	  objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+	  jsonConverter.setObjectMapper(objectMapper);
+	  return jsonConverter;
+	 }*/
+	
+  @Bean
   public CorsFilter corsFilter() {
 	 UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 	 CorsConfiguration config = new CorsConfiguration();
@@ -47,7 +47,7 @@ public class WebConfig extends WebMvcConfigurerAdapter  {
  
  @Override
  public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-  converters.add(customJackson2HttpMessageConverter());
+  //  converters.add(customJackson2HttpMessageConverter());
   super.extendMessageConverters(converters);
  }
 }
