@@ -23,12 +23,16 @@ public class FindWordMatchingPossibilities {
 		findMathingWord(wordToFind);
 	}*/
 
-	public Map<String,List<String>> findMatchingWord(String wordToFind) throws FileNotFoundException {
+	public Map<String,List<String>> findMatchingWord(String wordToFind,String domainType) throws FileNotFoundException {
 		System.out.println("Word to Find : "+wordToFind);
 		String wordArr[] = null;
 		Map<String,List<String>> matchingMap = null;
+		File file = null;
 		ClassLoader classLoader = getClass().getClassLoader();
-		File file = new File(classLoader.getResource("HRMS-dataset.txt").getFile());
+		if(domainType.equalsIgnoreCase("HRMS"))
+		    file = new File(classLoader.getResource("HRMS-dataset.txt").getFile());
+		else if(domainType.equalsIgnoreCase("SupplyChain"))
+			file = new File(classLoader.getResource("SupplyChain-dataset.txt").getFile());
 		Scanner scanner = new Scanner(file);
 		
 		wordArr = splitWordToFind(wordToFind, wordArr, 2);

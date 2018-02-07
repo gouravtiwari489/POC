@@ -40,8 +40,8 @@ public class TableMetaDataExtractorController {
 	}
 	
 	@PostMapping("/findMatch")
-	public ResponseEntity<Map<String,List<String>>> matchWords(@RequestParam(name = "wordToFind", required = true) String wordToFind) throws ClassNotFoundException, IOException {
-		Map<String,List<String>> matchingMap = findWordMatchingPossibilities.findMatchingWord(wordToFind);
+	public ResponseEntity<Map<String,List<String>>> matchWords(@RequestParam(name = "wordToFind", required = true) String wordToFind,@RequestParam(name = "domainType", required = true) String domainType) throws ClassNotFoundException, IOException {
+		Map<String,List<String>> matchingMap = findWordMatchingPossibilities.findMatchingWord(wordToFind,domainType);
 		return new ResponseEntity<Map<String,List<String>>>(matchingMap, HttpStatus.OK);
 	}	
 }

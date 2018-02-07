@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.datagenerator.demo.domain.Domain;
 import com.datagenerator.demo.repository.DomainRepository;
 import com.datagenerator.demo.service.SQLFileReadService;
+import com.datagenerator.demo.utils.FindWordMatchingPossibilities;
 import com.datagenerator.demo.utils.TableStructureExtractor;
 
 @Service
@@ -27,6 +28,9 @@ public class SQLFileReadServiceImpl implements SQLFileReadService{
 	@Autowired
 	private TableStructureExtractor tableStructureExtractor;
 	
+	@Autowired
+	private FindWordMatchingPossibilities findWordMatchingPossibilities;
+	
 	@Override
 	public List<LinkedHashMap<String, LinkedHashMap<String,String>>> readSQLfile(MultipartFile multiFile,String domainType) throws Exception {
 		
@@ -35,35 +39,59 @@ public class SQLFileReadServiceImpl implements SQLFileReadService{
 		FileOutputStream fos = new FileOutputStream(convFile);
 		fos.write(multiFile.getBytes());
 		LinkedHashMap<String, LinkedHashMap<String,String>> inputTableMap = tableStructureExtractor.searchforTableName(convFile);
-	//	LinkedHashMap<String, LinkedHashMap<String,String>> inputTableMap = tableStructureExtractor.searchforTableName();
 		System.out.println("inputTableMap--"+inputTableMap);
 		LinkedHashMap<String, LinkedHashMap<String, String>> finalInputMap = new LinkedHashMap<>();
 		LinkedHashMap<String, LinkedHashMap<String, String>> finalMappedMap = new LinkedHashMap<>();
-		List<Domain>  domains = domainRepository.getDomainByDomainId(domainType);
-		List<Object> tables = domains.get(0).getTables();
+	//	List<Domain>  domains = domainRepository.getDomainByDomainId(domainType);
+	//	List<Object> tables = domains.get(0).getTables();
 		Map<String, LinkedHashMap<String, String>> availableTables = new LinkedHashMap<>();
-		for(Object table:tables){
+		/*for(Object table:tables){
 			 Map<String, LinkedHashMap<String, String>> tbl = new LinkedHashMap<>();
 			 tbl  = (Map<String, LinkedHashMap<String, String>>) table;
 			 for (Map.Entry<String, LinkedHashMap<String,String>> entry : tbl.entrySet()) {
 				 availableTables.put(entry.getKey(), entry.getValue());
 			 }
-		}
+		}*/
 		System.out.println("availableTables2222-----"+availableTables);
 		if(inputTableMap !=null && !inputTableMap.isEmpty()){
 			for (Map.Entry<String, LinkedHashMap<String,String>> entry : inputTableMap.entrySet()) {
 			    String inputTableName = entry.getKey();
 			    LinkedHashMap<String,String> inputTableFields = entry.getValue();
-			    
-	//		    System.out.println("inputTableName 11: " + inputTableName + " inputTableFields 22: " + inputTableFields);
-				for (Map.Entry<String, LinkedHashMap<String,String>> availablemap : availableTables.entrySet()) {
+			    LinkedHashMap<String,String> columnCatMap = new LinkedHashMap<>();
+			    LinkedHashMap<String,String> mappedMap = new LinkedHashMap<>();
+			    for (String inputColumnName : inputTableFields.keySet()) {
+			    	 String cat = "";
+			    		if(!inputColumnName.startsWith("PK") && !inputColumnName.startsWith("FK")){
+			    			Map<String,List<String>> matchedWords = new LinkedHashMap<>();
+			    			
+			    			matchedWords = findWordMatchingPossibilities.findMatchingWord(inputColumnName,domainType);
+			    			if(matchedWords!= null && !matchedWords.isEmpty())
+			    			{
+			    				Set<String> entires = matchedWords.keySet();
+						         for(String ent:entires){
+						        	 if(cat == null || cat.isEmpty())
+						        		 cat = ent;
+						        	 else
+						        		 cat = cat+" "+ ent;
+						         }
+			    			}
+			    			columnCatMap.put(inputColumnName, cat);
+					    	mappedMap.put(inputColumnName+"<>"+cat, inputTableFields.get(inputColumnName));	
+			    		}
+			    	//	 columnCatMap.put(inputColumnName, cat);
+			    	//	 mappedMap.put(cat, inputTableFields.get(inputColumnName));
+			    		
+			    }
+			    availableTables.put(inputTableName, columnCatMap);
+			    finalMappedMap.put(inputTableName, mappedMap);
+			    System.out.println("----columnCatMap is--"+columnCatMap.toString());
+				/*for (Map.Entry<String, LinkedHashMap<String,String>> availablemap : availableTables.entrySet()) {
 					boolean tableMatched = false;
 					boolean fieldsMatched = false;
 					String inPutkeysList = "";
 					String mappedkeysList = "";
 					String tablekey = availablemap.getKey();
 					LinkedHashMap<String,String> fieldsvalue = availablemap.getValue();
-	//			    System.out.println("available table 33: " + tablekey + " available columns 44: " + fieldsvalue);
 				    if(tablekey.contains(inputTableName)){
 				    	tableMatched=  true;
 				    }
@@ -81,16 +109,11 @@ public class SQLFileReadServiceImpl implements SQLFileReadService{
 				    }
 				    
 		
-	//			    System.out.println("counter size--"+counter);
-	//			    System.out.println("inputTableFieldsSize size--"+inputTableFieldsSize);
 					if (counter > 0 && inputTableFieldsSize > 0) {
 						int percentage = (counter / inputTableFieldsSize) * 100;
 						if (percentage >= 80)
 							fieldsMatched = true;
 					}
-	//			    System.out.println("tableMatched : " + tableMatched + " fieldsMatched : " + fieldsMatched);
-	//			    System.out.println("final input table : " + inputTableName + " final input columns : " + inputTableFields);
-	//			    System.out.println("final available table : " + tablekey + " final available columns : " + fieldsvalue);
 				    for (String inputColumnName : inputTableFields.keySet()) {
 				    	if(inPutkeysList == null || inPutkeysList.isEmpty())
 				    		inPutkeysList = inputColumnName;
@@ -117,18 +140,20 @@ public class SQLFileReadServiceImpl implements SQLFileReadService{
 				         	 fieldsvalue.put("KEYS", mappedkeysList);
 				    	
 				    }
-				}
+				}*/
 			}
 		}
 		fos.close();
-		JSONObject json1 = new JSONObject(finalInputMap);
+		System.out.println("----availableTables is--"+availableTables.toString());
+		System.out.println("----finalMappedMap is--"+finalMappedMap.toString());
+		/*JSONObject json1 = new JSONObject(finalInputMap);
 		System.out.println(json1); 
 		System.out.println("###############");
 		
 		JSONObject json2 = new JSONObject(finalMappedMap);
-		System.out.println(json2); 
+		System.out.println(json2); */
 		List<LinkedHashMap<String, LinkedHashMap<String,String>>> list = new ArrayList<>();
-		list.add(finalInputMap);
+		list.add(inputTableMap);
 		list.add(finalMappedMap);
 		return list;
 		
