@@ -7,18 +7,20 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Scanner;
-import java.util.Set;
-
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
+import com.datagenerator.demo.domain.GenerateDataObject;
+import com.datagenerator.demo.serviceImpl.MapToListTransformerService;
 import static java.util.Comparator.comparingInt;
 import static java.util.stream.Collectors.toMap;
 
 @Component
 public class TableStructureExtractor {
+	
+	@Autowired
+	private MapToListTransformerService  mapToListTransformerService;
 
 	public LinkedHashMap<String, LinkedHashMap<String,String>> searchforTableName(File file) throws FileNotFoundException {
 		LinkedHashMap<String, LinkedHashMap<String,String>> tableMap = new LinkedHashMap<>();
@@ -79,7 +81,7 @@ public class TableStructureExtractor {
 	private void reOrderTableStructure(LinkedHashMap<String, LinkedHashMap<String,String>> tableMap){
 		LinkedHashMap<String, List<String>>  fkListMap = new LinkedHashMap<>();
 		
-		  List<String> noForeignList = new LinkedList<String>();
+		 // List<String> noForeignList = new LinkedList<String>();
 		for (Map.Entry<String, LinkedHashMap<String,String>> entry : tableMap.entrySet()) {
 			String tableName = entry.getKey();
 		    LinkedHashMap<String,String> tableFields = entry.getValue();
@@ -125,6 +127,7 @@ public class TableStructureExtractor {
 		
 //		fkListMap.put("NOFK", noForeignList);
 		LinkedHashMap<String, List<String>> sorted = sortMap(fkListMap);
+		
 		System.out.println(sorted.toString());
 		doPairing(sorted);
 		JSONObject json1 = new JSONObject(sorted);
@@ -171,7 +174,7 @@ public class TableStructureExtractor {
 		
 		
 	}
-	public LinkedHashMap<String, List<String>> getFKMap() throws FileNotFoundException {
+	public List<GenerateDataObject> getFKMap() throws FileNotFoundException {
 		LinkedHashMap<String, LinkedHashMap<String, String>> tableMap = new LinkedHashMap<>();
 		ClassLoader classLoader = getClass().getClassLoader();
 		File file = new File(classLoader.getResource("mysqlsampledatabase.sql").getFile());
@@ -251,11 +254,10 @@ public class TableStructureExtractor {
 				}, LinkedHashMap::new));
 
 		System.out.println(sorted.toString());
-	//	LinkedHashMap<String, List<String>> paired = new LinkedHashMap<>();
-	//	paired = doPairing(sorted);
-	//	return paired;
-		return sorted;
+		mapToListTransformerService.setTableMap(sorted);
+		return mapToListTransformerService.transform();
 	}
+	
 	/*private void printMetaData(Map<String, Map<String,String>> tableMap) {
 		System.out.println("List of Table Names : ");
 		Set set = tableMap.entrySet();
