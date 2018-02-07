@@ -111,20 +111,18 @@ public class FindWordMatchingPossibilities {
 	}
 	
 	private float computeProbability(String word1, String word2){
-		float hits=0, match=0;
+		float match=0;
 		for(int i=0; i<word1.length(); i++){
-			hits=0;
-			for(int j=0; j<word2.length(); j++){
+			for(int j=0+i; j<word2.length(); j++){
 				if(word1.charAt(i) == word2.charAt(j)){
 					match++;
 					if(i<word1.length()-1)
 						i++;
 				}
-				hits++;
 			}
 		}
-		System.out.println("Probability for "+word1+" = "+word2+" is : "+Math.abs(match/hits));
-		return Math.abs(match/hits);
+		System.out.println("Probability for "+word1+" = "+word2+" is : "+Math.abs(match/word2.length()));
+		return Math.abs(match/word2.length());
 	}
 
 	private  String[] splitWordToFind(String wordToFind, String[] wordArr, int splitLength) {
