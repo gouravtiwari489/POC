@@ -1,0 +1,2 @@
+CustomerId customerNumber customer_Number customer_number cust_Number Cust_Number cust_Num cust_num consumerNumber consumer_Number consumer_number consumer_Num consumer_num
+CustomerName CustomerName Customer_Name customer_Name customer_name Cust_Name cust_name CustName  

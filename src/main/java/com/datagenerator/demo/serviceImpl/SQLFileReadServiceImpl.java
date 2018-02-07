@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,7 +101,12 @@ public class SQLFileReadServiceImpl implements SQLFileReadService{
 				    	inputTableFields.put("KEYS", inPutkeysList);
 				    finalInputMap.put(inputTableName, inputTableFields);
 				    if(tableMatched && fieldsMatched){
-				    	finalMappedMap.put(tablekey, fieldsvalue);
+				    	LinkedHashMap<String,String> fieldsvalue2 = new LinkedHashMap<>();
+				    	 Set<Entry<String, String>> entires = fieldsvalue.entrySet();
+				         for(Entry<String,String> ent:entires){
+				             fieldsvalue2.put(ent.getKey()+" "+ent.getKey()+" "+ent.getKey(), ent.getValue());
+				         }
+				    	finalMappedMap.put(tablekey, fieldsvalue2);
 				    	for(String availableColumn : fieldsvalue.keySet()){
 				    		if(mappedkeysList == null || mappedkeysList.isEmpty())
 				    			mappedkeysList = availableColumn;
