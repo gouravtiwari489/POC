@@ -151,9 +151,25 @@ public class SQLFileReadServiceImpl implements SQLFileReadService{
 		System.out.println("###############");
 		
 		JSONObject json2 = new JSONObject(finalMappedMap);
+		
+		
 		System.out.println(json2); */
+		
+		for (Map.Entry<String, LinkedHashMap<String,String>> entry : inputTableMap.entrySet()) {
+			
+			LinkedHashMap<String,String> inputTableFields = entry.getValue();
+			LinkedHashMap<String,String> finalInputTableFields = new LinkedHashMap<>();
+			for (String inputColumnName : inputTableFields.keySet()) {
+				if(!inputColumnName.startsWith("PK") && !inputColumnName.startsWith("FK"))
+				       finalInputTableFields.put(inputColumnName, inputTableFields.get(inputColumnName));
+				
+			}
+			finalInputMap.put(entry.getKey(), finalInputTableFields);
+			
+		}
 		List<LinkedHashMap<String, LinkedHashMap<String,String>>> list = new ArrayList<>();
-		list.add(inputTableMap);
+		//list.add(inputTableMap);
+		list.add(finalInputMap);
 		list.add(finalMappedMap);
 		return list;
 		
