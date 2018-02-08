@@ -67,10 +67,11 @@ public class TableStructureExtractor {
 				if(fieldString.length>2) {
 					String field = fieldString[2].replace("`", "");
 					String fieldType = fieldString[3].replace("`", "");
+					fieldType = fieldType.replace(",", "");
 					fieldMap.put(field,fieldType);
 				}
 			}
-			if(tableName != "" || null != tableName && fieldMap!=null)
+			if((tableName != "" && null != tableName) && (fieldMap!=null && !fieldMap.isEmpty()))
 				tableMap.put(tableName, fieldMap);
 		}
 		scanner.close();
