@@ -24,8 +24,6 @@ public class TableStructureExtractor {
 
 	public LinkedHashMap<String, LinkedHashMap<String,String>> searchforTableName(File file) throws FileNotFoundException {
 		LinkedHashMap<String, LinkedHashMap<String,String>> tableMap = new LinkedHashMap<>();
-		/*ClassLoader classLoader = getClass().getClassLoader();
-		File file = new File(classLoader.getResource("Dump20180122.sql").getFile());*/
 		final Scanner scanner = new Scanner(file);
 		String tableName = "",primaryKey = "";
 		LinkedHashMap<String, String> fieldMap = null;
@@ -51,12 +49,9 @@ public class TableStructureExtractor {
 				String[] fieldString = lineFromFile.split("FOREIGN KEY ");
 				String[] fieldString2 = fieldString[1].split("REFERENCES ");
 				System.out.println("fieldString for fk is::"+fieldString2[0]+"--"+fieldString2[1]);
-		//		String field = fieldString[1].split(" ")[0].replace("`", "");
-		//		String fkRelationship = fieldString[0].split(" ")[3].replace("`", "");
 				String test1 = fieldString2[0].replace("(", "").replace(")", "").replace("`", "").replace(" ", "");
 				String test2 = fieldString2[1].replace(" ", "").replace("`", "").replace(",", "").replace("ONUPDATECASCADE", "");
 				fieldMap.put("FK"+fkCount+"->"+test1,test2);
-		//		fkList.add(test1+"-"+test2);
 				count =0;
 				fkCount++;
 			}else if(lineFromFile.contains("ENGINE")) {
@@ -81,8 +76,6 @@ public class TableStructureExtractor {
 	
 	private void reOrderTableStructure(LinkedHashMap<String, LinkedHashMap<String,String>> tableMap){
 		LinkedHashMap<String, List<String>>  fkListMap = new LinkedHashMap<>();
-		
-		 // List<String> noForeignList = new LinkedList<String>();
 		for (Map.Entry<String, LinkedHashMap<String,String>> entry : tableMap.entrySet()) {
 			String tableName = entry.getKey();
 		    LinkedHashMap<String,String> tableFields = entry.getValue();
@@ -99,45 +92,18 @@ public class TableStructureExtractor {
 		    		String tblName  = associationSplit[0];
 		    		String colName  = associationSplit[1].replace(")", "");
 		    		System.out.println("tblName is ---"+tblName+"---colName--"+colName);
-		    		
-		    		/*LinkedHashMap<String,String> tableFields2 = tableMap.get(tblName);
-		    		for (String inputColumnName2 : tableFields2.keySet()) {
-		    			if(inputColumnName2.startsWith("FK")){
-		    				String[] fieldString2 = inputColumnName2.split("->");
-				    		String field2 = fieldString2[1];
-				    		String association2 = tableFields2.get(inputColumnName2);
-				    		System.out.println("tblName is ---"+field2);
-				    		System.out.println("association is ---"+association2);
-				    		String[] associationSplit2 = association2.split("\\(");
-				    		String tblName2  = associationSplit2[0];
-				    		String colName2  = associationSplit2[1].replace(")", "");
-				    		System.out.println("tblName2 is ---"+tblName2+"---colName2--"+colName2);
-		    				
-		    			}
-		    		}*/
-		    		//list.add(inputColumnName+"-"+tableFields.get(inputColumnName));
 		    		list.add(tblName);
 		    	}
 		    }
-//		    if(list != null && !list.isEmpty())
 		         fkListMap.put(tableName, list);
-//		    else
-//		    	noForeignList.add(tableName);
-			
 		}
-		
-//		fkListMap.put("NOFK", noForeignList);
 		LinkedHashMap<String, List<String>> sorted = sortMap(fkListMap);
-		
 		System.out.println(sorted.toString());
 		doPairing(sorted);
 		JSONObject json1 = new JSONObject(sorted);
 		System.out.println(json1); 
 		
 	}
-	
-	
-	
 	
 	private LinkedHashMap<String, List<String>> doPairing(LinkedHashMap<String, List<String>> sorted) {
 		LinkedHashMap<String, List<String>> paired=new LinkedHashMap<>();
@@ -242,7 +208,6 @@ public class TableStructureExtractor {
 					System.out.println("tblName is ---" + tblName + "---colName--" + colName);
 
 					list.add(tblName);
-					//list.add(inputColumnName+"-"+tableFields.get(inputColumnName));
 				}
 			}
 			fkListMap.put(tableName2, list);
@@ -258,25 +223,5 @@ public class TableStructureExtractor {
 		mapToListTransformerService.setTableMap(sorted);
 		return mapToListTransformerService.transform();
 	}
-	
-	/*private void printMetaData(Map<String, Map<String,String>> tableMap) {
-		System.out.println("List of Table Names : ");
-		Set set = tableMap.entrySet();
-		Iterator itr = set.iterator();
-		while (itr.hasNext()) {
-			Entry<String, Map> entry = (Entry<String, Map>) itr.next();
-			System.out.println("###################### Table Name : " + entry.getKey()); 
-			Map fieldsMap = entry.getValue();
-			
-			if(fieldsMap != null) {
-				Set fieldSet = fieldsMap.entrySet();
-				Iterator it = fieldSet.iterator();
-				while(it.hasNext()) {
-					Entry<String, String> fieldEntry = (Entry<String, String>) it.next();
-					System.out.println(fieldEntry.getKey()+" :: "+fieldEntry.getValue());
-				}
-			}
-			System.out.println("###################### Table ####################### "); 
-		}
-	}*/
+
 }
