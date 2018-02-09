@@ -1,4 +1,0 @@
-HRMSIds id Id eId EID Eid empId EmpId EmployeeId employeeId e_id emp_id employee_id
-HRMSName Ename Name FullName Fname FName enm empName empnm emp_nm
-HRMSAge 1 2 3 4 5 6 7 8 9
-HRMSDeptId dId deptId dept_id DeptId departmentId
