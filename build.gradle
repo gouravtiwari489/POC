@@ -34,5 +34,15 @@ dependencies {
 	compile ('io.springfox:springfox-swagger2:2.7.0')
 	compile ('commons-io:commons-io:2.4')
 	compile ('org.json:json:20171018')
+	//compile ('org.codehaus.jackson:jackson-mapper-asl:1.5.0')
+	//compile ('com.cebglobal:xpresso:0.9.0')
+
+	compile ('org.springframework.security.oauth:spring-security-oauth2:2.0.13.RELEASE')	
+	compile ('org.springframework.boot:spring-boot-starter-security:1.5.3.RELEASE')
+    compile ('org.springframework.boot:spring-boot-starter-web:1.5.3.RELEASE')
+    compile ('org.springframework.security.oauth:spring-security-oauth2:2.0.13.RELEASE')
+    runtime ('org.springframework.boot:spring-boot-devtools:1.5.3.RELEASE')
+    
+    
 	
 }
