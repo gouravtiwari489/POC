@@ -24,11 +24,11 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	@Autowired
     private AuthenticationManager authenticationManager;
 	
-	@Override
+	/*@Override
     public void configure(final AuthorizationServerEndpointsConfigurer endpoints) {
-		endpoints.tokenStore(tokenStore())
+//		endpoints.tokenStore(tokenStore())
 			.authenticationManager(authenticationManager);
-    }
+    }*/
 	
 	@Override
     public void configure(final ClientDetailsServiceConfigurer clients) throws Exception {
@@ -39,7 +39,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	        .authorizedGrantTypes("password")
 	        .accessTokenValiditySeconds(3600);
     }
-	
+	/*
 	@Bean
 	public TokenStore tokenStore() {
 		return new InMemoryTokenStore();
@@ -59,6 +59,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Bean
     public TokenEnhancer tokenEnhancer() {
         return new CustomTokenEnhancer();
-    }
+    }*/
 
 }

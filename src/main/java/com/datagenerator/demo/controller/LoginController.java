@@ -22,8 +22,8 @@ import com.datagenerator.demo.domain.User;
 @CrossOrigin
 public class LoginController {
 	
-	@Autowired
-    private AuthorizationServerTokenServices tokenServices;
+//	@Autowired
+//    private AuthorizationServerTokenServices tokenServices;
 	
 	@PostMapping("/login")
 	public ResponseEntity<HttpStatus> getAllEmps(@RequestBody User user){
@@ -37,7 +37,7 @@ public class LoginController {
 	
 	
 
-    @GetMapping(value = "/getSomething")
+    /*@GetMapping(value = "/getSomething")
     public String getSection(OAuth2Authentication authentication) {
        Map<String, Object> additionalInfo = tokenServices.getAccessToken(authentication).getAdditionalInformation();
         String customInfo = (String) additionalInfo.get("customInfo");
@@ -46,7 +46,7 @@ public class LoginController {
         // Play with authorities
 
         return customInfo;
-    }
+    }*/
 	
 	
 }
