@@ -1,6 +1,6 @@
 package com.datagenerator.demo.controller;
 
-import java.util.ArrayList;
+import java.io.File;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,8 +24,9 @@ public class SQLFileReadController extends BaseController{
 	
 	@GetMapping
 	public ResponseEntity<List<GenerateDataObject>> getFKRelation() throws Exception {
-		List<GenerateDataObject> tableList = new ArrayList<>();
-		tableList = tableStructureExtractor.getFKMap();
+		ClassLoader classLoader = getClass().getClassLoader();
+		File file = new File(classLoader.getResource("mysqlsampledatabase.sql").getFile());
+		List<GenerateDataObject> tableList = tableStructureExtractor.getFKMap(file);
 		return new ResponseEntity<>(tableList, HttpStatus.OK);
 	}
 
