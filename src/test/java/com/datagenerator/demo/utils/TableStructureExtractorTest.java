@@ -33,9 +33,21 @@ public class TableStructureExtractorTest {
 		File file = new File(classLoader.getResource("mysql-test.sql").getFile());
 		List<GenerateDataObject> derivedList = tableStructureExtractor.getFKMap(file);
 		assertEquals("offices", derivedList.get(0).getTableName());
+		assertEquals("employees", derivedList.get(0).getChildTableName().get(0).getTableName());
+		assertEquals("productlines", derivedList.get(1).getTableName());
+		assertEquals("products", derivedList.get(1).getChildTableName().get(0).getTableName());
+	}
+	
+	/*@Test
+	public void shouldNotCreateParentChildMappingIfCyclicDepenpendent() throws FileNotFoundException {
+		
+		ClassLoader classLoader = getClass().getClassLoader();
+		File file = new File(classLoader.getResource("mysql-test.sql").getFile());
+		List<GenerateDataObject> derivedList = tableStructureExtractor.getFKMap(file);
+		assertEquals("offices", derivedList.get(0).getTableName());
 		assertEquals("employees", derivedList.get(0).getChildTableName());
 		assertEquals("productlines", derivedList.get(1).getTableName());
 		assertEquals("products", derivedList.get(1).getChildTableName());
-	}
+	}*/
 
 }
