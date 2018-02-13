@@ -38,4 +38,8 @@ public class CustomTokenConverter extends JwtAccessTokenConverter {
 	public void setAdditionalInfo(String key,Object data) {
 		tokenServices.getAccessToken(authentication).getAdditionalInformation().put(key, data);
 	}
+	
+	public Object getAdditionalInfo(String key) {
+		return tokenServices.getAccessToken(authentication).getAdditionalInformation().get(key);
+	}
 } 

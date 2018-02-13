@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.datagenerator.demo.domain.GenerateDataObject;
 import static java.util.Comparator.comparingInt;
@@ -22,6 +23,9 @@ public class TableStructureExtractor {
 	private static final String FOREIGN_KEY = "FOREIGN KEY ";
 	private static final String PRIMARY_KEY = "PRIMARY KEY ";
 	private static final String CREATE_TABLE = "CREATE TABLE ";
+	
+	@Autowired
+	private CustomTokenConverter customTokenConverter;
 
 	public LinkedHashMap<String, LinkedHashMap<String, String>> searchforTableName(File file)
 			throws FileNotFoundException {
@@ -78,10 +82,12 @@ public class TableStructureExtractor {
 	private void reOrderTableStructure(LinkedHashMap<String, LinkedHashMap<String, String>> tableMap) {
 		LinkedHashMap<String, List<String>> fkListMap = createFKListMap(tableMap);
 		LinkedHashMap<String, List<String>> sorted = sortMap(fkListMap);
-		System.out.println(sorted.toString());
-		doPairing(sorted);
-		JSONObject json1 = new JSONObject(sorted);
-		System.out.println(json1);
+		List<GenerateDataObject> list = transform(sorted);
+		customTokenConverter.setAdditionalInfo("orderedFKList", list);
+		System.out.println(customTokenConverter.getAdditionalInfo("orderedFKList"));
+		//doPairing(sorted);
+		//JSONObject json1 = new JSONObject(sorted);
+	//	System.out.println(json1);
 
 	}
 

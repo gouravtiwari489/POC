@@ -40,9 +40,9 @@ public class UploadController {
 		/*if (null == multipartFile) {
 			return new ResponseEntity<String>("Please select file for upload.!", HttpStatus.BAD_REQUEST);
 		}*/
-		uploadService.uploadFile(multipartFile);
+	//	uploadService.uploadFile(multipartFile);
 		List<LinkedHashMap<String, LinkedHashMap<String,String>>> list = sqlFileReadService.readSQLfile(multipartFile,domainType);
-		customTokenConverter.setAdditionalInfo("upload",list);
+		customTokenConverter.setAdditionalInfo("mappedTables",list);
 		return new ResponseEntity<List<LinkedHashMap<String, LinkedHashMap<String,String>>>>(list,HttpStatus.OK);
 	}
 	
