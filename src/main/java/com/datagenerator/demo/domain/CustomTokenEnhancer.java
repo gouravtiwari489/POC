@@ -1,5 +1,6 @@
 package com.datagenerator.demo.domain;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -30,7 +31,9 @@ public class CustomTokenEnhancer implements TokenEnhancer {
         ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInfo);*/
         
         try {
-			LinkedHashMap<String, LinkedHashMap<String, String>> listmap= (LinkedHashMap<String, LinkedHashMap<String, String>>) tableStructureExtractor.getFKMap();
+        	ClassLoader classLoader = getClass().getClassLoader();
+    		File file = new File(classLoader.getResource("mysqlsampledatabase.sql").getFile());
+			LinkedHashMap<String, LinkedHashMap<String, String>> listmap= (LinkedHashMap<String, LinkedHashMap<String, String>>) tableStructureExtractor.getFKMap(file);
 			  final Map<String, Object> additionalInfo = new HashMap<>();
 			  additionalInfo.put("customInfo", listmap);
 			 ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInfo);
