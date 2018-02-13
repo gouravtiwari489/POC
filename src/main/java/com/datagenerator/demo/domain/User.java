@@ -1,15 +1,29 @@
 package com.datagenerator.demo.domain;
 
-import lombok.AllArgsConstructor;
+import java.util.List;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Generated;
 
+@Document
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class User  {
+public class User {
 
-	private String userName;
+	@Id
+	@Generated
+	private String id;
+	private String username;
 	private String password;
+	private List<Role> roles;
+	User(){}
+	public User(String username, String password, List<Role> roles) {
+		this.username = username;
+		this.password = password;
+		this.roles = roles;
+	}
+	
 	
 }
