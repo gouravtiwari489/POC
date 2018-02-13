@@ -1,6 +1,7 @@
 package com.datagenerator.demo.utils;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -38,16 +39,15 @@ public class TableStructureExtractorTest {
 		assertEquals("products", derivedList.get(1).getChildTableName().get(0).getTableName());
 	}
 	
-	/*@Test
+	@Test
 	public void shouldNotCreateParentChildMappingIfCyclicDepenpendent() throws FileNotFoundException {
 		
 		ClassLoader classLoader = getClass().getClassLoader();
-		File file = new File(classLoader.getResource("mysql-test.sql").getFile());
+		File file = new File(classLoader.getResource("my-sql-test-2.sql").getFile());
 		List<GenerateDataObject> derivedList = tableStructureExtractor.getFKMap(file);
-		assertEquals("offices", derivedList.get(0).getTableName());
-		assertEquals("employees", derivedList.get(0).getChildTableName());
-		assertEquals("productlines", derivedList.get(1).getTableName());
-		assertEquals("products", derivedList.get(1).getChildTableName());
-	}*/
-
+		assertNotEquals("offices", derivedList.get(0).getTableName());
+		assertEquals("productlines", derivedList.get(0).getTableName());
+		assertEquals("products", derivedList.get(0).getChildTableName().get(0).getTableName());
+	}
+	
 }
