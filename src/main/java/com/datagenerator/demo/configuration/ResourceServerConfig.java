@@ -29,13 +29,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	    if(repo.count()==0) {
 	    	repo.save(new User("user","user",Arrays.asList(new Role("USER"),new Role("ACTUATOR"))));
 	    }
-		
-		builder.userDetailsService(new UserDetailsService() {
-			@Override
-			public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-				return new CustomUserDetails( repo.findByUsername(username ));
-			}
-		});
+		                           
+		builder.userDetailsService(name->new  CustomUserDetails( repo.findByUsername(name )));
     }
     
 	@Override

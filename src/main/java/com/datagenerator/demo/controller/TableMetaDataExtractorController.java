@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.datagenerator.demo.utils.CustomTokenConverter;
 import com.datagenerator.demo.utils.FindWordMatchingPossibilities;
 import com.datagenerator.demo.utils.TableStructureExtractor;
 
@@ -31,11 +32,15 @@ public class TableMetaDataExtractorController {
 	@Autowired
 	private FindWordMatchingPossibilities findWordMatchingPossibilities;
 	
+	@Autowired
+	private CustomTokenConverter customTokenConverter;
+	
 	@GetMapping
 	public ResponseEntity<LinkedHashMap<String, LinkedHashMap<String,String>>> extractTableMetaData() throws ClassNotFoundException, IOException {
 		ClassLoader classLoader = getClass().getClassLoader();
 		File file = new File(classLoader.getResource("Dump20180122.sql").getFile());
 		LinkedHashMap<String, LinkedHashMap<String,String>> tableMap = tableStructureExtractor.searchforTableName(file);
+		customTokenConverter.setAdditionalInfo("extractor",tableMap);
 		return new ResponseEntity<LinkedHashMap<String, LinkedHashMap<String,String>>>(tableMap, HttpStatus.OK);
 	}
 	

@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.datagenerator.demo.service.SQLFileReadService;
 import com.datagenerator.demo.serviceImpl.UploadService;
+import com.datagenerator.demo.utils.CustomTokenConverter;
 
 
 @RestController
@@ -31,6 +32,9 @@ public class UploadController {
 	@Autowired
 	SQLFileReadService sqlFileReadService;
 	
+	@Autowired
+	private CustomTokenConverter customTokenConverter;
+	
 	@PostMapping("/upload")
 	public ResponseEntity<List<LinkedHashMap<String, LinkedHashMap<String,String>>>> uploadProfile(@RequestParam(name = "file", required = true) MultipartFile multipartFile,@RequestParam(name = "domainType", required = true)String domainType) throws Exception {
 		/*if (null == multipartFile) {
@@ -38,6 +42,7 @@ public class UploadController {
 		}*/
 		uploadService.uploadFile(multipartFile);
 		List<LinkedHashMap<String, LinkedHashMap<String,String>>> list = sqlFileReadService.readSQLfile(multipartFile,domainType);
+		customTokenConverter.setAdditionalInfo("upload",list);
 		return new ResponseEntity<List<LinkedHashMap<String, LinkedHashMap<String,String>>>>(list,HttpStatus.OK);
 	}
 	
