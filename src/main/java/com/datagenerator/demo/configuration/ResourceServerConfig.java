@@ -24,15 +24,7 @@ import com.datagenerator.demo.repository.UserRepository;
 @EnableWebSecurity
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
-	@Autowired
-    public void authenticationManager(AuthenticationManagerBuilder builder,UserRepository repo) throws Exception {
-	    if(repo.count()==0) {
-	    	repo.save(new User("user","user",Arrays.asList(new Role("USER"),new Role("ACTUATOR"))));
-	    }
-		                           
-		builder.userDetailsService(name->new  CustomUserDetails( repo.findByUsername(name )));
-    }
-    
+	    
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 		http
