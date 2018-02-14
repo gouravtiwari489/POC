@@ -80,6 +80,7 @@ public class UploadController {
 		if (file != null) {
 			response.setContentType("application/vnd.ms-excel");
 			response.setContentLength((int) file.length());
+			response.setHeader("filename", file.getName());
 			IOUtils.copyLarge(isr, response.getOutputStream());
 		} else {
 			isr.close();
