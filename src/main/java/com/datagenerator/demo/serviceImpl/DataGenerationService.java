@@ -21,8 +21,8 @@ public class DataGenerationService {
 
 	public void generateData() {
 		tableMap = (List<LinkedHashMap<String, LinkedHashMap<String, String>>>) customTokenConverter
-				.getAdditionalInfo("orderedFKList");
-		tableList = (List<GenerateDataObject>) customTokenConverter.getAdditionalInfo("");
+				.getAdditionalInfo("mappedTables");
+		tableList = (List<GenerateDataObject>) customTokenConverter.getAdditionalInfo("orderedFKList");
 
 		threadService(tableList);
 
