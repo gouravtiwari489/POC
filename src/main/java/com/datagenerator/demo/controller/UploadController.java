@@ -71,8 +71,9 @@ public class UploadController {
 				.contentType(MediaType.APPLICATION_OCTET_STREAM).contentLength(file.length()).body(resource);
 	}
 
-	@GetMapping("/downloadExcel")
-	public ResponseEntity<?> downloadExcelFile() throws Exception {
+	@PostMapping("/downloadExcel")
+	public ResponseEntity<?> downloadExcelFile(@RequestParam(name = "fileType", required = true) String fileType) throws Exception {
+		System.out.println("@@@@@@@@@@@@@@@@@   "+fileType+"   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 		dataGenerationService.generateData();
 		Resource resource = new ClassPathResource("output/ExcelSheet.xls");
 		File file = resource.getFile();
