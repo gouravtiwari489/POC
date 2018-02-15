@@ -105,7 +105,7 @@ public class SwaggerConfig {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder().title("Data Generator").description("")
                 .termsOfServiceUrl("http://localhost:9080/datagenerator")
-                .contact(new Contact("Test", "http://www.example.com", "test@example.com"))
+                .contact(new Contact("Data generator", "http://localhost:9080/datagenerator", "ositechportal@gmail.com"))
                 .license("Open Source").licenseUrl("https://www.example.com").version("1.0.0").build();
     }
 }
