@@ -1,14 +1,10 @@
-/*package com.datagenerator.demo.utils;
+package com.datagenerator.demo.utils;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
-
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -18,15 +14,15 @@ import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.IndexedColors;
+import org.springframework.stereotype.Service;
 
-import com.datagenerator.demo.serviceImpl.Dataset;
-
-public class CreateFileAndWrite {
+@Service
+public class GenerateExcelUtil {
 
 	static HSSFWorkbook workbook = null;
 	static CellStyle style;
 
-	public static void insertDataIntoSheet(Map<String, String> fieldMap, String excelFilePath, String sheetName)
+	public  static void createAndInsertDataIntoSheet(String excelFilePath, String sheetName, List<List<String>> recordToAdd)
 			throws Exception {
 		int rownum = 0;
 		HSSFWorkbook workbook = createExcel(excelFilePath, sheetName);
@@ -38,37 +34,13 @@ public class CreateFileAndWrite {
 		font.setColor(IndexedColors.BLACK.getIndex());
 		font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
 		style.setFont(font);
-		List<String> headerRow1 = new ArrayList<String>();
-		for (Map.Entry<String, String> entry : fieldMap.entrySet()) {
-			headerRow1.add(entry.getKey().toUpperCase());
-		}
-		System.out.println("headerRow1 " + headerRow1);
-		List<List<String>> recordToAdd = new ArrayList<List<String>>();
-		recordToAdd.add(headerRow1);
-		for (int i = 0; i < 1000; i++) {
-			List<String> firstRow = new ArrayList<String>();
-
-			for (Map.Entry<String, String> entry : fieldMap.entrySet()) {
-				if (entry.getValue().contains("int")) {
-					firstRow.add(i + "");
-				} else if (entry.getValue().contains("decimal")) {
-					firstRow.add(i + new Random().nextInt(23456) * 0.2 + "");
-				} else {
-					firstRow.add(Dataset.getRandomData(entry.getKey()));
-				}
-
-			}
-			System.out.println("firstRow " + firstRow);
-			recordToAdd.add(firstRow);
-		}
-
 		addContent(recordToAdd, firstSheet, rownum);
 		FileOutputStream outputStream = new FileOutputStream(excelFilePath);
 		workbook.write(outputStream);
 		outputStream.close();
 	}
 
-	static void addContent(List<List<String>> l1, HSSFSheet firstSheet, int rownum) throws Exception {
+	public static void addContent(List<List<String>> l1, HSSFSheet firstSheet, int rownum) throws Exception {
 		try {
 			for (int j = 0; j < l1.size(); j++) {
 				HSSFRow row = firstSheet.createRow(rownum);
@@ -92,7 +64,7 @@ public class CreateFileAndWrite {
 		FileOutputStream fos = null;
 		if (workbook == null || workbook.getSheet(sheetName) == null) {
 			try {
-				synchronized (CreateFileAndWrite.class) {
+				synchronized (GenerateExcelUtil.class) {
 					if (workbook == null) {
 						if (new File(excelFilePath).createNewFile()) {
 							workbook = new HSSFWorkbook();
@@ -124,4 +96,5 @@ public class CreateFileAndWrite {
 		}
 		return workbook;
 	}
-}*/
+
+}

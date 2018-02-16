@@ -1,27 +1,16 @@
 package com.datagenerator.demo.configuration;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.context.request.async.DeferredResult;
-
-import com.fasterxml.classmate.TypeResolver;
-
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.ResponseMessageBuilder;
-import springfox.documentation.schema.AlternateTypeRule;
 import springfox.documentation.schema.ModelRef;
-import springfox.documentation.schema.WildcardType;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.AuthorizationScope;
 import springfox.documentation.service.Contact;
@@ -30,7 +19,6 @@ import springfox.documentation.service.OAuth;
 import springfox.documentation.service.ResourceOwnerPasswordCredentialsGrant;
 import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.service.SecurityReference;
-import springfox.documentation.service.VendorExtension;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
@@ -70,11 +58,11 @@ public class SwaggerConfig {
 
     private OAuth securitySchema() {
 
-        List<AuthorizationScope> authorizationScopeList = new ArrayList();
+        List<AuthorizationScope> authorizationScopeList = new ArrayList<>();
         authorizationScopeList.add(new AuthorizationScope("read", "read all"));
         authorizationScopeList.add(new AuthorizationScope("write", "access all"));
 
-        List<GrantType> grantTypes = new ArrayList();
+        List<GrantType> grantTypes = new ArrayList<>();
         GrantType creGrant = new ResourceOwnerPasswordCredentialsGrant(authLink+"/oauth/token");
 
         grantTypes.add(creGrant);

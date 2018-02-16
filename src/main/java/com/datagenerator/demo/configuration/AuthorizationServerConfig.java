@@ -20,10 +20,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	@Autowired
     private AuthenticationManager authenticationManager;
 	
-	@Autowired
-	private TokenStore tokenStore;
-	
-	
 	@Override
     public void configure(final ClientDetailsServiceConfigurer clients) throws Exception {
 		clients.inMemory() 

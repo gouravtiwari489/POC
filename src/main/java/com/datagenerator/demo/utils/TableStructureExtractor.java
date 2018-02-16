@@ -6,12 +6,11 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Scanner;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import com.datagenerator.demo.domain.GenerateDataObject;
 import static java.util.Comparator.comparingInt;
 import static java.util.stream.Collectors.toMap;
 
@@ -23,7 +22,7 @@ public class TableStructureExtractor {
 	private static final String FOREIGN_KEY = "FOREIGN KEY ";
 	private static final String PRIMARY_KEY = "PRIMARY KEY ";
 	private static final String CREATE_TABLE = "CREATE TABLE ";
-	
+
 	@Autowired
 	private CustomTokenConverter customTokenConverter;
 
@@ -82,37 +81,9 @@ public class TableStructureExtractor {
 	private void reOrderTableStructure(LinkedHashMap<String, LinkedHashMap<String, String>> tableMap) {
 		LinkedHashMap<String, List<String>> fkListMap = createFKListMap(tableMap);
 		LinkedHashMap<String, List<String>> sorted = sortMap(fkListMap);
-		List<GenerateDataObject> list = transform(sorted);
-		customTokenConverter.setAdditionalInfo("orderedFKList", list);
+		Map<Integer, List<String>> map = transform(sorted);
+		customTokenConverter.setAdditionalInfo("orderedFKList", map);
 		System.out.println(customTokenConverter.getAdditionalInfo("orderedFKList"));
-		//doPairing(sorted);
-		//JSONObject json1 = new JSONObject(sorted);
-	//	System.out.println(json1);
-
-	}
-
-	private LinkedHashMap<String, List<String>> doPairing(LinkedHashMap<String, List<String>> sorted) {
-		LinkedHashMap<String, List<String>> paired = new LinkedHashMap<>();
-
-		sorted.forEach((k, v) -> {
-
-			paired.put(k, new ArrayList<String>());
-
-			if (v.isEmpty()) {
-				paired.put(k, new ArrayList<String>());
-			} else {
-				v.stream().forEach(index -> {
-					List<String> val = new ArrayList<>();
-					if (paired.get(index) != null)
-						val = paired.get(index);
-					val.add(k);
-					paired.put(index, val);
-				});
-			}
-
-		});
-
-		return sortMap(paired);
 	}
 
 	private LinkedHashMap<String, List<String>> sortMap(LinkedHashMap<String, List<String>> inputMap) {
@@ -121,142 +92,6 @@ public class TableStructureExtractor {
 					throw new AssertionError();
 				}, LinkedHashMap::new));
 
-	}
-
-	public List<GenerateDataObject> getFKMap(File file) throws FileNotFoundException {
-		final Scanner scanner = new Scanner(file);
-		LinkedHashMap<String, LinkedHashMap<String, String>> tableMap = createTableMap(scanner);
-		LinkedHashMap<String, List<String>> fkListMap = createFKListMap(tableMap);
-		LinkedHashMap<String, List<String>> sorted = sortFKListMap(fkListMap);
-
-		return transform(sorted);
-	}
-
-	public List<GenerateDataObject> transform(LinkedHashMap<String, List<String>> tableMap) {
-		List<GenerateDataObject> tableList = new ArrayList<>();
-		for (Map.Entry<String, List<String>> entry : tableMap.entrySet()) {
-			List<GenerateDataObject> tableList1 = new ArrayList<>();
-			transformMaptoListData(tableList1, entry.getKey(), entry.getValue(), tableMap);
-			tableList.addAll(tableList1);
-		}
-		return tableList;
-	}
-
-	private void transformMaptoListData(List<GenerateDataObject> tableList, String child, List<String> parent,
-			LinkedHashMap<String, List<String>> tableMap) {
-		boolean isFound = false;
-		List<String> childTableName = null;
-		List<String> parent1 = null;
-		for (GenerateDataObject genDataObj : tableList) {
-			if (parent.contains(genDataObj.getTableName())) {
-				isFound = true;
-				addChildToParent(genDataObj, child);
-				childTableName = filterParentTable(child, tableMap);
-				if (!childTableName.isEmpty()) {
-					for (String child2 : childTableName) {
-						parent1 = new ArrayList<String>();
-						parent1.add(child);
-						transformMaptoListData(tableList, child2, parent1, tableMap);
-					}
-				}
-				break;
-			} else if (genDataObj.getChildTableName() != null) {
-				transformMaptoListData(genDataObj.getChildTableName(), child, parent, tableMap);
-			}
-		}
-		if (!isFound) {
-			if (parent.isEmpty()) {
-				GenerateDataObject child1 = new GenerateDataObject();
-				child1.setTableName(child);
-				tableList.add(child1);
-				childTableName = filterParentTable(child, tableMap);
-				if (!childTableName.isEmpty()) {
-					for (String child2 : childTableName) {
-						parent1 = new ArrayList<String>();
-						parent1.add(child);
-						transformMaptoListData(tableList, child2, parent1, tableMap);
-					}
-				}
-
-			}
-		}
-
-	}
-
-	private List<String> filterParentTable(String child, Map<String, List<String>> tableMap) {
-		List<String> childTableName = new ArrayList<String>();
-		for (Map.Entry<String, List<String>> entry : tableMap.entrySet()) {
-			List<String> parentList = entry.getValue();
-			if (parentList.contains(child)) {
-				childTableName.add(entry.getKey());
-			}
-		}
-		return childTableName;
-	}
-
-	private void addChildToParent(GenerateDataObject parent, String child) {
-		if (!(parent.getChildTableName() != null && parent.getChildTableName().size() > 0)) {
-			List<GenerateDataObject> childList = new LinkedList<GenerateDataObject>();
-			parent.setChildTableName(childList);
-		}
-		GenerateDataObject child1 = new GenerateDataObject();
-		child1.setTableName(child);
-		parent.getChildTableName().add(child1);
-	}
-
-	private LinkedHashMap<String, LinkedHashMap<String, String>> createTableMap(final Scanner scanner) {
-		LinkedHashMap<String, LinkedHashMap<String, String>> tableMap = new LinkedHashMap<>();
-		String tableName = "";
-		String primaryKey = "";
-		LinkedHashMap<String, String> fieldMap = null;
-		int count = 0;
-		int fkCount = 1;
-		while (scanner.hasNextLine()) {
-			final String lineFromFile = scanner.nextLine();
-			if (lineFromFile.contains(CREATE_TABLE)) {
-				fieldMap = new LinkedHashMap<>();
-				fkCount = 1;
-				String[] matchString = lineFromFile.split(CREATE_TABLE);
-				tableName = matchString[1].split(" ")[0].replace("`", "");
-				count = 1;
-			} else if (lineFromFile.contains(PRIMARY_KEY)) {
-				count = 0;
-				String[] pkString = lineFromFile.split(PRIMARY_KEY);
-				primaryKey = pkString[1].split(" ")[0].replace("`", "");
-				if (primaryKey.length() > 1)
-					fieldMap.put("PK", primaryKey.substring(1, primaryKey.length() - 2));
-			} else if (lineFromFile.contains(FOREIGN_KEY)) {
-				String[] fieldString = lineFromFile.split(FOREIGN_KEY);
-				String[] fieldString2 = fieldString[1].split(REFERENCES);
-				System.out.println("fieldString for fk is::" + fieldString2[0] + "--" + fieldString2[1]);
-				String test1 = fieldString2[0].replace("(", "").replace(")", "").replace("`", "").replace(" ", "");
-				String test2 = fieldString2[1].replace(" ", "").replace("`", "").replace(",", "")
-						.replace("ONUPDATECASCADE", "");
-				fieldMap.put("FK" + fkCount + "->" + test1, test2);
-				count = 0;
-				fkCount++;
-			} else if (lineFromFile.contains(ENGINE)) {
-				count = 0;
-			} else if (count == 1) {
-				String[] fieldString = lineFromFile.split(" ");
-				if (fieldString.length > 2) {
-					String field = fieldString[2].replace("`", "");
-					String fieldType = fieldString[3].replace("`", "");
-					fieldMap.put(field, fieldType);
-				}
-			}
-			if (tableName != "" || null != tableName && fieldMap != null)
-				tableMap.put(tableName, fieldMap);
-		}
-		scanner.close();
-		return tableMap;
-	}
-
-	private LinkedHashMap<String, List<String>> sortFKListMap(LinkedHashMap<String, List<String>> fkListMap) {
-		return fkListMap.entrySet().stream().sorted(comparingInt(e -> e.getValue().size()))
-				.collect(toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> {
-					throw new AssertionError();
-				}, LinkedHashMap::new));
 	}
 
 	private LinkedHashMap<String, List<String>> createFKListMap(
@@ -287,4 +122,127 @@ public class TableStructureExtractor {
 		}
 		return fkListMap;
 	}
+
+	public Map<Integer, List<String>> transform(LinkedHashMap<String, List<String>> tableMap) {
+		Map<Integer, List<String>> newMap = new LinkedHashMap<Integer, List<String>>();
+		for (Map.Entry<String, List<String>> entry : tableMap.entrySet()) {
+			transformMaptoListData_1(newMap, entry.getKey(), entry.getValue(), tableMap);
+		}
+		return newMap;
+	}
+
+	private void transformMaptoListData_1(Map<Integer, List<String>> orderedMap, String child, List<String> list,
+			LinkedHashMap<String, List<String>> tableMap) {
+		for (String parentTable : list) {
+			Integer parentOrderLevel = 0;
+			Integer childOrderLevel = 0;
+			for (Map.Entry<Integer, List<String>> entry : orderedMap.entrySet()) {
+				if (entry.getValue().contains(parentTable) && parentOrderLevel < entry.getKey()) {
+					parentOrderLevel = entry.getKey();
+				}
+				if (entry.getValue().contains(child)) {
+					childOrderLevel = entry.getKey();
+				}
+			}
+			if (parentOrderLevel == 0) {
+				parentOrderLevel = addChildIntoMap(parentTable, orderedMap, parentOrderLevel);
+
+			}
+			if (childOrderLevel > 0) {
+				if (parentOrderLevel >= childOrderLevel)// if parent order
+														// number is greater
+														// than child then put
+														// child below parent or
+														// leave as it is in
+														// order
+				{
+					if (!isTablesOnCyclicDependencies(parentOrderLevel, childOrderLevel, parentTable, child,
+							tableMap)) {
+						orderedMap.get(childOrderLevel).remove(child);
+						parentOrderLevel = addChildIntoMap(child, orderedMap, parentOrderLevel);
+						findChildDependencies(child, orderedMap, parentOrderLevel, tableMap);
+					}
+				}
+			} else {
+				addChildIntoMap(child, orderedMap, parentOrderLevel);
+			}
+		}
+		if (list.size() == 0) {
+			addChildIntoMap(child, orderedMap, 0);
+		}
+
+	}
+
+	private boolean isTablesOnCyclicDependencies(Integer parentOrderLevel, Integer childOrderLevel, String parentTable,
+			String child, LinkedHashMap<String, List<String>> tableMap) {
+		boolean isTrue = false;
+		if (parentOrderLevel.intValue() == childOrderLevel.intValue()) {
+			for (Map.Entry<String, List<String>> entry : tableMap.entrySet()) {
+				if (entry.getKey().equals(child)) {
+					break;
+				}
+				if (entry.getValue().contains(child) && entry.getKey().equals(parentTable)) {
+					isTrue = true;
+				}
+
+			}
+		}
+
+		return isTrue;
+	}
+
+	private int addChildIntoMap(String child, Map<Integer, List<String>> newMap, Integer parentOrderLevel) {
+
+		int newParentLevel = parentOrderLevel.intValue() + 1;
+		List<String> OrderLevelist = newMap.get(newParentLevel);
+		if (!(OrderLevelist != null && OrderLevelist.size() > 0)) {
+			OrderLevelist = new ArrayList<String>();
+			newMap.put(parentOrderLevel + 1, OrderLevelist);
+		}
+		newMap.get(newParentLevel).add(child);
+		return newParentLevel;
+	}
+
+	private void findChildDependencies(String child, Map<Integer, List<String>> orderedMap, Integer parentOrderLevel,
+			LinkedHashMap<String, List<String>> tableMap) {
+
+		List<String> childDependentTables = findDependencies(child, child, tableMap);
+
+		for (String childTable : childDependentTables) {
+			ListIterator<Integer> litt = new LinkedList<Integer>(orderedMap.keySet()).listIterator();
+			while (litt.hasNext()) {
+				Integer entry = litt.next();
+				if (orderedMap.get(entry).contains(childTable)) {
+					if (entry <= parentOrderLevel) {
+						List<String> parentDependentTables = findDependencies(childTable, child, tableMap);
+						List<String> tables = orderedMap.get(entry);
+						tables.remove(childTable);
+						orderedMap.put(entry, tables);
+						if (parentDependentTables.contains(child)) {
+							addChildIntoMap(childTable, orderedMap, parentOrderLevel - 1);
+							childTable = childTable + "-->>" + child;
+							addChildIntoMap(childTable, orderedMap, parentOrderLevel - 1);
+							continue;
+						}
+						addChildIntoMap(childTable, orderedMap, parentOrderLevel);
+
+					}
+				}
+			}
+		}
+	}
+
+	private List<String> findDependencies(String parent, String child, LinkedHashMap<String, List<String>> tableMap) {
+		List<String> dependentTables = new ArrayList<String>();
+		for (Map.Entry<String, List<String>> entry : tableMap.entrySet()) {
+			if (entry.getValue().contains(parent)) {
+				dependentTables.add(entry.getKey());
+			}
+			if (entry.getKey().equals(child)) {
+				break;
+			}
+		}
+		return dependentTables;
+	}
+
 }

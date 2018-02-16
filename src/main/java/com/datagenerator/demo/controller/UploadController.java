@@ -3,20 +3,15 @@ package com.datagenerator.demo.controller;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.InputStreamSource;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,7 +20,10 @@ import com.datagenerator.demo.service.SQLFileReadService;
 import com.datagenerator.demo.serviceImpl.DataGenerationService;
 import com.datagenerator.demo.utils.CustomTokenConverter;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RestController
+@Slf4j
 public class UploadController {
 
 
@@ -45,36 +43,19 @@ public class UploadController {
 	public ResponseEntity<List<LinkedHashMap<String, LinkedHashMap<String, String>>>> uploadProfile(
 			@RequestParam(name = "file", required = true) MultipartFile multipartFile,
 			@RequestParam(name = "domainType", required = true) String domainType) throws Exception {
-		/*
-		 * if (null == multipartFile) { return new
-		 * ResponseEntity<String>("Please select file for upload.!",
-		 * HttpStatus.BAD_REQUEST); }
-		 */
-		// uploadService.uploadFile(multipartFile);
+		
 		List<LinkedHashMap<String, LinkedHashMap<String, String>>> list = sqlFileReadService.readSQLfile(multipartFile,
 				domainType);
 		customTokenConverter.setAdditionalInfo("mappedTables", list);
 		return new ResponseEntity<List<LinkedHashMap<String, LinkedHashMap<String, String>>>>(list, HttpStatus.OK);
 	}
 
-	/*@GetMapping("/download")
-	public ResponseEntity<?> downloadFile() {
-		ClassLoader classLoader = getClass().getClassLoader();
-		File file = new File(classLoader.getResource("Dump20180122.sql").getFile());
-		InputStreamSource resource = null;
-		try {
-			resource = new org.springframework.core.io.InputStreamResource(new java.io.FileInputStream(file));
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + file.getName())
-				.contentType(MediaType.APPLICATION_OCTET_STREAM).contentLength(file.length()).body(resource);
-	}*/
+
 
 	@PostMapping("/download")
 	public ResponseEntity<?> downloadExcelFile(@RequestParam(name = "fileType", required = true) String fileType) throws Exception {
+		log.info("@@@@@@@@@@@@@@@@@   "+fileType+"   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 		dataGenerationService.generateData();
-		
 		String generatedFileName = fileType.equals("xls") ? "output/ExcelSheet.xls" : fileType.equals("csv") ? "output/DAS.zip" : fileType.equals("sql") ? "output/DAS.sql" : "output/DAS.xml";
 		String responseContentType = fileType.equals("xls") ? "application/vnd.ms-excel" : fileType.equals("csv") ? "application/csv" : fileType.equals("sql") ? "application/sql" : "application/xml";
 		Resource resource = new ClassPathResource(generatedFileName);
@@ -87,6 +68,7 @@ public class UploadController {
 			IOUtils.copyLarge(isr, response.getOutputStream());
 		} else {
 			isr.close();
+			log.error("Excel file not found");
 			throw new Exception("Excel file not found");
 		}
 		response.getOutputStream().flush();
