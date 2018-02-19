@@ -8,6 +8,7 @@ import java.util.Random;
 import org.springframework.stereotype.Service;
 
 import com.datagenerator.demo.serviceImpl.Dataset;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -28,7 +29,7 @@ public class GenerateSampleDataUtil {
 					row.add(Dataset.getRandomData(entry.getKey()));
 				}
 			}
-			log.info("row "+row);
+			//log.info("row "+row);
 			records.add(row);
 		}
 		return records;
