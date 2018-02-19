@@ -57,7 +57,7 @@ public class UploadController {
 		return new ResponseEntity<List<LinkedHashMap<String, LinkedHashMap<String, String>>>>(list, HttpStatus.OK);
 	}
 
-	@GetMapping("/download")
+	/*@GetMapping("/download")
 	public ResponseEntity<?> downloadFile() {
 		ClassLoader classLoader = getClass().getClassLoader();
 		File file = new File(classLoader.getResource("Dump20180122.sql").getFile());
@@ -69,17 +69,19 @@ public class UploadController {
 		}
 		return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + file.getName())
 				.contentType(MediaType.APPLICATION_OCTET_STREAM).contentLength(file.length()).body(resource);
-	}
+	}*/
 
-	@PostMapping("/downloadExcel")
+	@PostMapping("/download")
 	public ResponseEntity<?> downloadExcelFile(@RequestParam(name = "fileType", required = true) String fileType) throws Exception {
-		System.out.println("@@@@@@@@@@@@@@@@@   "+fileType+"   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 		dataGenerationService.generateData();
-		Resource resource = new ClassPathResource("output/ExcelSheet.xls");
+		
+		String generatedFileName = fileType.equals("xls") ? "output/ExcelSheet.xls" : fileType.equals("csv") ? "output/DAS.zip" : fileType.equals("sql") ? "output/DAS.sql" : "output/DAS.xml";
+		String responseContentType = fileType.equals("xls") ? "application/vnd.ms-excel" : fileType.equals("csv") ? "application/csv" : fileType.equals("sql") ? "application/sql" : "application/xml";
+		Resource resource = new ClassPathResource(generatedFileName);
 		File file = resource.getFile();
 		BufferedInputStream isr = new BufferedInputStream(new FileInputStream(file));
 		if (file != null) {
-			response.setContentType("application/vnd.ms-excel");
+			response.setContentType(responseContentType);
 			response.setContentLength((int) file.length());
 			response.setHeader("filename", file.getName());
 			IOUtils.copyLarge(isr, response.getOutputStream());
@@ -87,7 +89,8 @@ public class UploadController {
 			isr.close();
 			throw new Exception("Excel file not found");
 		}
+		response.getOutputStream().flush();
+		response.getOutputStream().close();
 		return new ResponseEntity<HttpServletResponse>(response, HttpStatus.OK);
 	}
-
 }
