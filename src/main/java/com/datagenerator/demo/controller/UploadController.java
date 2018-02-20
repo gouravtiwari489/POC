@@ -56,9 +56,11 @@ public class UploadController {
 
 
 	@PostMapping("/download")
-	public ResponseEntity<?> downloadExcelFile(@RequestParam(name = "fileType", required = true) String fileType) throws Exception {
+	public ResponseEntity<?> downloadExcelFile(@RequestParam(name = "fileType", required = true) String fileType,
+			@RequestParam(name = "rowCount", required = true) int rowCount) throws Exception {
 		BufferedInputStream isr=null;
-		log.info("@@@@@@@@@@@@@@@@@   "+fileType+"   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+		log.info("@@@@@@@@@@@@@@@@@ fileType   "+fileType+"   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+		log.info("@@@@@@@@@@@@@@@@@ rowCount   "+rowCount+"   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 		dataGenerationService.generateData();
 		String generatedFileName = fileType.equals("xls") ? "output/ExcelSheet.xls" : fileType.equals("csv") ? "output/DAS.zip" : fileType.equals("sql") ? "output/DAS.sql" : "output/DAS.xml";
 		String responseContentType = fileType.equals("xls") ? "application/vnd.ms-excel" : fileType.equals("csv") ? "application/csv" : fileType.equals("sql") ? "application/sql" : "application/xml";
