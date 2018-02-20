@@ -3,6 +3,8 @@ package com.datagenerator.demo.controller;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -61,7 +63,7 @@ public class UploadController {
 		log.info("@@@@@@@@@@@@@@@@@ fileType   "+fileType+"   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 		log.info("@@@@@@@@@@@@@@@@@ rowCount   "+rowCount+"   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 		dataGenerationService.generateData();
-		String generatedFileName = fileType.equals("xls") ? "output/ExcelSheet.xls" : fileType.equals("csv") ? "output/DAS.zip" : fileType.equals("sql") ? "output/DAS.sql" : "output/DAS.xml";
+		String generatedFileName = fileType.equals("xls") ? "output/ExcelSheet.xlsx" : fileType.equals("csv") ? "output/DAS.zip" : fileType.equals("sql") ? "output/DAS.sql" : "output/DAS.xml";
 		String responseContentType = fileType.equals("xls") ? "application/vnd.ms-excel" : fileType.equals("csv") ? "application/csv" : fileType.equals("sql") ? "application/sql" : "application/xml";
 		Resource resource = new ClassPathResource(generatedFileName);
 		File file = resource.getFile();
