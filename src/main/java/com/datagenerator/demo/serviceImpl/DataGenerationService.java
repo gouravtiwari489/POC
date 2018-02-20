@@ -5,11 +5,15 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
@@ -52,6 +56,8 @@ public class DataGenerationService {
 		try {
 			Resource resource = new ClassPathResource("output");
 			filePath = resource.getFile().getPath() + "\\ExcelSheet.xls";
+			File f = new File(filePath);
+			Files.deleteIfExists(Paths.get(f.toURI()));
 			if (new File(filePath).createNewFile()) {
 				workbook = new HSSFWorkbook();
 			} else {
@@ -67,8 +73,9 @@ public class DataGenerationService {
 					executor.execute(dataGenerationWorker);
 				}
 				executor.shutdown();
-				while (!executor.isTerminated()) {
-				}
+				executor.awaitTermination(5, TimeUnit.MINUTES);
+				/*while (!executor.isTerminated()) {
+				}*/
 				log.info("Finished all threads");
 				FileOutputStream outputStream = null;
 				outputStream = new FileOutputStream(filePath);
@@ -82,6 +89,7 @@ public class DataGenerationService {
 			log.error("Error while creating excel", ex);
 		} catch (Exception ex) {
 			log.error("Error wrting to file", ex);
+			ex.printStackTrace();
 		}
 
 	}
