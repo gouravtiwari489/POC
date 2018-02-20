@@ -118,7 +118,6 @@ public class TableStructureExtractor {
 				}
 			}
 			fkListMap.put(tableName2, list);
-
 		}
 		return fkListMap;
 	}
@@ -146,7 +145,6 @@ public class TableStructureExtractor {
 			}
 			if (parentOrderLevel == 0) {
 				parentOrderLevel = addChildIntoMap(parentTable, orderedMap, parentOrderLevel);
-
 			}
 			if (childOrderLevel > 0) {
 				if (parentOrderLevel >= childOrderLevel)// if parent order
@@ -184,10 +182,8 @@ public class TableStructureExtractor {
 				if (entry.getValue().contains(child) && entry.getKey().equals(parentTable)) {
 					isTrue = true;
 				}
-
 			}
 		}
-
 		return isTrue;
 	}
 
@@ -225,7 +221,6 @@ public class TableStructureExtractor {
 							continue;
 						}
 						addChildIntoMap(childTable, orderedMap, parentOrderLevel);
-
 					}
 				}
 			}
@@ -244,5 +239,4 @@ public class TableStructureExtractor {
 		}
 		return dependentTables;
 	}
-
 }

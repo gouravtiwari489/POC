@@ -18,31 +18,20 @@ public class FindWordMatchingPossibilities {
 	@Value("${match.threshold}")
 	String threshold;
 	
-	/*public  void main(String[] args) throws FileNotFoundException {
-		String wordToFind = "dId";
-		findMathingWord(wordToFind);
-	}*/
-
 	public Map<String,List<String>> findMatchingWord(String wordToFind,String domainType) throws FileNotFoundException {
 		System.out.println("Word to Find : "+wordToFind);
 		String wordArr[] = null;
 		Map<String,List<String>> matchingMap = null;
-		File file = null;
 		ClassLoader classLoader = getClass().getClassLoader();
-		if(domainType.equalsIgnoreCase("HRMS"))
-		    file = new File(classLoader.getResource("HRMS-dataset.txt").getFile());
-		else if(domainType.equalsIgnoreCase("SupplyChain"))
-			file = new File(classLoader.getResource("SupplyChain-dataset.txt").getFile());
+		
+		String datasetFileName = domainType.equalsIgnoreCase("HRMS") ? "HRMS-dataset.txt" : "SupplyChain-dataset.txt";
+		
+		File file = new File(classLoader.getResource(datasetFileName).getFile());
 		Scanner scanner = new Scanner(file);
 		
 		wordArr = splitWordToFind(wordToFind, wordArr, 2);
 		wordArr = removeNullValues(wordArr);
-		
 	    matchingMap = findMatchingWords(wordArr, matchingMap, scanner);
-		/*System.out.println("First time match #################################");
-	    for(Map.Entry<String, String> elem : matchingMap.entrySet()){
-			System.out.println(elem.getKey()+" :: "+elem.getValue());
-		}*/
 	    
 	    int splitLength = 3, len=wordArr.length;
 		while(matchingMap.size() >1){
@@ -125,7 +114,7 @@ public class FindWordMatchingPossibilities {
 		return Math.abs(match/word2.length());
 	}
 
-	private  String[] splitWordToFind(String wordToFind, String[] wordArr, int splitLength) {
+	private  String[] splitWordToFind(String wordToFind, String[] wordArr,  int splitLength) {
 		wordArr = new String[50];
 		int j=0;
 		if(wordToFind.length() <= splitLength){

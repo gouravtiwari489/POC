@@ -28,7 +28,6 @@ public class DataGenerationWorker implements Runnable {
 			e.printStackTrace();
 		}
 		log.info("data generation completed for " + tableName);
-
 	}
 
 	private void generateData(String tableName) throws Exception {

@@ -6,6 +6,5 @@ import com.datagenerator.demo.domain.Domain;
 
 public interface DomainRepository extends MongoRepository<Domain, String>{
 
-	
 	public List<Domain> getDomainByDomainId(String name) ;
 }

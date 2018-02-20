@@ -26,18 +26,18 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 public class DataGenerationService {
-
+	
 	public static List<LinkedHashMap<String, LinkedHashMap<String, String>>> tablFieldMappingeMap = null;
-	private static Map<Integer, List<String>> tablesMap = null;
 
 	@Autowired
 	private CustomTokenConverter customTokenConverter;
 
+	@SuppressWarnings("unchecked")
 	public void generateData() {
 
 		tablFieldMappingeMap = (List<LinkedHashMap<String, LinkedHashMap<String, String>>>) customTokenConverter
 				.getAdditionalInfo("mappedTables");
-		tablesMap = (Map<Integer, List<String>>) customTokenConverter.getAdditionalInfo("orderedFKList");
+		Map<Integer, List<String>> tablesMap = (Map<Integer, List<String>>) customTokenConverter.getAdditionalInfo("orderedFKList");
 		log.info("tablFieldMappingeMap values after getting from context", tablFieldMappingeMap);
 		log.info("tablesMap values after getting from context", tablesMap);
 		threadService(tablesMap);
@@ -67,15 +67,12 @@ public class DataGenerationService {
 					executor.execute(dataGenerationWorker);
 				}
 				executor.shutdown();
-				while (!executor.isTerminated()) {
-				}
+				while (!executor.isTerminated()) {}
 				log.info("Finished all threads");
-				FileOutputStream outputStream = null;
-				outputStream = new FileOutputStream(filePath);
+				FileOutputStream outputStream = new FileOutputStream(filePath);
 				workbook.write(outputStream);
 				outputStream.close();
 			}
-
 		} catch (FileNotFoundException ex) {
 			log.error("Error while creating excel", ex);
 		} catch (IOException ex) {
@@ -83,7 +80,5 @@ public class DataGenerationService {
 		} catch (Exception ex) {
 			log.error("Error wrting to file", ex);
 		}
-
 	}
-
 }

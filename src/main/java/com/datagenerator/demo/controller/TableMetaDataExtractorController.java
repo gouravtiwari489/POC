@@ -26,9 +26,6 @@ public class TableMetaDataExtractorController {
 	@Autowired
 	private TableStructureExtractor tableStructureExtractor;
 	
-	//@Autowired
-	//sprivate XmiTableStructureExtractor XmiTableStructureExtractor;
-	
 	@Autowired
 	private FindWordMatchingPossibilities findWordMatchingPossibilities;
 	

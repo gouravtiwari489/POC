@@ -23,7 +23,5 @@ public class UploadService {
 		fos.write(multipartFile.getBytes());
 		tableStructureExtractor.searchforTableName(convFile);
 		fos.close();
-
 	}
-
 }

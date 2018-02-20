@@ -1,6 +1,5 @@
 package com.datagenerator.demo.domain;
 
-
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.Data;
@@ -14,6 +13,4 @@ public class Role {
 	public Role( String name) {
 		this.name = name;
 	}
-	
-
 }

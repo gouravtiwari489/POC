@@ -14,16 +14,14 @@ public class Dataset {
 
 	static {
 		try{
-		Resource resource = new ClassPathResource("datasets");
-		resource.getFile().getPath();
-		File [] files = new File(resource.getFile().getPath()).listFiles();
-		
-		for (File file : files) {
-			List<String> lines = FileUtils.readLines(file, "utf-8");
-
-			map.put(file.getName().split("\\.")[0].toLowerCase(), lines);
-		}
-
+			Resource resource = new ClassPathResource("datasets");
+			resource.getFile().getPath();
+			File [] files = new File(resource.getFile().getPath()).listFiles();
+			
+			for (File file : files) {
+				List<String> lines = FileUtils.readLines(file, "utf-8");
+				map.put(file.getName().split("\\.")[0].toLowerCase(), lines);
+			}
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -36,10 +34,5 @@ public class Dataset {
 		}else{
 			return ColumnName.toLowerCase();
 		}
-
 	}
-	
-	
-	
-
 }
