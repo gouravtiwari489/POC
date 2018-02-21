@@ -51,7 +51,7 @@ public class UploadController {
 		
 		List<LinkedHashMap<String, LinkedHashMap<String, String>>> list = sqlFileReadService.readSQLfile(multipartFile,
 				domainType);
-		customTokenConverter.setAdditionalInfo("mappedTables", list);
+	//	customTokenConverter.setAdditionalInfo("mappedTables", list);
 		return new ResponseEntity<List<LinkedHashMap<String, LinkedHashMap<String, String>>>>(list, HttpStatus.OK);
 	}
 

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import com.datagenerator.demo.repository.DomainRepository;
 import com.datagenerator.demo.service.SQLFileReadService;
+import com.datagenerator.demo.utils.CustomTokenConverter;
 import com.datagenerator.demo.utils.FindWordMatchingPossibilities;
 import com.datagenerator.demo.utils.TableStructureExtractor;
 
@@ -25,6 +26,9 @@ public class SQLFileReadServiceImpl implements SQLFileReadService{
 	
 	@Autowired
 	private FindWordMatchingPossibilities findWordMatchingPossibilities;
+	
+	@Autowired
+	private CustomTokenConverter customTokenConverter;
 	
 	@Override
 	public List<LinkedHashMap<String, LinkedHashMap<String,String>>> readSQLfile(MultipartFile multiFile,String domainType) throws Exception {
@@ -85,9 +89,13 @@ public class SQLFileReadServiceImpl implements SQLFileReadService{
 			finalInputMap.put(entry.getKey(), finalInputTableFields);
 		}
 		List<LinkedHashMap<String, LinkedHashMap<String,String>>> list = new ArrayList<>();
-		list.add(finalInputMap);
+		List<LinkedHashMap<String, LinkedHashMap<String,String>>> list2 = new ArrayList<>();
+		list.add(inputTableMap);
 		list.add(finalMappedMap);
-		return list;
+		list2.add(finalInputMap);
+		list2.add(finalMappedMap);
+		customTokenConverter.setAdditionalInfo("mappedTables", list);
+		return list2;
 		
 		// Unmapped entity needs to be saved?
 	}
