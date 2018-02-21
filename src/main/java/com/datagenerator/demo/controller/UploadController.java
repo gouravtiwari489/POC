@@ -63,8 +63,8 @@ public class UploadController {
 		log.info("@@@@@@@@@@@@@@@@@ fileType   "+fileType+"   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 		log.info("@@@@@@@@@@@@@@@@@ rowCount   "+rowCount+"   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 		dataGenerationService.generateData();
-		String generatedFileName = fileType.equals("xls") ? "output/ExcelSheet.xlsx" : fileType.equals("csv") ? "output/DAS.zip" : fileType.equals("sql") ? "output/DAS.sql" : "output/DAS.xml";
-		String responseContentType = fileType.equals("xls") ? "application/vnd.ms-excel" : fileType.equals("csv") ? "application/csv" : fileType.equals("sql") ? "application/sql" : "application/xml";
+		String generatedFileName = fileType.equals("xlsx") ? "output/ExcelSheet.xlsx" : fileType.equals("csv") ? "output/DAS.zip" : fileType.equals("sql") ? "output/DAS.sql" : "output/DAS.xml";
+		String responseContentType = fileType.equals("xlsx") ? "application/vnd.ms-excel" : fileType.equals("csv") ? "application/csv" : fileType.equals("sql") ? "application/sql" : "application/xml";
 		Resource resource = new ClassPathResource(generatedFileName);
 		File file = resource.getFile();
 		BufferedInputStream isr = new BufferedInputStream(new FileInputStream(file));
