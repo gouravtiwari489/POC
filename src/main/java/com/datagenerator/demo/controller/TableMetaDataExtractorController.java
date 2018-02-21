@@ -36,7 +36,12 @@ public class TableMetaDataExtractorController {
 	public ResponseEntity<LinkedHashMap<String, LinkedHashMap<String,String>>> extractTableMetaData() throws ClassNotFoundException, IOException {
 		ClassLoader classLoader = getClass().getClassLoader();
 		File file = new File(classLoader.getResource("Dump20180122.sql").getFile());
-		LinkedHashMap<String, LinkedHashMap<String,String>> tableMap = tableStructureExtractor.searchforTableName(file);
+		LinkedHashMap<String, LinkedHashMap<String, String>> tableMap = new LinkedHashMap<>();
+		try {
+			tableMap = tableStructureExtractor.searchforTableName(file);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		customTokenConverter.setAdditionalInfo("extractor",tableMap);
 		return new ResponseEntity<LinkedHashMap<String, LinkedHashMap<String,String>>>(tableMap, HttpStatus.OK);
 	}

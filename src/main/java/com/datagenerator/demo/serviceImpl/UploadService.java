@@ -21,7 +21,12 @@ public class UploadService {
 		convFile.createNewFile();
 		FileOutputStream fos = new FileOutputStream(convFile);
 		fos.write(multipartFile.getBytes());
-		tableStructureExtractor.searchforTableName(convFile);
+		try {
+			tableStructureExtractor.searchforTableName(convFile);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		fos.close();
 	}
 }

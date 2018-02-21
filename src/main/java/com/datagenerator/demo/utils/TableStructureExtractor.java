@@ -27,7 +27,7 @@ public class TableStructureExtractor {
 	private CustomTokenConverter customTokenConverter;
 
 	public LinkedHashMap<String, LinkedHashMap<String, String>> searchforTableName(File file)
-			throws FileNotFoundException {
+			throws Exception {
 		LinkedHashMap<String, LinkedHashMap<String, String>> tableMap = new LinkedHashMap<>();
 		final Scanner scanner = new Scanner(file);
 		String tableName = "", primaryKey = "";
@@ -78,8 +78,33 @@ public class TableStructureExtractor {
 		return tableMap;
 	}
 
-	private void reOrderTableStructure(LinkedHashMap<String, LinkedHashMap<String, String>> tableMap) {
+	private void reOrderTableStructure(LinkedHashMap<String, LinkedHashMap<String, String>> tableMap) throws Exception{
 		LinkedHashMap<String, List<String>> fkListMap = createFKListMap(tableMap);
+		String msg = "";
+		for (Map.Entry<String, List<String>> entry : fkListMap.entrySet()) {
+			String parentTbl = entry.getKey();
+			List<String> childTbls = entry.getValue();
+			if(childTbls.contains(parentTbl))
+				msg = "Table "+parentTbl+ " has self join";
+			else {
+				for(String chldtbl:childTbls) {
+					List<String> childTbls2 = fkListMap.get(chldtbl);
+					if(childTbls2.contains(parentTbl)) {
+						if(!msg.isEmpty())
+							msg = msg + " and   " + parentTbl +" has cyclic dependency with " + chldtbl;
+						else
+							msg =  parentTbl +" has cyclic dependency with " + chldtbl;
+					}
+						
+				}
+				
+			}
+			
+		}
+		if(!msg.isEmpty()) {
+			throw new Exception(msg);
+		}
+			
 		LinkedHashMap<String, List<String>> sorted = sortMap(fkListMap);
 		Map<Integer, List<String>> map = transform(sorted);
 		customTokenConverter.setAdditionalInfo("orderedFKList", map);

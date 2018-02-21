@@ -48,9 +48,12 @@ public class UploadController {
 	public ResponseEntity<List<LinkedHashMap<String, LinkedHashMap<String, String>>>> uploadProfile(
 			@RequestParam(name = "file", required = true) MultipartFile multipartFile,
 			@RequestParam(name = "domainType", required = true) String domainType) throws Exception {
-		
-		List<LinkedHashMap<String, LinkedHashMap<String, String>>> list = sqlFileReadService.readSQLfile(multipartFile,
-				domainType);
+		List<LinkedHashMap<String, LinkedHashMap<String, String>>> list = null;
+		try {
+		      list = sqlFileReadService.readSQLfile(multipartFile,domainType);
+		}catch(Exception ex) {
+			throw new Exception(ex.getMessage());
+		}
 	//	customTokenConverter.setAdditionalInfo("mappedTables", list);
 		return new ResponseEntity<List<LinkedHashMap<String, LinkedHashMap<String, String>>>>(list, HttpStatus.OK);
 	}
