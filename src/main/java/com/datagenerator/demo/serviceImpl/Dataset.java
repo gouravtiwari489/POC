@@ -1,6 +1,8 @@
 package com.datagenerator.demo.serviceImpl;
 
 import java.io.File;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,5 +36,13 @@ public class Dataset {
 		}else{
 			return ColumnName.toLowerCase();
 		}
+	}
+
+	public static Date  getRandomDate() {
+		
+		long  beginTime = Timestamp.valueOf("1900-01-01 00:00:00").getTime();
+		long  endTime = System.currentTimeMillis();
+		    long diff = endTime - beginTime + 1;
+		    return new Date(beginTime + (long) (Math.random() * diff));
 	}
 }

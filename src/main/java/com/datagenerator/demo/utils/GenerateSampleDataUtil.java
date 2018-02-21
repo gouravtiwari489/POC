@@ -11,23 +11,30 @@ import com.datagenerator.demo.serviceImpl.Dataset;
 
 @Service
 public class GenerateSampleDataUtil {
-	
-	public static List<List<String>> generateData(Map<String, String> fieldMap) {
+
+	public static List<List<String>> generateData(Map<String, String> fieldMap, int rowCount) {
 		List<List<String>> records = new ArrayList<List<String>>();
 		records.add(new ArrayList<String>(fieldMap.keySet()));
-		for (int i = 0; i < 1000; i++) {
+		for (int i = 1; i <= rowCount; i++) {
 			List<String> row = new ArrayList<String>();
 			for (Map.Entry<String, String> entry : fieldMap.entrySet()) {
-				if (entry.getValue().contains("int")) {
+				String[] values = entry.getValue().split("<>");
+				if (values[1].contains("varchar")) {
+					row.add(Dataset.getRandomData(values[0]));
+				} else if (values[1].contains("int")) {
 					row.add(i + "");
-				} else if (entry.getValue().contains("decimal")) {
+				} else if (values[1].contains("blob")) {
+					row.add(Dataset.getRandomData(values[0]));
+				}  else if (values[1].contains("date")) {
+					row.add(Dataset.getRandomDate().toString());
+				}
+				else {
 					row.add(i + new Random().nextInt(23456) * 0.2 + "");
-				} else {
-					row.add(Dataset.getRandomData(entry.getKey()));
 				}
 			}
 			records.add(row);
 		}
+
 		return records;
 	}
 }
