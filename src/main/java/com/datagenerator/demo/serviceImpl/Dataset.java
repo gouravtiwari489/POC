@@ -30,9 +30,10 @@ public class Dataset {
 	}
 
 	public static String getRandomData(String ColumnName) {
+		System.out.println("ColumnName "+ColumnName);
 		List<String> data = map.get(ColumnName.toLowerCase());
 		if(data!=null){
-		return data.get(new Random().nextInt(100));
+		return data.get(new Random().nextInt(data.size()));
 		}else{
 			return ColumnName.toLowerCase();
 		}
