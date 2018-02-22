@@ -2,6 +2,8 @@ package com.datagenerator.demo.serviceImpl;
 
 import java.io.File;
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -15,34 +17,50 @@ public class Dataset {
 	public static Map<String, List<String>> map = new HashMap<>();
 
 	static {
-		try{
+		try {
 			Resource resource = new ClassPathResource("datasets");
 			resource.getFile().getPath();
-			File [] files = new File(resource.getFile().getPath()).listFiles();
-			
+			File[] files = new File(resource.getFile().getPath()).listFiles();
+
 			for (File file : files) {
 				List<String> lines = FileUtils.readLines(file, "utf-8");
 				map.put(file.getName().split("\\.")[0].toLowerCase(), lines);
 			}
-		}catch(Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	public static String getRandomData(String ColumnName) {
 		List<String> data = map.get(ColumnName.toLowerCase());
-		if(data!=null){
-		return data.get(new Random().nextInt(data.size()));
-		}else{
+		if (data != null) {
+			return data.get(new Random().nextInt(data.size()));
+		} else {
 			return ColumnName.toLowerCase();
 		}
 	}
 
-	public static Date  getRandomDate() {
+	public static Date getRandomDate() {
+
+		long beginTime = Timestamp.valueOf("1900-01-01 00:00:00").getTime();
+		long endTime = System.currentTimeMillis();
+		long diff = endTime - beginTime + 1;
+		return new Date(beginTime + (long) (Math.random() * diff));
+	}
+
+	public static String getRandomDecimal() throws ParseException {
+
+		double begin= 1000d;
+		double end = 9999d;
+		DecimalFormat df=new DecimalFormat("0.00");
+		String number=df.format(begin+new Random().nextDouble()*(end-begin));
+		return df.parse(number).toString();
+	}
+
+	public static String getRandomInt() {
+		int begin= 1000;
+		int end = 9999;
 		
-		long  beginTime = Timestamp.valueOf("1900-01-01 00:00:00").getTime();
-		long  endTime = System.currentTimeMillis();
-		    long diff = endTime - beginTime + 1;
-		    return new Date(beginTime + (long) (Math.random() * diff));
+		return ((new Random().nextInt(end-begin)+1)+begin)+"";
 	}
 }

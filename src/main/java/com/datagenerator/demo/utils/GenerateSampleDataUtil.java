@@ -3,7 +3,6 @@ package com.datagenerator.demo.utils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import org.springframework.stereotype.Service;
 
@@ -22,7 +21,7 @@ public class GenerateSampleDataUtil {
 				if (values[1].contains("varchar")) {
 					row.add(Dataset.getRandomData(values[0]));
 				} else if (values[1].contains("int")) {
-					row.add(i + "");
+					row.add(Dataset.getRandomInt());
 				} else if (values[1].contains("blob")) {
 					row.add(Dataset.getRandomData(values[0]));
 				}  else if (values[1].contains("date")) {
@@ -31,7 +30,11 @@ public class GenerateSampleDataUtil {
 					row.add(Dataset.getRandomData(values[0]));
 				}
 				else {
-					row.add(i + new Random().nextInt(23456) * 0.2 + "");
+					try{
+					row.add(Dataset.getRandomDecimal());
+					}catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 			}
 			records.add(row);
