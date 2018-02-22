@@ -30,70 +30,94 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class SwaggerConfig {
 
-   
-    private String clientId="client";
-    private String clientSecret="clientpassword";
-    private String authLink="http://localhost:9080/datagenerator/";
+  private String clientId = "client";
+  private String clientSecret = "clientpassword";
+  private String authLink = "http://localhost:9080/datagenerator/";
 
-    @Bean
-    public Docket api() {
+  @Bean
+  public Docket api() {
 
-        List<ResponseMessage> list = new java.util.ArrayList<>();
-        list.add(new ResponseMessageBuilder().code(500).message("500 message")
-                .responseModel(new ModelRef("Result")).build());
-        list.add(new ResponseMessageBuilder().code(401).message("Unauthorized")
-                .responseModel(new ModelRef("Result")).build());
-        list.add(new ResponseMessageBuilder().code(406).message("Not Acceptable")
-                .responseModel(new ModelRef("Result")).build());
+    List<ResponseMessage> list = new java.util.ArrayList<>();
+    list.add(
+        new ResponseMessageBuilder()
+            .code(500)
+            .message("500 message")
+            .responseModel(new ModelRef("Result"))
+            .build());
+    list.add(
+        new ResponseMessageBuilder()
+            .code(401)
+            .message("Unauthorized")
+            .responseModel(new ModelRef("Result"))
+            .build());
+    list.add(
+        new ResponseMessageBuilder()
+            .code(406)
+            .message("Not Acceptable")
+            .responseModel(new ModelRef("Result"))
+            .build());
 
-        return new Docket(DocumentationType.SWAGGER_2).select().apis(RequestHandlerSelectors.basePackage("com.datagenerator.demo.controller"))
-                .paths(PathSelectors.any()).build().securitySchemes(Collections.singletonList(securitySchema()))
-                .securityContexts(Collections.singletonList(securityContext())).pathMapping("/")
-                .useDefaultResponseMessages(false).apiInfo(apiInfo()).globalResponseMessage(RequestMethod.GET, list)
-                .globalResponseMessage(RequestMethod.POST, list);
+    return new Docket(DocumentationType.SWAGGER_2)
+        .select()
+        .apis(RequestHandlerSelectors.basePackage("com.datagenerator.demo.controller"))
+        .paths(PathSelectors.any())
+        .build()
+        .securitySchemes(Collections.singletonList(securitySchema()))
+        .securityContexts(Collections.singletonList(securityContext()))
+        .pathMapping("/")
+        .useDefaultResponseMessages(false)
+        .apiInfo(apiInfo())
+        .globalResponseMessage(RequestMethod.GET, list)
+        .globalResponseMessage(RequestMethod.POST, list);
+  }
 
+  private OAuth securitySchema() {
 
+    List<AuthorizationScope> authorizationScopeList = new ArrayList<>();
+    authorizationScopeList.add(new AuthorizationScope("read", "read all"));
+    authorizationScopeList.add(new AuthorizationScope("write", "access all"));
 
-    }
+    List<GrantType> grantTypes = new ArrayList<>();
+    GrantType creGrant = new ResourceOwnerPasswordCredentialsGrant(authLink + "/oauth/token");
 
-    private OAuth securitySchema() {
+    grantTypes.add(creGrant);
 
-        List<AuthorizationScope> authorizationScopeList = new ArrayList<>();
-        authorizationScopeList.add(new AuthorizationScope("read", "read all"));
-        authorizationScopeList.add(new AuthorizationScope("write", "access all"));
+    return new OAuth("oauth2schema", authorizationScopeList, grantTypes);
+  }
 
-        List<GrantType> grantTypes = new ArrayList<>();
-        GrantType creGrant = new ResourceOwnerPasswordCredentialsGrant(authLink+"/oauth/token");
+  private SecurityContext securityContext() {
+    return SecurityContext.builder()
+        .securityReferences(defaultAuth())
+        .forPaths(PathSelectors.ant("/datagenerator/**"))
+        .build();
+  }
 
-        grantTypes.add(creGrant);
+  private List<SecurityReference> defaultAuth() {
 
-        return new OAuth("oauth2schema", authorizationScopeList, grantTypes);
+    final AuthorizationScope[] authorizationScopes = new AuthorizationScope[2];
+    authorizationScopes[0] = new AuthorizationScope("read", "read all");
+    authorizationScopes[1] = new AuthorizationScope("write", "write all");
 
-    }
+    return Collections.singletonList(new SecurityReference("oauth2schema", authorizationScopes));
+  }
 
-    private SecurityContext securityContext() {
-        return SecurityContext.builder().securityReferences(defaultAuth()).forPaths(PathSelectors.ant("/datagenerator/**"))
-                .build();
-    }
+  @Bean
+  public SecurityConfiguration securityInfo() {
+    return new SecurityConfiguration(
+        clientId, clientSecret, "", "", "", ApiKeyVehicle.HEADER, "", " ");
+  }
 
-    private List<SecurityReference> defaultAuth() {
-
-        final AuthorizationScope[] authorizationScopes = new AuthorizationScope[2];
-        authorizationScopes[0] = new AuthorizationScope("read", "read all");
-        authorizationScopes[1] = new AuthorizationScope("write", "write all");
-
-        return Collections.singletonList(new SecurityReference("oauth2schema", authorizationScopes));
-    }
-
-    @Bean
-    public SecurityConfiguration securityInfo() {
-        return new SecurityConfiguration(clientId, clientSecret, "", "", "", ApiKeyVehicle.HEADER, "", " ");
-    }
-    
-    private ApiInfo apiInfo() {
-        return new ApiInfoBuilder().title("Data Generator").description("")
-                .termsOfServiceUrl("http://localhost:9080/datagenerator")
-                .contact(new Contact("Data generator", "http://localhost:9080/datagenerator", "ositechportal@gmail.com"))
-                .license("Open Source").licenseUrl("https://www.example.com").version("1.0.0").build();
-    }
+  private ApiInfo apiInfo() {
+    return new ApiInfoBuilder()
+        .title("Data Generator")
+        .description("")
+        .termsOfServiceUrl("http://localhost:9080/datagenerator")
+        .contact(
+            new Contact(
+                "Data generator", "http://localhost:9080/datagenerator", "ositechportal@gmail.com"))
+        .license("Open Source")
+        .licenseUrl("https://www.example.com")
+        .version("1.0.0")
+        .build();
+  }
 }

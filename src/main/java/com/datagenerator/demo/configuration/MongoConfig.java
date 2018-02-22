@@ -1,5 +1,3 @@
 package com.datagenerator.demo.configuration;
 
-public class MongoConfig {
-
-}
+public class MongoConfig {}

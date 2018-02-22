@@ -1,7 +1,10 @@
 package com.datagenerator.demo.controller;
 
+import com.datagenerator.demo.domain.CustomUserDetails;
+import com.datagenerator.demo.domain.User;
+import com.datagenerator.demo.serviceImpl.LogoutService;
+import com.datagenerator.demo.utils.CustomTokenConverter;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
@@ -20,53 +23,47 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.datagenerator.demo.domain.CustomUserDetails;
-import com.datagenerator.demo.domain.User;
-import com.datagenerator.demo.serviceImpl.LogoutService;
-import com.datagenerator.demo.utils.CustomTokenConverter;
-
 @Scope("request")
 @RestController
 @CrossOrigin
-
 public class LoginController {
 
-	@Autowired
-	private AuthorizationServerTokenServices tokenServices;
+  @Autowired private AuthorizationServerTokenServices tokenServices;
 
-	@Autowired
-	private CustomTokenConverter customTokenConverter;
-	
-	@Autowired
-	LogoutService logoutService;
+  @Autowired private CustomTokenConverter customTokenConverter;
 
-	@PostMapping("/login")
-	public ResponseEntity<HttpStatus> getAllEmps(@RequestBody User user) {
+  @Autowired LogoutService logoutService;
 
-		if (user.getUsername().equalsIgnoreCase("admin") && user.getPassword().equalsIgnoreCase("admin")) {
-			return new ResponseEntity<>(HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-	}
+  @PostMapping("/login")
+  public ResponseEntity<HttpStatus> getAllEmps(@RequestBody User user) {
 
-	@RequestMapping(value = "/getInfo/{key}", method = RequestMethod.GET)
-	public ResponseEntity<?> getSection(@PathVariable String key, OAuth2Authentication authentication) {
-		Map<String, Object> additionalInfo = tokenServices.getAccessToken(authentication).getAdditionalInformation();
-		return new ResponseEntity<>(additionalInfo.get(key), HttpStatus.OK);
-	}
+    if (user.getUsername().equalsIgnoreCase("admin")
+        && user.getPassword().equalsIgnoreCase("admin")) {
+      return new ResponseEntity<>(HttpStatus.OK);
+    } else {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+  }
 
-	@GetMapping("/currentlyLoggedIn")
-	public ResponseEntity<?> getUsersById() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
-		customTokenConverter.setAdditionalInfo("CurrentUser", user);
-		return new ResponseEntity<>(user, HttpStatus.OK);
-	}
+  @RequestMapping(value = "/getInfo/{key}", method = RequestMethod.GET)
+  public ResponseEntity<?> getSection(
+      @PathVariable String key, OAuth2Authentication authentication) {
+    Map<String, Object> additionalInfo =
+        tokenServices.getAccessToken(authentication).getAdditionalInformation();
+    return new ResponseEntity<>(additionalInfo.get(key), HttpStatus.OK);
+  }
 
-	@PostMapping("/clearUserSession")
-	public ResponseEntity<HttpStatus> logout(@RequestParam String userName) {
-		logoutService.clearUserData(userName);
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
+  @GetMapping("/currentlyLoggedIn")
+  public ResponseEntity<?> getUsersById() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
+    customTokenConverter.setAdditionalInfo("CurrentUser", user);
+    return new ResponseEntity<>(user, HttpStatus.OK);
+  }
+
+  @PostMapping("/clearUserSession")
+  public ResponseEntity<HttpStatus> logout(@RequestParam String userName) {
+    logoutService.clearUserData(userName);
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
 }

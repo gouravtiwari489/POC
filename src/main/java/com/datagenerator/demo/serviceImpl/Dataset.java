@@ -14,53 +14,53 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
 public class Dataset {
-	public static Map<String, List<String>> map = new HashMap<>();
+  public static Map<String, List<String>> map = new HashMap<>();
 
-	static {
-		try {
-			Resource resource = new ClassPathResource("datasets");
-			resource.getFile().getPath();
-			File[] files = new File(resource.getFile().getPath()).listFiles();
+  static {
+    try {
+      Resource resource = new ClassPathResource("datasets");
+      resource.getFile().getPath();
+      File[] files = new File(resource.getFile().getPath()).listFiles();
 
-			for (File file : files) {
-				List<String> lines = FileUtils.readLines(file, "utf-8");
-				map.put(file.getName().split("\\.")[0].toLowerCase(), lines);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+      for (File file : files) {
+        List<String> lines = FileUtils.readLines(file, "utf-8");
+        map.put(file.getName().split("\\.")[0].toLowerCase(), lines);
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
 
-	public static String getRandomData(String ColumnName) {
-		List<String> data = map.get(ColumnName.toLowerCase());
-		if (data != null) {
-			return data.get(new Random().nextInt(data.size()));
-		} else {
-			return ColumnName.toLowerCase();
-		}
-	}
+  public static String getRandomData(String ColumnName) {
+    List<String> data = map.get(ColumnName.toLowerCase());
+    if (data != null) {
+      return data.get(new Random().nextInt(data.size()));
+    } else {
+      return ColumnName.toLowerCase();
+    }
+  }
 
-	public static Date getRandomDate() {
+  public static Date getRandomDate() {
 
-		long beginTime = Timestamp.valueOf("1900-01-01 00:00:00").getTime();
-		long endTime = System.currentTimeMillis();
-		long diff = endTime - beginTime + 1;
-		return new Date(beginTime + (long) (Math.random() * diff));
-	}
+    long beginTime = Timestamp.valueOf("1900-01-01 00:00:00").getTime();
+    long endTime = System.currentTimeMillis();
+    long diff = endTime - beginTime + 1;
+    return new Date(beginTime + (long) (Math.random() * diff));
+  }
 
-	public static String getRandomDecimal() throws ParseException {
+  public static String getRandomDecimal() throws ParseException {
 
-		double begin= 1000d;
-		double end = 9999d;
-		DecimalFormat df=new DecimalFormat("0.00");
-		String number=df.format(begin+new Random().nextDouble()*(end-begin));
-		return df.parse(number).toString();
-	}
+    double begin = 1000d;
+    double end = 9999d;
+    DecimalFormat df = new DecimalFormat("0.00");
+    String number = df.format(begin + new Random().nextDouble() * (end - begin));
+    return df.parse(number).toString();
+  }
 
-	public static String getRandomInt() {
-		int begin= 1000;
-		int end = 9999;
-		
-		return ((new Random().nextInt(end-begin)+1)+begin)+"";
-	}
+  public static String getRandomInt() {
+    int begin = 1000;
+    int end = 9999;
+
+    return ((new Random().nextInt(end - begin) + 1) + begin) + "";
+  }
 }
