@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import com.datagenerator.demo.service.SQLFileReadService;
@@ -51,8 +52,9 @@ public class UploadController {
 		return new ResponseEntity<List<LinkedHashMap<String, LinkedHashMap<String, String>>>>(list, HttpStatus.OK);
 	}
 
+	
 	@PostMapping("/download")
-	public ResponseEntity<?> downloadExcelFile(@RequestParam(name = "fileType", required = true) String fileType,
+	public@ResponseBody byte[] downloadExcelFile(@RequestParam(name = "fileType", required = true) String fileType,
 			@RequestParam(name = "rowCount", required = true) int rowCount,
 			@RequestParam(name = "updatedMappedData", required = true) String updatedMappedData) throws Exception {
 		log.info("@@@@@@@@@@@@@@@@@ rowCount   " + rowCount + "   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
@@ -66,21 +68,9 @@ public class UploadController {
 		Resource resource = new ClassPathResource(generatedFileName);
 		File file = resource.getFile();
 		BufferedInputStream isr = new BufferedInputStream(new FileInputStream(file));
-		ServletOutputStream stream = response.getOutputStream();
-		if (file != null) {
-			response.setContentType(responseContentType);
-			response.setContentLength((int) file.length());
-			response.setHeader("filename", file.getName());
-			IOUtils.copyLarge(isr, stream);
-			isr.close();
-		} else {
-			isr.close();
-			log.error("Excel file not found");
-			throw new Exception("Excel file not found");
-
-		}
-		stream.flush();
-		stream.close();
-		return new ResponseEntity<HttpServletResponse>(response, HttpStatus.OK);
+		//InputStream in=new InputStre
+		 return IOUtils.toByteArray(isr);
 	}
+	
+	
 }
