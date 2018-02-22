@@ -62,7 +62,6 @@ public class LoginController {
 		CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
 		customTokenConverter.setAdditionalInfo("CurrentUser", user);
 		return new ResponseEntity<>(user, HttpStatus.OK);
-
 	}
 
 	@PostMapping("/clearUserSession")
@@ -70,5 +69,4 @@ public class LoginController {
 		logoutService.clearUserData(userName);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
 }
