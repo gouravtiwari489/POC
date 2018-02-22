@@ -1,6 +1,7 @@
 package com.datagenerator.demo.controller;
 
 import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
@@ -16,14 +17,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.datagenerator.demo.domain.CustomUserDetails;
 import com.datagenerator.demo.domain.User;
+import com.datagenerator.demo.serviceImpl.LogoutService;
 import com.datagenerator.demo.utils.CustomTokenConverter;
 
 @Scope("request")
 @RestController
 @CrossOrigin
+
 public class LoginController {
 
 	@Autowired
@@ -31,6 +36,9 @@ public class LoginController {
 
 	@Autowired
 	private CustomTokenConverter customTokenConverter;
+	
+	@Autowired
+	LogoutService logoutService;
 
 	@PostMapping("/login")
 	public ResponseEntity<HttpStatus> getAllEmps(@RequestBody User user) {
@@ -57,4 +65,11 @@ public class LoginController {
 
 	}
 
+	@PostMapping("/clearUserSession")
+	public ResponseEntity<HttpStatus> logout(@RequestParam String userName) {
+		System.out.println(userName);
+		logoutService.clearUserData(userName);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
 }
