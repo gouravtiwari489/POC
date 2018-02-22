@@ -67,7 +67,6 @@ public class LoginController {
 
 	@PostMapping("/clearUserSession")
 	public ResponseEntity<HttpStatus> logout(@RequestParam String userName) {
-		System.out.println(userName);
 		logoutService.clearUserData(userName);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
