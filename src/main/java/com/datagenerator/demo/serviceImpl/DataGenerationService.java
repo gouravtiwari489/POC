@@ -34,7 +34,7 @@ public class DataGenerationService {
 	private CustomTokenConverter customTokenConverter;
 
 	@SuppressWarnings("unchecked")
-	public void generateData(String updatedMappedData, String fileType, int rowCount) {
+	public void generateData(String updatedMappedData, String fileType, int rowCount) throws IOException {
 
 	/*	tablFieldMappingeMap = (List<LinkedHashMap<String, LinkedHashMap<String, String>>>) customTokenConverter
 				.getAdditionalInfo("mappedTables");*/
@@ -46,16 +46,14 @@ public class DataGenerationService {
 
 	}
 
-	public void threadService(Map<Integer, List<String>> tablesMap, String fileType, int rowCount, Map<String, LinkedHashMap<String, String>> map) {
-		String filePath = null;
-		XSSFWorkbook workbook = null;
+	public void threadService(Map<Integer, List<String>> tablesMap, String fileType, int rowCount, Map<String, LinkedHashMap<String, String>> map) throws IOException {
 		try {
-			workbook = new XSSFWorkbook();
 			for (Map.Entry<Integer, List<String>> entry : tablesMap.entrySet()) {
 				log.info("Key = " + entry.getKey() + ", Value = " + entry.getValue());
 				List<String> tablesList = entry.getValue();
 				ExecutorService executor = Executors.newFixedThreadPool(tablesList.size());
 				for (String tableName : tablesList) {
+					XSSFWorkbook workbook = new XSSFWorkbook();
 					Runnable dataGenerationWorker = new DataGenerationWorker(tableName, workbook,map.get(tableName),rowCount,fileType);
 					executor.execute(dataGenerationWorker);
 				}
@@ -63,15 +61,6 @@ public class DataGenerationService {
 				while (!executor.isTerminated()) {
 				}
 			}
-			Resource resource = new ClassPathResource("output");
-			filePath = resource.getFile().getPath() + "\\ExcelSheet.xlsx";
-			OutputStream excelFileToCreate = new FileOutputStream(new File(filePath));
-			workbook.write(excelFileToCreate);
-			excelFileToCreate.close();
-		} catch (FileNotFoundException ex) {
-			log.error("Error while creating excel", ex);
-		} catch (IOException ex) {
-			log.error("Error while creating excel", ex);
 		} catch (Exception ex) {
 			log.error("Error wrting to file", ex);
 			ex.printStackTrace();

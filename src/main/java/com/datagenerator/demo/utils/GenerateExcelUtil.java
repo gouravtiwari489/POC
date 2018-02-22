@@ -1,6 +1,5 @@
 package com.datagenerator.demo.utils;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -19,7 +18,7 @@ public class GenerateExcelUtil {
 			List<List<String>> recordToAdd)  {
 		try{
 		int rownum = 0;
-		workbook = createExcel(workbook, sheetName);
+		workbook.createSheet(sheetName);
 		XSSFSheet firstSheet = workbook.getSheet(sheetName);
 		XSSFCellStyle style = workbook.createCellStyle();
 		style.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
@@ -52,20 +51,5 @@ public class GenerateExcelUtil {
 			e.printStackTrace();
 		} finally {
 		}
-	}
-	public static XSSFWorkbook createExcel(XSSFWorkbook workbook, String sheetName)
-			throws IOException {
-		try {
-			if (workbook.getSheet(sheetName) == null) {
-				synchronized (workbook) {
-						if (workbook.getSheet(sheetName) == null) {
-							workbook.createSheet(sheetName);
-						}
-					}
-				} 
-			}catch (Exception e) {
-				throw e;
-			}
-		return workbook;
 	}
 }
