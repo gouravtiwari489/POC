@@ -27,6 +27,8 @@ public class GenerateSampleDataUtil {
 					row.add(Dataset.getRandomData(values[0]));
 				}  else if (values[1].contains("date")) {
 					row.add(Dataset.getRandomDate().toString());
+				}else if (values[1].contains("text")) {
+					row.add(Dataset.getRandomData(values[0]));
 				}
 				else {
 					row.add(i + new Random().nextInt(23456) * 0.2 + "");
