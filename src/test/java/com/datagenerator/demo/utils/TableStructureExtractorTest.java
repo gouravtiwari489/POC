@@ -1,10 +1,11 @@
-/*package com.datagenerator.demo.utils;
+package com.datagenerator.demo.utils;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.doNothing;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.junit.Test;
@@ -14,8 +15,6 @@ import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.datagenerator.demo.domain.GenerateDataObject;
-import com.datagenerator.demo.serviceImpl.MapToListTransformerService1;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -25,30 +24,34 @@ public class TableStructureExtractorTest {
 	private TableStructureExtractor tableStructureExtractor;
 	
 	@Mock
-	private MapToListTransformerService1  mapToListTransformerService;
+	private CustomTokenConverter customTokenConverter;
+	
 	
 	@Test
-	public void shouldCreateParentChildMapping() throws FileNotFoundException {
+	public void shouldCreateParentChildMapping() throws Exception {
 		
 		ClassLoader classLoader = getClass().getClassLoader();
 		File file = new File(classLoader.getResource("mysql-test.sql").getFile());
-		List<GenerateDataObject> derivedList = tableStructureExtractor.getFKMap(file);
-		assertEquals("offices", derivedList.get(0).getTableName());
-		assertEquals("employees", derivedList.get(0).getChildTableName().get(0).getTableName());
-		assertEquals("productlines", derivedList.get(1).getTableName());
-		assertEquals("products", derivedList.get(1).getChildTableName().get(0).getTableName());
+		doNothing().when(customTokenConverter).setAdditionalInfo("orderedFKList", new HashMap<Integer, List<String>>());
+
+		LinkedHashMap<String, LinkedHashMap<String, String>> derivedList = tableStructureExtractor.searchforTableName(file);
+		assertThat(derivedList).isNotEmpty().hasSize(9);
+		assertThat(derivedList).containsKey("d_calendar");
+		assertThat(derivedList).containsKey("d_campus");
+		assertThat(derivedList).containsKey("d_exam");
+
+
 	}
 	
-	@Test
-	public void shouldNotCreateParentChildMappingIfCyclicDepenpendent() throws FileNotFoundException {
+	/*@Test
+	public void shouldNotCreateParentChildMappingIfCyclicDepenpendent() throws Exception {
 		
 		ClassLoader classLoader = getClass().getClassLoader();
 		File file = new File(classLoader.getResource("my-sql-test-2.sql").getFile());
-		List<GenerateDataObject> derivedList = tableStructureExtractor.getFKMap(file);
+		LinkedHashMap<String, LinkedHashMap<String, String>> derivedList = tableStructureExtractor.searchforTableName(file);
 		assertNotEquals("offices", derivedList.get(0).getTableName());
 		assertEquals("productlines", derivedList.get(0).getTableName());
 		assertEquals("products", derivedList.get(0).getChildTableName().get(0).getTableName());
-	}
+	}*/
 	
 }
-*/
