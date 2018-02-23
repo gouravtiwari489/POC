@@ -2,6 +2,7 @@ package com.datagenerator.demo.serviceImpl;
 
 import com.datagenerator.demo.utils.CustomTokenConverter;
 import com.datagenerator.demo.utils.DataGenerationWorker;
+import com.datagenerator.demo.utils.ZipUtil;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -37,6 +38,7 @@ public class DataGenerationService {
     log.info("tablFieldMappingeMap values after getting from context", tablFieldMappingeMap);
     log.info("tablesMap values after getting from context", tablesMap);
     threadService(tablesMap, fileType, rowCount, json_to_map(updatedMappedData));
+    ZipUtil.createZipFiles(fileType);
   }
 
   public void threadService(

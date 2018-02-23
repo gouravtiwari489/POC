@@ -60,7 +60,7 @@ public class UploadController {
     dataGenerationService.generateData(updatedMappedData, fileType, rowCount);
     String generatedFileName =
         fileType.equals("xlsx")
-            ? "output/ExcelSheet.xlsx"
+            ? "output/DAS.zip"
             : fileType.equals("csv")
                 ? "output/DAS.zip"
                 : fileType.equals("sql") ? "output/DAS.sql" : "output/DAS.xml";
