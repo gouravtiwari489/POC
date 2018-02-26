@@ -22,3 +22,5 @@ security:
     password: admin
   basic:
     enabled: true
+dependencycheck:
+              toggle: false

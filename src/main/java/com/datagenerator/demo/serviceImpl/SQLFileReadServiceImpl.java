@@ -28,14 +28,14 @@ public class SQLFileReadServiceImpl implements SQLFileReadService {
 
   @Override
   public List<LinkedHashMap<String, LinkedHashMap<String, String>>> readSQLfile(
-      MultipartFile multiFile, String domainType) throws Exception {
+      MultipartFile multiFile, String domainType,boolean dependencyCheck) throws Exception {
 
     File convFile = new File(multiFile.getOriginalFilename());
     convFile.createNewFile();
     FileOutputStream fos = new FileOutputStream(convFile);
     fos.write(multiFile.getBytes());
     LinkedHashMap<String, LinkedHashMap<String, String>> inputTableMap =
-        tableStructureExtractor.searchforTableName(convFile);
+        tableStructureExtractor.searchforTableName(convFile,dependencyCheck);
     System.out.println("inputTableMap--" + inputTableMap);
     LinkedHashMap<String, LinkedHashMap<String, String>> finalInputMap = new LinkedHashMap<>();
     LinkedHashMap<String, LinkedHashMap<String, String>> finalMappedMap = new LinkedHashMap<>();

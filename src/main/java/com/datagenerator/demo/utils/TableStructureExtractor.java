@@ -12,11 +12,14 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Scanner;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class TableStructureExtractor {
 
+ @Value("${dependencycheck.toggle}")
+ String toggleCheck;
   private static final String ENGINE = "ENGINE";
   private static final String REFERENCES = "REFERENCES ";
   private static final String FOREIGN_KEY = "FOREIGN KEY ";
@@ -25,7 +28,7 @@ public class TableStructureExtractor {
 
   @Autowired private CustomTokenConverter customTokenConverter;
 
-  public LinkedHashMap<String, LinkedHashMap<String, String>> searchforTableName(File file)
+  public LinkedHashMap<String, LinkedHashMap<String, String>> searchforTableName(File file,boolean dependencyCheck)
       throws Exception {
     LinkedHashMap<String, LinkedHashMap<String, String>> tableMap = new LinkedHashMap<>();
     final Scanner scanner = new Scanner(file);
@@ -78,32 +81,46 @@ public class TableStructureExtractor {
         tableMap.put(tableName, fieldMap);
     }
     scanner.close();
-    reOrderTableStructure(tableMap);
+    reOrderTableStructure(tableMap,dependencyCheck);
     return tableMap;
   }
 
-  private void reOrderTableStructure(LinkedHashMap<String, LinkedHashMap<String, String>> tableMap)
+  private void reOrderTableStructure(LinkedHashMap<String, LinkedHashMap<String, String>> tableMap,boolean dependencyCheck)
       throws Exception {
     LinkedHashMap<String, List<String>> fkListMap = createFKListMap(tableMap);
     String msg = "";
-    for (Map.Entry<String, List<String>> entry : fkListMap.entrySet()) {
-      String parentTbl = entry.getKey();
-      List<String> childTbls = entry.getValue();
-      if (childTbls.contains(parentTbl)) msg = "Table " + parentTbl + " has self join";
-      else {
-        for (String chldtbl : childTbls) {
-          List<String> childTbls2 = fkListMap.get(chldtbl);
-          if (childTbls2.contains(parentTbl)) {
-            if (!msg.isEmpty())
-              msg = msg + " and   " + parentTbl + " has cyclic dependency with " + chldtbl;
-            else msg = parentTbl + " has cyclic dependency with " + chldtbl;
-          }
-        }
-      }
-    }
+    String message = "";
+    boolean dependCheck = Boolean.parseBoolean(toggleCheck);
+			for (Map.Entry<String, List<String>> entry : fkListMap.entrySet()) {
+				String parentTbl = entry.getKey();
+				List<String> childTbls = entry.getValue();
+				if (childTbls.contains(parentTbl))
+					msg = "Table " + parentTbl + " has self join";
+				else {
+					for (String chldtbl : childTbls) {
+						List<String> childTbls2 = fkListMap.get(chldtbl);
+						if (childTbls2.contains(parentTbl)) {
+							if (!msg.isEmpty())
+								msg = msg + " and   " + parentTbl + " has cyclic dependency with " + chldtbl;
+							else
+								msg = parentTbl + " has cyclic dependency with " + chldtbl;
+						}
+					}
+				}
+			}
+		
+    
     if (!msg.isEmpty()) {
-      throw new Exception(msg);
+    	message = dependCheck?message = "Error!" + msg:"Warning!" + msg;
     }
+    if(dependCheck) {
+    	 throw new Exception(message);
+    }else if(!dependCheck && dependencyCheck) {
+    	 throw new Exception(message);
+    }else if(!dependCheck && !dependencyCheck){
+    	System.out.println("dependency ignored and proceed");
+    }
+    	
 
     LinkedHashMap<String, List<String>> sorted = sortMap(fkListMap);
     Map<Integer, List<String>> map = transform(sorted);

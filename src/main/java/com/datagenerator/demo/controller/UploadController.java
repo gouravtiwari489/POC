@@ -35,13 +35,16 @@ public class UploadController {
   public ResponseEntity<List<LinkedHashMap<String, LinkedHashMap<String, String>>>> uploadProfile(
       @RequestParam(name = "file", required = true) MultipartFile multipartFile,
       @RequestParam(name = "domainType", required = true) String domainType,
-  	  @RequestParam(name = "dependencyToggle", required = true) String dependencyToggle)	
+      @RequestParam(name = "dependencyToggle", required = true) String dependencyToggle)
       throws Exception {
-	boolean dependencyCheck = Boolean.parseBoolean(dependencyToggle);
-	log.info("@@@@@@@@@@@@@@@@@ dependencyToggle   " + dependencyCheck + "   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");  
+    boolean dependencyCheck = Boolean.parseBoolean(dependencyToggle);
+    log.info(
+        "@@@@@@@@@@@@@@@@@ dependencyToggle   "
+            + dependencyCheck
+            + "   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
     List<LinkedHashMap<String, LinkedHashMap<String, String>>> list = null;
     try {
-      list = sqlFileReadService.readSQLfile(multipartFile, domainType);
+      list = sqlFileReadService.readSQLfile(multipartFile, domainType,dependencyCheck);
     } catch (Exception ex) {
       throw new Exception(ex.getMessage());
     }
