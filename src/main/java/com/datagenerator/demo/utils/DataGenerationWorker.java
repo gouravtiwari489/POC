@@ -7,10 +7,12 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.LinkedHashMap;
 import java.util.List;
-import lombok.extern.slf4j.Slf4j;
+import java.util.Map;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import com.datagenerator.demo.serviceImpl.RelationalDataExtractor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class DataGenerationWorker implements Runnable {
@@ -20,19 +22,23 @@ public class DataGenerationWorker implements Runnable {
   private LinkedHashMap<String, String> fieldMap;
   private int rowCount;
   private String fileType;
+  List<LinkedHashMap<String, LinkedHashMap<String, String>>> tablFieldMappingeMap;
+  Map<String,List<String>> concurrentMap;
 
   public DataGenerationWorker(
       String tableName,
       XSSFWorkbook workbook,
       LinkedHashMap<String, String> fieldMap,
       int rowCount,
-      String fileType) {
+      String fileType, List<LinkedHashMap<String, LinkedHashMap<String, String>>> tablFieldMappingeMap,Map<String,List<String>> concurrentMap) {
 
     this.tableName = tableName;
     this.workbook = workbook;
     this.fieldMap = fieldMap;
     this.rowCount = rowCount;
     this.fileType = fileType;
+    this.tablFieldMappingeMap=tablFieldMappingeMap;
+    this.concurrentMap=concurrentMap;
   }
 
   @Override
@@ -49,7 +55,8 @@ public class DataGenerationWorker implements Runnable {
   private void generateData(String tableName) {
     try {
 
-      List<List<String>> excelData = GenerateSampleDataUtil.generateData(fieldMap, rowCount);
+      List<List<String>> excelData = GenerateSampleDataUtil.generateData(fieldMap,tablFieldMappingeMap.get(0), rowCount,concurrentMap,tableName);
+      concurrentMap.putAll(RelationalDataExtractor.extractdata(tablFieldMappingeMap.get(0), excelData, tableName));
       GenerateExcelUtil.createAndInsertDataIntoSheet(workbook, tableName, excelData);
       writeToFile(fileType, workbook, tableName);
     } catch (Exception e) {

@@ -29,7 +29,6 @@ public class UploadController {
 
   @Autowired DataGenerationService dataGenerationService;
 
-  @Autowired private HttpServletResponse response;
 
   @PostMapping("/upload")
   public ResponseEntity<List<LinkedHashMap<String, LinkedHashMap<String, String>>>> uploadProfile(

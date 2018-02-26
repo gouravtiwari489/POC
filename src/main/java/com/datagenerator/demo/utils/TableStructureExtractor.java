@@ -112,15 +112,16 @@ public class TableStructureExtractor {
     
     if (!msg.isEmpty()) {
     	message = dependCheck?message = "Error!" + msg:"Warning!" + msg;
+      if (dependCheck) {
+        throw new Exception(message);
+      } else if (!dependCheck && dependencyCheck) {
+        throw new Exception(message);
+      } else if (!dependCheck && !dependencyCheck) {
+        System.out.println("dependency ignored and proceed");
+      }
+
     }
-    if(dependCheck) {
-    	 throw new Exception(message);
-    }else if(!dependCheck && dependencyCheck) {
-    	 throw new Exception(message);
-    }else if(!dependCheck && !dependencyCheck){
-    	System.out.println("dependency ignored and proceed");
-    }
-    	
+        	
 
     LinkedHashMap<String, List<String>> sorted = sortMap(fkListMap);
     Map<Integer, List<String>> map = transform(sorted);

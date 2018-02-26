@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import lombok.extern.slf4j.Slf4j;
@@ -31,8 +32,10 @@ public class DataGenerationService {
   public void generateData(String updatedMappedData, String fileType, int rowCount)
       throws IOException {
 
-    /*	tablFieldMappingeMap = (List<LinkedHashMap<String, LinkedHashMap<String, String>>>) customTokenConverter
-    .getAdditionalInfo("mappedTables");*/
+    tablFieldMappingeMap =
+        (List<LinkedHashMap<String, LinkedHashMap<String, String>>>)
+            customTokenConverter.getAdditionalInfo("mappedTables");
+
     Map<Integer, List<String>> tablesMap =
         (Map<Integer, List<String>>) customTokenConverter.getAdditionalInfo("orderedFKList");
     log.info("tablFieldMappingeMap values after getting from context", tablFieldMappingeMap);
@@ -48,6 +51,7 @@ public class DataGenerationService {
       Map<String, LinkedHashMap<String, String>> map)
       throws IOException {
     try {
+      Map<String,List<String>> concurrentMap=new ConcurrentHashMap<>();
       for (Map.Entry<Integer, List<String>> entry : tablesMap.entrySet()) {
         log.info("Key = " + entry.getKey() + ", Value = " + entry.getValue());
         List<String> tablesList = entry.getValue();
@@ -55,7 +59,14 @@ public class DataGenerationService {
         for (String tableName : tablesList) {
           XSSFWorkbook workbook = new XSSFWorkbook();
           Runnable dataGenerationWorker =
-              new DataGenerationWorker(tableName, workbook, map.get(tableName), rowCount, fileType);
+              new DataGenerationWorker(
+                  tableName,
+                  workbook,
+                  map.get(tableName),
+                  rowCount,
+                  fileType,
+                  tablFieldMappingeMap,
+                  concurrentMap);
           executor.execute(dataGenerationWorker);
         }
         executor.shutdown();
