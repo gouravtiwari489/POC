@@ -54,7 +54,6 @@ public class ZipUtil {
           zipOut.write(tmp, 0, size);
         }
         zipOut.flush();
-        zipOut.close();
         fis.close();
       }
       zipOut.close();
