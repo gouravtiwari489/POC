@@ -24,3 +24,15 @@ security:
     enabled: true
 dependencycheck:
               toggle: false
+              
+logging:
+  path: logs
+  file: logs\das.log
+
+  
+ 
+  
+    
+  
+ 
+ 

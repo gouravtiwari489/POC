@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 public class DemoApplication {
 
   public static void main(String[] args) {
+    System.out.println("Application Starting...... check the logs in logs/das.log");
     SpringApplication.run(DemoApplication.class, args);
   }
 
