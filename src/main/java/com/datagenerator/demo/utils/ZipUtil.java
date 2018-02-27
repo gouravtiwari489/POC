@@ -53,7 +53,7 @@ public class ZipUtil {
         while ((size = fis.read(tmp)) != -1) {
           zipOut.write(tmp, 0, size);
         }
-        zipOut.flush();
+        zipOut.closeEntry();
         fis.close();
       }
       zipOut.close();
