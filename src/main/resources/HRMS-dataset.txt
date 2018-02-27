@@ -7,3 +7,10 @@ EmpTitle jobTitle job_Title job_title designation grade title emp_title Emp_titl
 EmpAddress EmpAddress emp_address emp_addr Emp_addr Emp_Addr Employeeaddress Employee_address employee_address Employeeaddr EmployeeAddr Employee_Addr Employee_addr representativeAddress representative_Addres representative_address rep_Address repAddress repaddress jobholder_address jobholder_Address jobholder_addr jobholder_addr
 EmpAge 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 40 41 42 43 44 45 46 47 48 49 50
 EmpExtension Employee_extension Employee_Extension Emp_extension Emp_Extension Emp_Ext emp_Ext emp_ext Associate_extension Associate_Extension Asso_extension Asso_Extension Asso_Ext asso_Ext asso_ext jobholder_extension Jobholder_Extension Jobholder_Ext jobholder_Ext jobholder_ext
+OfficeId officeCode office_Code office_code office_Id office_id officeId officeid officeId
+City city
+Phone phone
+State state
+Country country
+PostalCode postal_code zip_code postalCode
+territory

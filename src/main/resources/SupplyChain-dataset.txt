@@ -18,7 +18,7 @@ PostalCode postal_code zip_code postalCode
 territory
 OrderId orderNumber order_Number orderId order_Id orderid order_id
 ProductId productCode product_Code product_code prod_Code prod_code prodCode prodcode productNumber productnumber product_Number product_number prod_Number prodNum prodnum prod_Num prod_num
-ProductPrice priceEach price_Each price
+ProductPrice priceEach price_Each pr_price prod_price Product_Price productprice
 OrderDate order_date orderDate
 OrderRequiredDate requiredDate required_Date required_date orderRequiredDate order_required_date
 OrderShippeddate shipped_Date shipped_date shippedDate shipping_date Shipping_Date
@@ -39,5 +39,13 @@ CreditLimit creditLimit credit_Limit cred_Limit Credit_Limit cred_limit
 ProductStock prod_stock productStock Product_Stock quantityInStock quantity_In_Stock
 ProductBuyPrice buyPrice buy_price product_buy_price
 ProductName productName product_Name prod_Name Prod_Name prodName
-
-
+BookAuthor bookauthor book_author Book_Author bkauthor
+SupplierCode Supplier_Code supplier_code Supplier_id supplier_id Supp_Code supp_code SuppCode suppcode supp_id supplierid supplier_Id supplierId supplierCode
+SupplierName suppliername Supplier_Name SuppName Supp_Name supp_Name supp_name supplier_nm supp_nm
+BookTitle Book_Title booktitle book_title bk_title
+PaymentMethod Payment_Method payment_method payment_type Payment_Type paymenttype PaymentType payment_mode paymentmode Payment_Mode Mode_of_Payment 
+FoodName Food_Name food_name food_nm name_of_food foodname
+FoodFlavour Food_Flavour food_flavour flavour_of_food
+PaymentDate Payment_Date payment_date paymentdate date_of_payment
+CustomerCategory Customer_Category customer_category cust_category Cust_Category custcategory CustCategory
+CampaignNumber Campaign_Number campaign_number campaignnumber CampaignCode Campaign_Code campaign_code
