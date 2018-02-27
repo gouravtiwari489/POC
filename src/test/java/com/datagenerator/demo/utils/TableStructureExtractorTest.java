@@ -32,7 +32,7 @@ public class TableStructureExtractorTest {
         .setAdditionalInfo("orderedFKList", new HashMap<Integer, List<String>>());
 
     LinkedHashMap<String, LinkedHashMap<String, String>> derivedList =
-        tableStructureExtractor.searchforTableName(file,false);
+        tableStructureExtractor.searchforTableName(file, false);
     assertThat(derivedList).isNotEmpty().hasSize(9);
     assertThat(derivedList).containsKey("d_calendar");
     assertThat(derivedList).containsKey("d_campus");

@@ -7,7 +7,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.LinkedHashMap;
 import java.util.List;
-import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +28,6 @@ public class UploadController {
 
   @Autowired DataGenerationService dataGenerationService;
 
-
   @PostMapping("/upload")
   public ResponseEntity<List<LinkedHashMap<String, LinkedHashMap<String, String>>>> uploadProfile(
       @RequestParam(name = "file", required = true) MultipartFile multipartFile,
@@ -43,7 +41,7 @@ public class UploadController {
             + "   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
     List<LinkedHashMap<String, LinkedHashMap<String, String>>> list = null;
     try {
-      list = sqlFileReadService.readSQLfile(multipartFile, domainType,dependencyCheck);
+      list = sqlFileReadService.readSQLfile(multipartFile, domainType, dependencyCheck);
     } catch (Exception ex) {
       throw new Exception(ex.getMessage());
     }
@@ -69,6 +67,8 @@ public class UploadController {
     Resource resource = new ClassPathResource(generatedFileName);
     File file = resource.getFile();
     BufferedInputStream isr = new BufferedInputStream(new FileInputStream(file));
-    return IOUtils.toByteArray(isr);
+    byte[] bytes = IOUtils.toByteArray(isr);
+    isr.close();
+    return bytes;
   }
 }

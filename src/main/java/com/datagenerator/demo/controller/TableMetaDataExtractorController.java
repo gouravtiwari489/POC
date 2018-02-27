@@ -34,7 +34,7 @@ public class TableMetaDataExtractorController {
     File file = new File(classLoader.getResource("Dump20180122.sql").getFile());
     LinkedHashMap<String, LinkedHashMap<String, String>> tableMap = new LinkedHashMap<>();
     try {
-      tableMap = tableStructureExtractor.searchforTableName(file,false);
+      tableMap = tableStructureExtractor.searchforTableName(file, false);
     } catch (Exception e) {
       e.printStackTrace();
     }

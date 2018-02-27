@@ -19,7 +19,7 @@ public class RelationalDataExtractor {
     Map<String, List<String>> dataMap = new HashMap<>();
     for (Entry<String, LinkedHashMap<String, String>> entry : linkedHashMap.entrySet()) {
       for (Entry<String, String> map : entry.getValue().entrySet()) {
-        
+
         if (map.getValue().contains(tableName) && map.getKey().contains("FK")) {
           String[] str = map.getValue().split("[\\(\\)]");
           dataMap.put(

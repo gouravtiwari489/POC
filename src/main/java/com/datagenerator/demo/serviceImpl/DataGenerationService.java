@@ -1,18 +1,5 @@
 package com.datagenerator.demo.serviceImpl;
 
-import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import lombok.extern.slf4j.Slf4j;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.datagenerator.demo.component.LoadFileGenerationObjects;
 import com.datagenerator.demo.download.utils.GenerateDataInterface;
 import com.datagenerator.demo.utils.CustomTokenConverter;
@@ -22,6 +9,16 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
@@ -45,9 +42,10 @@ public class DataGenerationService {
         (Map<Integer, List<String>>) customTokenConverter.getAdditionalInfo("orderedFKList");
     log.info("tablFieldMappingeMap values after getting from context", tablFieldMappingeMap);
     log.info("tablesMap values after getting from context", tablesMap);
-    GenerateDataInterface service=fileGenObj.getGenDataServiceMap().get(fileType);
-    threadService(tablesMap, fileType, rowCount, json_to_map(updatedMappedData),service);
+    GenerateDataInterface service = fileGenObj.getGenDataServiceMap().get(fileType);
+    threadService(tablesMap, fileType, rowCount, json_to_map(updatedMappedData), service);
     ZipUtil.createZipFiles(fileType);
+    System.out.println("zipping done");
   }
 
   public void threadService(
@@ -58,7 +56,7 @@ public class DataGenerationService {
       GenerateDataInterface service)
       throws IOException {
     try {
-      Map<String,List<String>> concurrentMap=new ConcurrentHashMap<>();
+      Map<String, List<String>> concurrentMap = new ConcurrentHashMap<>();
       for (Map.Entry<Integer, List<String>> entry : tablesMap.entrySet()) {
         log.info("Key = " + entry.getKey() + ", Value = " + entry.getValue());
         List<String> tablesList = entry.getValue();
