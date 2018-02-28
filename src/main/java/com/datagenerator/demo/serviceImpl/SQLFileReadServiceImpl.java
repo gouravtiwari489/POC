@@ -36,12 +36,9 @@ public class SQLFileReadServiceImpl implements SQLFileReadService {
     fos.write(multiFile.getBytes());
     LinkedHashMap<String, LinkedHashMap<String, String>> inputTableMap =
         tableStructureExtractor.searchforTableName(convFile, dependencyCheck);
-    System.out.println("inputTableMap--" + inputTableMap);
     LinkedHashMap<String, LinkedHashMap<String, String>> finalInputMap = new LinkedHashMap<>();
     LinkedHashMap<String, LinkedHashMap<String, String>> finalMappedMap = new LinkedHashMap<>();
     Map<String, LinkedHashMap<String, String>> availableTables = new LinkedHashMap<>();
-
-    System.out.println("availableTables2222-----" + availableTables);
     if (inputTableMap != null && !inputTableMap.isEmpty()) {
       for (Map.Entry<String, LinkedHashMap<String, String>> entry : inputTableMap.entrySet()) {
         String inputTableName = entry.getKey();
@@ -68,12 +65,9 @@ public class SQLFileReadServiceImpl implements SQLFileReadService {
         }
         availableTables.put(inputTableName, columnCatMap);
         finalMappedMap.put(inputTableName, mappedMap);
-        System.out.println("----columnCatMap is--" + columnCatMap.toString());
       }
     }
     fos.close();
-    System.out.println("----availableTables is--" + availableTables.toString());
-    System.out.println("----finalMappedMap is--" + finalMappedMap.toString());
     for (Map.Entry<String, LinkedHashMap<String, String>> entry : inputTableMap.entrySet()) {
       LinkedHashMap<String, String> inputTableFields = entry.getValue();
       LinkedHashMap<String, String> finalInputTableFields = new LinkedHashMap<>();

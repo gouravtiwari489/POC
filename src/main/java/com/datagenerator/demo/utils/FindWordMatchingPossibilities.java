@@ -19,7 +19,6 @@ public class FindWordMatchingPossibilities {
 
   public Map<String, List<String>> findMatchingWord(String wordToFind, String domainType)
       throws FileNotFoundException {
-    System.out.println("Word to Find : " + wordToFind);
     String wordArr[] = null;
     Map<String, List<String>> matchingMap = null;
     ClassLoader classLoader = getClass().getClassLoader();
@@ -45,10 +44,8 @@ public class FindWordMatchingPossibilities {
         break;
       }
     }
-    System.out.println("Second time match #################################");
     Map<String, List<String>> matchingProbMap = new HashMap<>();
     for (Map.Entry<String, List<String>> elem : matchingMap.entrySet()) {
-      System.out.println(elem.getKey() + " :: " + elem.getValue());
       List<String> list = elem.getValue();
       List<String> matchList = new ArrayList<>();
       list.forEach(
