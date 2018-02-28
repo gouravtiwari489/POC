@@ -2,12 +2,16 @@ package com.datagenerator.demo.controller;
 
 import com.datagenerator.demo.service.SQLFileReadService;
 import com.datagenerator.demo.serviceImpl.DataGenerationService;
+import com.datagenerator.demo.utils.ZipUtil;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.LinkedHashMap;
 import java.util.List;
+
 import lombok.extern.slf4j.Slf4j;
+
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -58,15 +62,8 @@ public class UploadController {
       throws Exception {
     log.info("@@@@@@@@@@@@@@@@@ rowCount   " + rowCount + "   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
     dataGenerationService.generateData(updatedMappedData, fileType, rowCount);
-    String generatedFileName =
-        fileType.equals("xlsx")
-            ? "output/DAS.zip"
-            : fileType.equals("csv")
-                ? "output/DAS.zip"
-                : fileType.equals("sql") ? "output/DAS.sql" : "output/DAS.xml";
-    Resource resource = new ClassPathResource(generatedFileName);
-    File file = resource.getFile();
-    BufferedInputStream isr = new BufferedInputStream(new FileInputStream(file));
+    String filePath=ZipUtil.createZipFiles(fileType);
+    BufferedInputStream isr = new BufferedInputStream(new FileInputStream(new File(filePath)));
     byte[] bytes = IOUtils.toByteArray(isr);
     isr.close();
     return bytes;
