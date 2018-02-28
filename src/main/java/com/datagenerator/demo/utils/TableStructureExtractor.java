@@ -52,8 +52,16 @@ public class TableStructureExtractor {
 		    count = 0;
 		    String[] pkString = lineFromFile.split(PRIMARY_KEY);
 		    primaryKey = pkString[1].split(" ")[0].replace("`", "");
+		    String[] pkString2 = null;
+		    if(primaryKey.endsWith(",")) {
+		    	 pkString2 = primaryKey.split(",");
+		    	  if(pkString2.length >1)
+				         primaryKey = pkString2[0]+"," + pkString2[1];
+				    else
+				    	primaryKey = pkString2[0];
+		    }
 		    if (primaryKey.length() > 1)
-		      fieldMap.put("PK", primaryKey.substring(1, primaryKey.length() - 2));
+		      fieldMap.put("PK", primaryKey.substring(1, primaryKey.length() - 1));
 		  } else if (lineFromFile.contains(FOREIGN_KEY)) {
 		    String[] fieldString = lineFromFile.split(FOREIGN_KEY);
 		    String[] fieldString2 = fieldString[1].split(REFERENCES);
@@ -86,7 +94,8 @@ public class TableStructureExtractor {
 		scanner.close();
 		reOrderTableStructure(tableMap, dependencyCheck);
 	} catch (Exception e) {
-		throw new Exception(PARSE_iSSUE);
+		e.printStackTrace();
+		throw new Exception(e.getMessage());
 	}
     return tableMap;
   }
