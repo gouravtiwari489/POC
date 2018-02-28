@@ -17,7 +17,7 @@ import org.springframework.core.io.Resource;
 @Slf4j
 public class ZipUtil {
 
-  public static void createZipFiles(String fileType) throws IOException {
+  public static String createZipFiles(String fileType) throws IOException {
 
     List<String> filePaths = new ArrayList<>();
     Resource resource = new ClassPathResource("output");
@@ -33,6 +33,7 @@ public class ZipUtil {
       }
     }
     zipFiles(filePaths, zipFilePath);
+    return zipFilePath;
   }
 
   private static void zipFiles(List<String> files, String zipPath) {
@@ -55,6 +56,7 @@ public class ZipUtil {
         }
         zipOut.closeEntry();
         fis.close();
+        //input.delete(); uncomment when we have implementation of diff folder for each file type
       }
       zipOut.close();
     } catch (FileNotFoundException e) {

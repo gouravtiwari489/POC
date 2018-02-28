@@ -44,8 +44,6 @@ public class DataGenerationService {
     log.info("tablesMap values after getting from context", tablesMap);
     GenerateDataInterface service = fileGenObj.getGenDataServiceMap().get(fileType);
     threadService(tablesMap, fileType, rowCount, json_to_map(updatedMappedData), service);
-    ZipUtil.createZipFiles(fileType);
-    System.out.println("zipping done");
   }
 
   public void threadService(
