@@ -26,63 +26,68 @@ public class TableStructureExtractor {
   private static final String FOREIGN_KEY = "FOREIGN KEY ";
   private static final String PRIMARY_KEY = "PRIMARY KEY ";
   private static final String CREATE_TABLE = "CREATE TABLE ";
+  private static final String PARSE_iSSUE = "There is an issue wth sql file.";
 
   @Autowired private CustomTokenConverter customTokenConverter;
 
   public LinkedHashMap<String, LinkedHashMap<String, String>> searchforTableName(
       File file, boolean dependencyCheck) throws Exception {
     LinkedHashMap<String, LinkedHashMap<String, String>> tableMap = new LinkedHashMap<>();
-    final Scanner scanner = new Scanner(file);
-    String tableName = "", primaryKey = "";
-    LinkedHashMap<String, String> fieldMap = null;
-    int count = 0, fkCount = 1;
-    while (scanner.hasNextLine()) {
-      final String lineFromFile = scanner.nextLine();
-      if (lineFromFile.contains(CREATE_TABLE)) {
-        fieldMap = new LinkedHashMap<>();
-        tableName = "";
-        fkCount = 1;
-        String[] matchString = lineFromFile.split(CREATE_TABLE);
-        tableName = matchString[1].split(" ")[0].replace("`", "");
-        count = 1;
-      } else if (lineFromFile.contains(PRIMARY_KEY)) {
-        primaryKey = "";
-        count = 0;
-        String[] pkString = lineFromFile.split(PRIMARY_KEY);
-        primaryKey = pkString[1].split(" ")[0].replace("`", "");
-        if (primaryKey.length() > 1)
-          fieldMap.put("PK", primaryKey.substring(1, primaryKey.length() - 2));
-      } else if (lineFromFile.contains(FOREIGN_KEY)) {
-        String[] fieldString = lineFromFile.split(FOREIGN_KEY);
-        String[] fieldString2 = fieldString[1].split(REFERENCES);
-        System.out.println("fieldString for fk is::" + fieldString2[0] + "--" + fieldString2[1]);
-        String test1 =
-            fieldString2[0].replace("(", "").replace(")", "").replace("`", "").replace(" ", "");
-        String test2 =
-            fieldString2[1]
-                .replace(" ", "")
-                .replace("`", "")
-                .replace(",", "")
-                .replace("ONUPDATECASCADE", "");
-        fieldMap.put("FK" + fkCount + "->" + test1, test2);
-        count = 0;
-        fkCount++;
-      } else if (lineFromFile.contains(ENGINE)) {
-        count = 0;
-      } else if (count == 1) {
-        String[] fieldString = lineFromFile.split(" ");
-        if (fieldString.length > 2) {
-          String field = fieldString[2].replace("`", "");
-          String fieldType = fieldString[3].replace("`", "");
-          fieldType = fieldType.replace(",", "");
-          fieldMap.put(field, fieldType);
-        }
-      }
-      if ((tableName != "" && null != tableName) && (fieldMap != null && !fieldMap.isEmpty()))
-        tableMap.put(tableName, fieldMap);
-    }
-    scanner.close();
-    reOrderTableStructure(tableMap, dependencyCheck);
+    try {
+		final Scanner scanner = new Scanner(file);
+		String tableName = "", primaryKey = "";
+		LinkedHashMap<String, String> fieldMap = null;
+		int count = 0, fkCount = 1;
+		while (scanner.hasNextLine()) {
+		  final String lineFromFile = scanner.nextLine();
+		  if (lineFromFile.contains(CREATE_TABLE)) {
+		    fieldMap = new LinkedHashMap<>();
+		    tableName = "";
+		    fkCount = 1;
+		    String[] matchString = lineFromFile.split(CREATE_TABLE);
+		    tableName = matchString[1].split(" ")[0].replace("`", "");
+		    count = 1;
+		  } else if (lineFromFile.contains(PRIMARY_KEY)) {
+		    primaryKey = "";
+		    count = 0;
+		    String[] pkString = lineFromFile.split(PRIMARY_KEY);
+		    primaryKey = pkString[1].split(" ")[0].replace("`", "");
+		    if (primaryKey.length() > 1)
+		      fieldMap.put("PK", primaryKey.substring(1, primaryKey.length() - 2));
+		  } else if (lineFromFile.contains(FOREIGN_KEY)) {
+		    String[] fieldString = lineFromFile.split(FOREIGN_KEY);
+		    String[] fieldString2 = fieldString[1].split(REFERENCES);
+		    System.out.println("fieldString for fk is::" + fieldString2[0] + "--" + fieldString2[1]);
+		    String test1 =
+		        fieldString2[0].replace("(", "").replace(")", "").replace("`", "").replace(" ", "");
+		    String test2 =
+		        fieldString2[1]
+		            .replace(" ", "")
+		            .replace("`", "")
+		            .replace(",", "")
+		            .replace("ONUPDATECASCADE", "");
+		    fieldMap.put("FK" + fkCount + "->" + test1, test2);
+		    count = 0;
+		    fkCount++;
+		  } else if (lineFromFile.contains(ENGINE)) {
+		    count = 0;
+		  } else if (count == 1) {
+		    String[] fieldString = lineFromFile.split(" ");
+		    if (fieldString.length > 2) {
+		      String field = fieldString[2].replace("`", "");
+		      String fieldType = fieldString[3].replace("`", "");
+		      fieldType = fieldType.replace(",", "");
+		      fieldMap.put(field, fieldType);
+		    }
+		  }
+		  if ((tableName != "" && null != tableName) && (fieldMap != null && !fieldMap.isEmpty()))
+		    tableMap.put(tableName, fieldMap);
+		}
+		scanner.close();
+		reOrderTableStructure(tableMap, dependencyCheck);
+	} catch (Exception e) {
+		throw new Exception(PARSE_iSSUE);
+	}
     return tableMap;
   }
 
