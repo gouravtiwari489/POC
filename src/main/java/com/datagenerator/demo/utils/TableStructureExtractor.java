@@ -33,6 +33,7 @@ public class TableStructureExtractor {
   public LinkedHashMap<String, LinkedHashMap<String, String>> searchforTableName(
       File file, boolean dependencyCheck) throws Exception {
     LinkedHashMap<String, LinkedHashMap<String, String>> tableMap = new LinkedHashMap<>();
+    LinkedHashMap<String, LinkedHashMap<String, String>> finalTableMap = new LinkedHashMap<>();
     try {
 		final Scanner scanner = new Scanner(file);
 		String tableName = "", primaryKey = "";
@@ -84,12 +85,20 @@ public class TableStructureExtractor {
 		    if (fieldString.length > 2) {
 		      String field = fieldString[2].replace("`", "");
 		      String fieldType = fieldString[3].replace("`", "");
-		      fieldType = fieldType.replace(",", "");
-		      fieldMap.put(field, fieldType);
+		   //   fieldType = fieldType.replace(",", "");
+		      String[] fieldType2 = null;
+		      if(fieldType.endsWith(",")) {
+		    	  fieldType2 = fieldType.split(",");
+		    	  fieldType =  fieldType2[0];
+			    }
+		//      if(field.equalsIgnoreCase("comments"))
+		//    	  System.out.println("got the point");
+		      if((field!=null && !field.isEmpty()) && (fieldType!=null && !fieldType.isEmpty()))
+		           fieldMap.put(field, fieldType);
 		    }
 		  }
 		  if ((tableName != "" && null != tableName) && (fieldMap != null && !fieldMap.isEmpty()))
-		    tableMap.put(tableName, fieldMap);
+		      tableMap.put(tableName, fieldMap);
 		}
 		scanner.close();
 		reOrderTableStructure(tableMap, dependencyCheck);
