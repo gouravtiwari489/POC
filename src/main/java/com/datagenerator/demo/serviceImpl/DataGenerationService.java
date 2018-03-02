@@ -1,14 +1,5 @@
 package com.datagenerator.demo.serviceImpl;
 
-import com.datagenerator.demo.component.LoadFileGenerationObjects;
-import com.datagenerator.demo.download.utils.GenerateDataInterface;
-import com.datagenerator.demo.utils.CustomTokenConverter;
-import com.datagenerator.demo.utils.DataGenerationWorker;
-import com.datagenerator.demo.utils.ZipUtil;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -16,9 +7,17 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.datagenerator.demo.component.LoadFileGenerationObjects;
+import com.datagenerator.demo.download.utils.GenerateDataInterface;
+import com.datagenerator.demo.utils.CustomTokenConverter;
+import com.datagenerator.demo.utils.DataGenerationWorker;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j

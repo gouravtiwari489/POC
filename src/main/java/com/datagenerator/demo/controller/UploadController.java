@@ -1,21 +1,12 @@
 package com.datagenerator.demo.controller;
 
-import com.datagenerator.demo.service.SQLFileReadService;
-import com.datagenerator.demo.serviceImpl.DataGenerationService;
-import com.datagenerator.demo.utils.ZipUtil;
-
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.LinkedHashMap;
 import java.util.List;
-
-import lombok.extern.slf4j.Slf4j;
-
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +14,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import com.datagenerator.demo.service.SQLFileReadService;
+import com.datagenerator.demo.serviceImpl.DataGenerationService;
+import com.datagenerator.demo.utils.ZipUtil;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @Slf4j

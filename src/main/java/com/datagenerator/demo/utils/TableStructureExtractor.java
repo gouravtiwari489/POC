@@ -2,7 +2,6 @@ package com.datagenerator.demo.utils;
 
 import static java.util.Comparator.comparingInt;
 import static java.util.stream.Collectors.toMap;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -26,14 +25,12 @@ public class TableStructureExtractor {
   private static final String FOREIGN_KEY = "FOREIGN KEY ";
   private static final String PRIMARY_KEY = "PRIMARY KEY ";
   private static final String CREATE_TABLE = "CREATE TABLE ";
-  private static final String PARSE_iSSUE = "There is an issue wth sql file.";
 
   @Autowired private CustomTokenConverter customTokenConverter;
 
   public LinkedHashMap<String, LinkedHashMap<String, String>> searchforTableName(
       File file, boolean dependencyCheck) throws Exception {
     LinkedHashMap<String, LinkedHashMap<String, String>> tableMap = new LinkedHashMap<>();
-    LinkedHashMap<String, LinkedHashMap<String, String>> finalTableMap = new LinkedHashMap<>();
     try {
 		final Scanner scanner = new Scanner(file);
 		String tableName = "", primaryKey = "";
