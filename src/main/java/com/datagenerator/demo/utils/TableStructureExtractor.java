@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import com.datagenerator.demo.exception.DependencyException;
+
 @Component
 public class TableStructureExtractor {
 
@@ -29,9 +31,9 @@ public class TableStructureExtractor {
   @Autowired private CustomTokenConverter customTokenConverter;
 
   public LinkedHashMap<String, LinkedHashMap<String, String>> searchforTableName(
-      File file, boolean dependencyCheck) throws Exception {
+      File file, boolean dependencyCheck) throws DependencyException, Exception {
     LinkedHashMap<String, LinkedHashMap<String, String>> tableMap = new LinkedHashMap<>();
-    try {
+    //try {
 		final Scanner scanner = new Scanner(file);
 		String tableName = "", primaryKey = "";
 		LinkedHashMap<String, String> fieldMap = null;
@@ -99,16 +101,16 @@ public class TableStructureExtractor {
 		}
 		scanner.close();
 		reOrderTableStructure(tableMap, dependencyCheck);
-	} catch (Exception e) {
-		e.printStackTrace();
-		throw new Exception(e.getMessage());
-	}
+	//} catch (Exception e) {
+	//	e.printStackTrace();
+	//	throw new Exception(e.getMessage());
+	//}
     return tableMap;
   }
 
   private void reOrderTableStructure(
       LinkedHashMap<String, LinkedHashMap<String, String>> tableMap, boolean dependencyCheck)
-      throws Exception {
+      throws DependencyException, Exception {
     LinkedHashMap<String, List<String>> fkListMap = createFKListMap(tableMap);
     String msg = "";
     String message = "";
@@ -132,9 +134,9 @@ public class TableStructureExtractor {
     if (!msg.isEmpty()) {
       message = dependCheck ? message = "Error!" + msg : "Warning!" + msg;
       if (dependCheck) {
-        throw new Exception(message);
+        throw new DependencyException(message);
       } else if (!dependCheck && dependencyCheck) {
-        throw new Exception(message);
+        throw new DependencyException(message);
       } else if (!dependCheck && !dependencyCheck) {
         System.out.println("dependency ignored and proceed");
       }

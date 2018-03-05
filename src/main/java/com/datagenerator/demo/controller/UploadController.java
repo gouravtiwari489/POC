@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.datagenerator.demo.exception.DependencyException;
 import com.datagenerator.demo.service.SQLFileReadService;
 import com.datagenerator.demo.serviceImpl.DataGenerationService;
 import com.datagenerator.demo.utils.ZipUtil;
@@ -32,18 +34,18 @@ public class UploadController {
       @RequestParam(name = "file", required = true) MultipartFile multipartFile,
       @RequestParam(name = "domainType", required = true) String domainType,
       @RequestParam(name = "dependencyToggle", required = true) String dependencyToggle)
-      throws Exception {
+      throws DependencyException, Exception {
     boolean dependencyCheck = Boolean.parseBoolean(dependencyToggle);
     log.info(
         "@@@@@@@@@@@@@@@@@ dependencyToggle   "
             + dependencyCheck
             + "   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
     List<LinkedHashMap<String, LinkedHashMap<String, String>>> list = null;
-    try {
+    //try {
       list = sqlFileReadService.readSQLfile(multipartFile, domainType, dependencyCheck);
-    } catch (Exception ex) {
-      throw new Exception(ex.getMessage());
-    }
+    //} catch (Exception ex) {
+      //throw new Exception(ex.getMessage());
+    //}
 
     return new ResponseEntity<List<LinkedHashMap<String, LinkedHashMap<String, String>>>>(
         list, HttpStatus.OK);

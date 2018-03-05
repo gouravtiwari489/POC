@@ -1,5 +1,6 @@
 package com.datagenerator.demo.serviceImpl;
 
+import com.datagenerator.demo.exception.DependencyException;
 import com.datagenerator.demo.repository.DomainRepository;
 import com.datagenerator.demo.service.SQLFileReadService;
 import com.datagenerator.demo.utils.CustomTokenConverter;
@@ -28,7 +29,7 @@ public class SQLFileReadServiceImpl implements SQLFileReadService {
 
   @Override
   public List<LinkedHashMap<String, LinkedHashMap<String, String>>> readSQLfile(
-      MultipartFile multiFile, String domainType, boolean dependencyCheck) throws Exception {
+      MultipartFile multiFile, String domainType, boolean dependencyCheck) throws DependencyException, Exception {
 
     File convFile = new File(multiFile.getOriginalFilename());
     convFile.createNewFile();
