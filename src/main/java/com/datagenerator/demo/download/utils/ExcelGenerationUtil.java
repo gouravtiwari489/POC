@@ -16,6 +16,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
+import com.datagenerator.demo.domain.CustomUserDetails;
+
 public enum ExcelGenerationUtil implements GenerateDataInterface {
   INSTANCE;
 
@@ -42,7 +44,7 @@ public enum ExcelGenerationUtil implements GenerateDataInterface {
   }
 
   @Override
-  public void generateData(String tableName, List<List<String>> excelData, String fileType) {
+  public void generateData(String tableName, List<List<String>> excelData, String fileType, CustomUserDetails user) {
     int rownum = 0;
     try {
       XSSFWorkbook workbook = new XSSFWorkbook();
@@ -56,18 +58,25 @@ public enum ExcelGenerationUtil implements GenerateDataInterface {
       font.setBoldweight(XSSFFont.BOLDWEIGHT_BOLD);
       style.setFont(font);
       addContent(excelData, firstSheet, rownum, style);
-      writeToFile(workbook, tableName, fileType);
+      writeToFile(workbook, tableName, fileType, user);
     } catch (Exception e) {
       e.printStackTrace();
     }
   }
 
   @Override
-  public void writeToFile(Object obj, String tableName, String fileType)
+  public void writeToFile(Object obj, String tableName, String fileType, CustomUserDetails user)
       throws IOException, FileNotFoundException {
     String filePath;
-    Resource resource = new ClassPathResource("output");
-    filePath = String.format("%s\\%s.%s", resource.getFile().getPath(), tableName, fileType);
+    Resource resource = new ClassPathResource("output\\"+user.getUsername());
+	if (!resource.exists()) {
+		new File("bin\\output\\" + user.getUsername()).mkdir();
+	}
+	File file = new File(resource.getFile().getPath() + "/" + fileType);
+	if (!file.exists()) {
+		file.mkdir();
+	}
+	filePath = String.format("%s\\%s.%s", resource.getFile().getPath() + "\\" + fileType, tableName, fileType);
     OutputStream excelFileToCreate = new FileOutputStream(new File(filePath));
     XSSFWorkbook workbook = (XSSFWorkbook) obj;
     workbook.write(excelFileToCreate);

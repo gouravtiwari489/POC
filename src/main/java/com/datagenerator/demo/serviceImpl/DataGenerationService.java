@@ -10,6 +10,7 @@ import java.util.concurrent.Executors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.datagenerator.demo.component.LoadFileGenerationObjects;
+import com.datagenerator.demo.domain.CustomUserDetails;
 import com.datagenerator.demo.download.utils.GenerateDataInterface;
 import com.datagenerator.demo.utils.CustomTokenConverter;
 import com.datagenerator.demo.utils.DataGenerationWorker;
@@ -43,6 +44,7 @@ public class DataGenerationService {
     log.info("tablesMap values after getting from context", tablesMap);
     GenerateDataInterface service = fileGenObj.getGenDataServiceMap().get(fileType);
     threadService(tablesMap, fileType, rowCount, json_to_map(updatedMappedData), service);
+    customTokenConverter.setAdditionalInfo("updatedMappedData",updatedMappedData);
   }
 
   public void threadService(
@@ -53,6 +55,7 @@ public class DataGenerationService {
       GenerateDataInterface service)
       throws IOException {
     try {
+      CustomUserDetails user = (CustomUserDetails)customTokenConverter.getAdditionalInfo("CurrentUser");
       Map<String, List<String>> concurrentMap = new ConcurrentHashMap<>();
       for (Map.Entry<Integer, List<String>> entry : tablesMap.entrySet()) {
         log.info("Key = " + entry.getKey() + ", Value = " + entry.getValue());
@@ -67,12 +70,13 @@ public class DataGenerationService {
                   fileType,
                   tablFieldMappingeMap,
                   concurrentMap,
-                  service);
+                  service, user);
           executor.execute(dataGenerationWorker);
         }
         executor.shutdown();
         while (!executor.isTerminated()) {}
       }
+      customTokenConverter.setAdditionalInfo(fileType,String.valueOf(rowCount));
     } catch (Exception ex) {
       log.error("Error wrting to file", ex);
       ex.printStackTrace();

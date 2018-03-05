@@ -1,5 +1,6 @@
 package com.datagenerator.demo.utils;
 
+import com.datagenerator.demo.domain.CustomUserDetails;
 import com.datagenerator.demo.download.utils.GenerateDataInterface;
 import com.datagenerator.demo.serviceImpl.RelationalDataExtractor;
 import java.util.LinkedHashMap;
@@ -17,6 +18,7 @@ public class DataGenerationWorker implements Runnable {
   private String fileType;
   private List<LinkedHashMap<String, LinkedHashMap<String, String>>> tablFieldMappingeMap;
   private Map<String, List<String>> concurrentMap;
+  private CustomUserDetails user;
 
   public DataGenerationWorker(
       String tableName,
@@ -25,7 +27,7 @@ public class DataGenerationWorker implements Runnable {
       String fileType,
       List<LinkedHashMap<String, LinkedHashMap<String, String>>> tablFieldMappingeMap,
       Map<String, List<String>> concurrentMap,
-      GenerateDataInterface service) {
+      GenerateDataInterface service, CustomUserDetails user) {
 
     this.tableName = tableName;
     this.service = service;
@@ -34,6 +36,7 @@ public class DataGenerationWorker implements Runnable {
     this.fileType = fileType;
     this.tablFieldMappingeMap = tablFieldMappingeMap;
     this.concurrentMap = concurrentMap;
+    this.user = user;
   }
 
   @Override
@@ -55,7 +58,7 @@ public class DataGenerationWorker implements Runnable {
               fieldMap, tablFieldMappingeMap.get(0), rowCount, concurrentMap, tableName);
       concurrentMap.putAll(
           RelationalDataExtractor.extractdata(tablFieldMappingeMap.get(0), excelData, tableName));
-      service.generateData(tableName, excelData, this.fileType);
+      service.generateData(tableName, excelData, this.fileType, user);
     } catch (Exception e) {
       e.printStackTrace();
     }

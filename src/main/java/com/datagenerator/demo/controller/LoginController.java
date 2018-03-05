@@ -4,9 +4,13 @@ import com.datagenerator.demo.domain.CustomUserDetails;
 import com.datagenerator.demo.domain.User;
 import com.datagenerator.demo.serviceImpl.LogoutService;
 import com.datagenerator.demo.utils.CustomTokenConverter;
+
+import java.io.File;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -53,17 +57,27 @@ public class LoginController {
     return new ResponseEntity<>(additionalInfo.get(key), HttpStatus.OK);
   }
 
-  @GetMapping("/currentlyLoggedIn")
-  public ResponseEntity<?> getUsersById() {
+  @GetMapping("/currentlyLoggedIn/{cont}")
+  public ResponseEntity<?> getUsersById(@PathVariable Boolean cont) throws Exception {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
     customTokenConverter.setAdditionalInfo("CurrentUser", user);
+	Resource resource = new ClassPathResource("output\\" + user.getUsername());
+	if (resource.exists()) {
+		if (cont) {
+			logoutService.clearUserData("\\output\\" + user.getUsername());
+		} else {
+			throw new Exception("Warning! You already login somewhere");
+		}
+
+	}
+	new File("bin\\output\\" + user.getUsername()).mkdir();
     return new ResponseEntity<>(user, HttpStatus.OK);
   }
 
   @PostMapping("/clearUserSession")
   public ResponseEntity<HttpStatus> logout(@RequestParam String userName) {
-    logoutService.clearUserData(userName);
+	logoutService.clearUserData("output/"+userName);
     return new ResponseEntity<>(HttpStatus.OK);
   }
 }
