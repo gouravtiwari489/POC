@@ -23,7 +23,6 @@ public class ExceptionControllerAdvice {
 
     @ExceptionHandler(DataAccessResourceFailureException.class)
     public ResponseEntity<ErrorResponse> exceptionHandler(DataAccessResourceFailureException ex) {
-    	System.out.println("*********************************************************");
         ErrorResponse error = new ErrorResponse();
         error.setErrorCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
         error.setMessage("Unable to connect to database");
@@ -34,6 +33,16 @@ public class ExceptionControllerAdvice {
     
     @ExceptionHandler(DependencyException.class)
     public ResponseEntity<ErrorResponse> exceptionHandler(DependencyException ex) {
+        ErrorResponse error = new ErrorResponse();
+        error.setErrorCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        error.setMessage(ex.getMessage());
+        error.setDeveloperMessage(String.format("%s: %s", ex.getClass().getSimpleName(), ex.getMessage()));
+        log.error(ex.getMessage(), ex);
+        return new ResponseEntity<ErrorResponse>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    
+    @ExceptionHandler(AlreadyLoggedInException.class)
+    public ResponseEntity<ErrorResponse> exceptionHandler(AlreadyLoggedInException ex) {
         ErrorResponse error = new ErrorResponse();
         error.setErrorCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
         error.setMessage(ex.getMessage());

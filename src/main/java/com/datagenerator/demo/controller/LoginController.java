@@ -2,6 +2,7 @@ package com.datagenerator.demo.controller;
 
 import com.datagenerator.demo.domain.CustomUserDetails;
 import com.datagenerator.demo.domain.User;
+import com.datagenerator.demo.exception.AlreadyLoggedInException;
 import com.datagenerator.demo.serviceImpl.LogoutService;
 import com.datagenerator.demo.utils.CustomTokenConverter;
 
@@ -67,7 +68,7 @@ public class LoginController {
 		if (cont) {
 			logoutService.clearUserData("\\output\\" + user.getUsername());
 		} else {
-			throw new Exception("Warning! You already login somewhere");
+			throw new AlreadyLoggedInException("Warning! You already login somewhere");
 		}
 
 	}
