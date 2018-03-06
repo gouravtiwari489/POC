@@ -1,6 +1,7 @@
 package com.datagenerator.demo.serviceImpl;
 
 import java.io.File;
+import java.security.SecureRandom;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -15,6 +16,8 @@ import org.springframework.core.io.Resource;
 
 public class Dataset {
   public static Map<String, List<String>> map = new HashMap<>();
+  private static final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  private static final Random rng = new SecureRandom();
 
   static {
     try {
@@ -31,13 +34,17 @@ public class Dataset {
     }
   }
 
-  public static String getRandomData(String ColumnName) {
+  public static String getRandomData(String ColumnName, String maxLength) {
     List<String> data = map.get(ColumnName.toLowerCase());
+    String randomString = "";
     if (data != null) {
-      return data.get(new Random().nextInt(data.size()));
+      String resultData = data.get(new Random().nextInt(data.size()));
+      if(resultData.length() > Integer.parseInt(maxLength)) 
+    	  randomString = resultData.substring(0, Integer.parseInt(maxLength));
     } else {
-      return ColumnName.toLowerCase();
+    	randomString = ColumnName.toLowerCase();
     }
+	return randomString;
   }
 
   public static Date getRandomDate() {
@@ -57,10 +64,15 @@ public class Dataset {
     return df.parse(number).toString();
   }
 
-  public static String getRandomInt() {
+  public static String getRandomInt(String maxLength) {
     int begin = 1000;
     int end = 9999;
-
-    return ((new Random().nextInt(end - begin) + 1) + begin) + "";
+    String randomResult = "";
+    String resultData = ((new Random().nextInt(end - begin) + 1) + begin) + "";
+    if(resultData.length() > Integer.parseInt(maxLength)) 
+    	randomResult = resultData.substring(0, Integer.parseInt(maxLength));
+    
+    return randomResult;
   }
+
 }
