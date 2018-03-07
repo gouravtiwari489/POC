@@ -3,6 +3,7 @@ package com.datagenerator.demo.component;
 import com.datagenerator.demo.download.utils.CSVGenerationUtil;
 import com.datagenerator.demo.download.utils.ExcelGenerationUtil;
 import com.datagenerator.demo.download.utils.GenerateDataInterface;
+import com.datagenerator.demo.download.utils.JSONGenerationUtil;
 import com.datagenerator.demo.download.utils.SQLGenerationUtil;
 import com.datagenerator.demo.download.utils.XMLGenerationUtil;
 import java.util.HashMap;
@@ -27,5 +28,6 @@ public class LoadFileGenerationObjects {
     genDataServiceMap.put("xlsx", ExcelGenerationUtil.INSTANCE);
     genDataServiceMap.put("sql", SQLGenerationUtil.INSTANCE);
     genDataServiceMap.put("xml", XMLGenerationUtil.INSTANCE);
+    genDataServiceMap.put("json", JSONGenerationUtil.INSTANCE);
   }
 }

@@ -38,7 +38,7 @@ public class UploadController {
 	
   @Autowired LogoutService logoutService;
 	
-  List<String> fileTypes = new ArrayList<>(Arrays.asList("csv", "xlsx", "xml", "sql"));
+  List<String> fileTypes = new ArrayList<>(Arrays.asList("csv", "xlsx", "xml", "sql", "json"));
 
   @PostMapping("/upload")
   public ResponseEntity<List<LinkedHashMap<String, LinkedHashMap<String, String>>>> uploadProfile(

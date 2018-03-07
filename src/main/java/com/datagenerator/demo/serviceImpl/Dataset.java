@@ -39,8 +39,8 @@ public class Dataset {
     String randomString = "";
     if (data != null) {
       String resultData = data.get(new Random().nextInt(data.size()));
-      if(resultData.length() > Integer.parseInt(maxLength)) 
-    	  randomString = resultData.substring(0, Integer.parseInt(maxLength));
+      if(resultData.length() < Integer.parseInt(maxLength)) 
+    	  randomString = resultData;
     } else {
     	randomString = ColumnName.toLowerCase();
     }
@@ -69,8 +69,8 @@ public class Dataset {
     int end = 9999;
     String randomResult = "";
     String resultData = ((new Random().nextInt(end - begin) + 1) + begin) + "";
-    if(resultData.length() > Integer.parseInt(maxLength)) 
-    	randomResult = resultData.substring(0, Integer.parseInt(maxLength));
+    if(resultData.length() < Integer.parseInt(maxLength)) 
+    	randomResult = resultData;
     
     return randomResult;
   }
