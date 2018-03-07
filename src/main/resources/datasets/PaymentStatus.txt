@@ -1,0 +1,5 @@
+Cancelled
+Completed
+In Progress
+Disputed
+Challenged
