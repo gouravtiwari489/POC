@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,16 +23,17 @@ public enum JSONGenerationUtil implements GenerateDataInterface {
 	public void generateData(String tableName, List<List<String>> excelData, String fileType, CustomUserDetails user) {
 		Map<String, String> jsonMap = null;
 		List<String> headers = excelData.get(0);
-
-		for (int i = 1; i < excelData.size() - 1; i++) {
+		List<Map<String, String>> finalMap = new ArrayList<>();
+		for (int i = 1; i < excelData.size(); i++) {
 			jsonMap = new LinkedHashMap<>();
 			List<String> data = excelData.get(i);
 			for (int j = 0; j < data.size(); j++) {
 				jsonMap.put(headers.get(j), data.get(j));
 			}
+			finalMap.add(jsonMap);
 		}
 		Gson gs = new Gson();
-		String gss = gs.toJson(jsonMap);
+		String gss = gs.toJson(finalMap);
 		try {
 			writeToFile(gss, tableName, fileType, user);
 		} catch (IOException e) {
