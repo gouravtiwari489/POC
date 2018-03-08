@@ -14,6 +14,7 @@ import org.springframework.core.io.Resource;
 public class StringDataGenerator implements IDataGenerator {
   public static Map<String, List<String>> map = new HashMap<>();
   private int begin = 1000;
+  private static final String ALPHA_NUMERIC_STRING = "abcdefghijklmnopqrstuvwxyz";
 
   static {
     try {
@@ -33,24 +34,37 @@ public class StringDataGenerator implements IDataGenerator {
   @Override
   public String generateData(Field field) {
     if (field.isPrimaryKey()) {
-      return generateUniqueData(field);
+      return generateUniqueDatawithNum(field);
+
     } else {
-      return generateRandomData(field);
+      return generateRandomDataFromDataSets(field);
+
     }
   }
 
-  private String generateUniqueData(Field field) {
+  private String generateUniqueDatawithNum(Field field) {
     begin++;
     return field.getColumnName().substring(0, 4) + begin;
   }
 
-  private String generateRandomData(Field field) {
+  private String generateRandomDataFromDataSets(Field field) {
     String ColumnName = field.getColumnName();
     List<String> data = map.get(ColumnName.toLowerCase());
     if (data != null) {
       return data.get(new Random().nextInt(data.size()));
     } else {
-      return ColumnName.toLowerCase();
+      return randomString(10);
+      
     }
+  }
+
+
+  public  String randomString(int count) {
+    StringBuilder builder = new StringBuilder();
+    while (count-- != 0) {
+      int character = (int) (Math.random() * ALPHA_NUMERIC_STRING.length());
+      builder.append(ALPHA_NUMERIC_STRING.charAt(character));
+    }
+    return builder.toString();
   }
 }

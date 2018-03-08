@@ -1,5 +1,10 @@
 package com.datagenerator.demo.exception;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class DependencyException extends RuntimeException {
 
   private static final long serialVersionUID = -6443053415907402665L;
