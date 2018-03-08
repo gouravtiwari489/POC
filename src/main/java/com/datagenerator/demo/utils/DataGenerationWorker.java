@@ -27,7 +27,8 @@ public class DataGenerationWorker implements Runnable {
       String fileType,
       List<LinkedHashMap<String, LinkedHashMap<String, String>>> tablFieldMappingeMap,
       Map<String, List<String>> concurrentMap,
-      GenerateDataInterface service, CustomUserDetails user) {
+      GenerateDataInterface service,
+      CustomUserDetails user) {
 
     this.tableName = tableName;
     this.service = service;

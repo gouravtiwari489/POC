@@ -1,5 +1,6 @@
 package com.datagenerator.demo.utils;
 
+import com.datagenerator.demo.domain.CustomUserDetails;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,15 +15,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
-import com.datagenerator.demo.domain.CustomUserDetails;
-
 @Slf4j
 public class ZipUtil {
 
-  public static String createZipFiles(String fileType, CustomUserDetails currentUser) throws IOException {
+  public static String createZipFiles(String fileType, CustomUserDetails currentUser)
+      throws IOException {
 
     List<String> filePaths = new ArrayList<>();
-    Resource resource = new ClassPathResource("output\\"+currentUser.getUsername()+"\\"+fileType);
+    Resource resource =
+        new ClassPathResource("output\\" + currentUser.getUsername() + "\\" + fileType);
     String zipFilePath = String.format("%s\\%s.%s", resource.getFile().getPath(), "DAS", "zip");
     File folder = new File(resource.getFile().getPath());
     File[] listOfFiles = folder.listFiles();

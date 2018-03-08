@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class ErrorResponse {
 
-    private int errorCode;
-    private String message;
-    private String developerMessage;
+  private int errorCode;
+  private String message;
+  private String developerMessage;
 }

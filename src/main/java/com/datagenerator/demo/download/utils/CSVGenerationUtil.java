@@ -1,14 +1,14 @@
 package com.datagenerator.demo.download.utils;
 
-import java.util.List;
-
 import com.datagenerator.demo.domain.CustomUserDetails;
+import java.util.List;
 
 public enum CSVGenerationUtil implements GenerateDataInterface {
   INSTANCE;
 
   @Override
-  public void generateData(String tableName, List<List<String>> excelData, String fileType, CustomUserDetails user) {
+  public void generateData(
+      String tableName, List<List<String>> excelData, String fileType, CustomUserDetails user) {
     ExcelGenerationUtil.INSTANCE.generateData(tableName, excelData, fileType, user);
   }
 

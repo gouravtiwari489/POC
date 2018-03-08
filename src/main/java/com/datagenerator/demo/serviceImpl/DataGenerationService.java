@@ -1,14 +1,5 @@
 package com.datagenerator.demo.serviceImpl;
 
-import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import com.datagenerator.demo.component.LoadFileGenerationObjects;
 import com.datagenerator.demo.domain.CustomUserDetails;
 import com.datagenerator.demo.download.utils.GenerateDataInterface;
@@ -18,7 +9,16 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
@@ -44,7 +44,7 @@ public class DataGenerationService {
     log.info("tablesMap values after getting from context", tablesMap);
     GenerateDataInterface service = fileGenObj.getGenDataServiceMap().get(fileType);
     threadService(tablesMap, fileType, rowCount, json_to_map(updatedMappedData), service);
-    customTokenConverter.setAdditionalInfo("updatedMappedData",updatedMappedData);
+    customTokenConverter.setAdditionalInfo("updatedMappedData", updatedMappedData);
   }
 
   public void threadService(
@@ -55,7 +55,8 @@ public class DataGenerationService {
       GenerateDataInterface service)
       throws IOException {
     try {
-      CustomUserDetails user = (CustomUserDetails)customTokenConverter.getAdditionalInfo("CurrentUser");
+      CustomUserDetails user =
+          (CustomUserDetails) customTokenConverter.getAdditionalInfo("CurrentUser");
       Map<String, List<String>> concurrentMap = new ConcurrentHashMap<>();
       for (Map.Entry<Integer, List<String>> entry : tablesMap.entrySet()) {
         log.info("Key = " + entry.getKey() + ", Value = " + entry.getValue());
@@ -70,13 +71,14 @@ public class DataGenerationService {
                   fileType,
                   tablFieldMappingeMap,
                   concurrentMap,
-                  service, user);
+                  service,
+                  user);
           executor.execute(dataGenerationWorker);
         }
         executor.shutdown();
         while (!executor.isTerminated()) {}
       }
-      customTokenConverter.setAdditionalInfo(fileType,String.valueOf(rowCount));
+      customTokenConverter.setAdditionalInfo(fileType, String.valueOf(rowCount));
     } catch (Exception ex) {
       log.error("Error wrting to file", ex);
       ex.printStackTrace();
