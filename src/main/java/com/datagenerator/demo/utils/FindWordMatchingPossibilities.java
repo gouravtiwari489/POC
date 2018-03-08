@@ -17,14 +17,28 @@ public class FindWordMatchingPossibilities {
   @Value("${match.threshold}")
   String threshold;
 
+  private static final String HRMS = "HRMS";
+  private static final String SUPPLYCHAIN = "SupplyChain";
+  private static final String MANUFACTURING = "Manufacturing";
+  private static final String CRM = "CRM";
+  private static final String RETAIL = "Retail";
+  private static final String PURCHASE = "Purchase";
+  private static final String LOGISTICS = "Logistics";
+  private static final String FINANCIAL = "Financial";
+  private static final String HRMSCATEGORY = "HRMS-dataset.txt";
+  private static final String SUPPLYCHAINCATEGORY = "SupplyChain-dataset.txt";
+  private static final String MANUFACTURINGCATEGORY = "Manufacturing-Categories.txt";
+
   public Map<String, List<String>> findMatchingWord(String wordToFind, String domainType)
       throws FileNotFoundException {
     String wordArr[] = null;
     Map<String, List<String>> matchingMap = null;
     ClassLoader classLoader = getClass().getClassLoader();
 
-    String datasetFileName =
-        domainType.equalsIgnoreCase("HRMS") ? "HRMS-dataset.txt" : "SupplyChain-dataset.txt";
+    String datasetFileName = null;
+    if (domainType.equalsIgnoreCase(HRMS)) datasetFileName = HRMSCATEGORY;
+    else if (domainType.equalsIgnoreCase(SUPPLYCHAIN)) datasetFileName = SUPPLYCHAINCATEGORY;
+    else if (domainType.equalsIgnoreCase(MANUFACTURING)) datasetFileName = MANUFACTURINGCATEGORY;
 
     File file = new File(classLoader.getResource(datasetFileName).getFile());
     Scanner scanner = new Scanner(file);
