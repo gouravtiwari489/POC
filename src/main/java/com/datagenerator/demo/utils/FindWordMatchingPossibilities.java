@@ -60,20 +60,27 @@ public class FindWordMatchingPossibilities {
     }
     Map<String, List<String>> matchingProbMap = new HashMap<>();
     for (Map.Entry<String, List<String>> elem : matchingMap.entrySet()) {
-      List<String> list = elem.getValue();
-      List<String> matchList = new ArrayList<>();
-      list.forEach(
-          new Consumer<String>() {
-            @Override
-            public void accept(String matchField) {
-              Float matchProb = computeProbability(wordToFind, matchField);
-              if (matchProb.compareTo(Float.valueOf(threshold)) >= 0.0f) {
-                matchList.add(matchField);
+        List<String> list = elem.getValue();
+        List<String> matchList = new ArrayList<>();
+        boolean isAdd=false;
+        for(String matchField : list) {
+                Float matchProb = computeProbability(wordToFind, matchField);
+                if(matchProb == 1.0f) {
+              	  matchingProbMap.clear();
+              	  matchList.add(matchField);
+              	  matchingProbMap.put(elem.getKey(), matchList);
+              	  isAdd =true;
+              	  break;
+                }else if (!isAdd && matchProb.compareTo(Float.valueOf(threshold)) >= 0.0f) {
+                  matchList.add(matchField);
+                }
               }
-            }
-          });
-      if (!matchList.isEmpty() && null != matchList) matchingProbMap.put(elem.getKey(), matchList);
-    }
+        if (!matchList.isEmpty() && null != matchList) {
+      	  if(!matchingProbMap.containsKey(elem.getKey()))
+      	     matchingProbMap.put(elem.getKey(), matchList);
+        }
+       //System.out.println("matchField = "+elem.getKey()+" :: matchList = "+matchList.size());
+      }
     scanner.close();
     return matchingProbMap;
   }
