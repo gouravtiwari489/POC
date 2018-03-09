@@ -65,20 +65,24 @@ public class FindWordMatchingPossibilities {
       for (String matchField : list) {
         Float matchProb = computeProbability(wordToFind, matchField);
         if (matchProb == 1.0f) {
+        	System.out.println("matchingProbMap is:::"+matchingProbMap.toString());
           matchingProbMap.clear();
           matchList.add(matchField);
           matchingProbMap.put(elem.getKey(), matchList);
           isAdd = true;
           break;
-        } else if (!isAdd && matchProb.compareTo(Float.valueOf(threshold)) >= 0.0f) {
-          matchList.add(matchField);
+        } else if(!isAdd && matchProb.compareTo(Float.valueOf(threshold)) >= 0.0f) {
+             matchList.add(matchField);
         }
       }
-      if (!matchList.isEmpty() && null != matchList) {
-        if (!matchingProbMap.containsKey(elem.getKey()))
-          matchingProbMap.put(elem.getKey(), matchList);
+      if(isAdd){
+    	  break;
       }
-      //System.out.println("matchField = "+elem.getKey()+" :: matchList = "+matchList.size());
+      if (!matchList.isEmpty() && null != matchList) {
+        if(!matchingProbMap.containsKey(elem.getKey()))
+             matchingProbMap.put(elem.getKey(), matchList);
+      }
+     // System.out.println("matchField = "+elem.getKey()+" :: matchList = "+matchList.size());
     }
     scanner.close();
     return matchingProbMap;
