@@ -34,14 +34,14 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     endpoints
         .tokenStore(tokenStore())
-        .tokenEnhancer(customTokenEnhancer())
+//        .tokenEnhancer(customTokenEnhancer())
         .authenticationManager(authenticationManager);
   }
 
-  @Bean
+  /*@Bean
   public CustomTokenConverter customTokenEnhancer() {
     return new CustomTokenConverter();
-  }
+  }*/
 
   @Bean
   public TokenStore tokenStore() {

@@ -1,9 +1,9 @@
 package com.datagenerator.demo.serviceImpl;
 
+import com.datagenerator.demo.domain.CustomUserDetails;
 import com.datagenerator.demo.exception.DependencyException;
 import com.datagenerator.demo.repository.DomainRepository;
 import com.datagenerator.demo.service.SQLFileReadService;
-import com.datagenerator.demo.utils.CustomTokenConverter;
 import com.datagenerator.demo.utils.FindWordMatchingPossibilities;
 import com.datagenerator.demo.utils.TableStructureExtractor;
 import java.io.File;
@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,7 +27,7 @@ public class SQLFileReadServiceImpl implements SQLFileReadService {
 
   @Autowired private FindWordMatchingPossibilities findWordMatchingPossibilities;
 
-  @Autowired private CustomTokenConverter customTokenConverter;
+//  @Autowired private CustomTokenConverter customTokenConverter;
 
   @Override
   public List<LinkedHashMap<String, LinkedHashMap<String, String>>> readSQLfile(
@@ -85,7 +87,10 @@ public class SQLFileReadServiceImpl implements SQLFileReadService {
     list.add(finalMappedMap);
     list2.add(finalInputMap);
     list2.add(finalMappedMap);
-    customTokenConverter.setAdditionalInfo("mappedTables", list);
+//    customTokenConverter.setAdditionalInfo("mappedTables", list);
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
+    user.setMappedTables(list);
     return list2;
 
     // Unmapped entity needs to be saved?

@@ -18,6 +18,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -27,24 +29,29 @@ public class DataGenerationService {
   public static List<LinkedHashMap<String, LinkedHashMap<String, String>>> tablFieldMappingeMap =
       null;
 
-  @Autowired private CustomTokenConverter customTokenConverter;
+//  @Autowired private CustomTokenConverter customTokenConverter;
   @Autowired LoadFileGenerationObjects fileGenObj;
 
   @SuppressWarnings("unchecked")
   public void generateData(String updatedMappedData, String fileType, int rowCount)
       throws IOException {
 
-    tablFieldMappingeMap =
+	  Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	  CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
+    /*tablFieldMappingeMap =
         (List<LinkedHashMap<String, LinkedHashMap<String, String>>>)
-            customTokenConverter.getAdditionalInfo("mappedTables");
+            customTokenConverter.getAdditionalInfo("mappedTables");*/
+	  tablFieldMappingeMap = user.getMappedTables();
 
-    Map<Integer, List<String>> tablesMap =
-        (Map<Integer, List<String>>) customTokenConverter.getAdditionalInfo("orderedFKList");
+    /*Map<Integer, List<String>> tablesMap =
+        (Map<Integer, List<String>>) customTokenConverter.getAdditionalInfo("orderedFKList");*/
+	  Map<Integer, List<String>> tablesMap = user.getOrderedFKListMap();
     log.info("tablFieldMappingeMap values after getting from context", tablFieldMappingeMap);
     log.info("tablesMap values after getting from context", tablesMap);
     GenerateDataInterface service = fileGenObj.getGenDataServiceMap().get(fileType);
-    threadService(tablesMap, fileType, rowCount, json_to_map(updatedMappedData), service);
-    customTokenConverter.setAdditionalInfo("updatedMappedData", updatedMappedData);
+    Map<String, LinkedHashMap<String, String>> map = json_to_map(updatedMappedData);
+    threadService(tablesMap, fileType, rowCount, map, service);
+//    customTokenConverter.setAdditionalInfo("updatedMappedData", updatedMappedData);
   }
 
   public void threadService(
@@ -55,8 +62,10 @@ public class DataGenerationService {
       GenerateDataInterface service)
       throws IOException {
     try {
-      CustomUserDetails user =
-          (CustomUserDetails) customTokenConverter.getAdditionalInfo("CurrentUser");
+      /*CustomUserDetails user =
+          (CustomUserDetails) customTokenConverter.getAdditionalInfo("CurrentUser");*/
+      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+      CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
       Map<String, List<String>> concurrentMap = new ConcurrentHashMap<>();
       for (Map.Entry<Integer, List<String>> entry : tablesMap.entrySet()) {
         log.info("Key = " + entry.getKey() + ", Value = " + entry.getValue());
@@ -78,7 +87,7 @@ public class DataGenerationService {
         executor.shutdown();
         while (!executor.isTerminated()) {}
       }
-      customTokenConverter.setAdditionalInfo(fileType, String.valueOf(rowCount));
+//      customTokenConverter.setAdditionalInfo(fileType, String.valueOf(rowCount));
     } catch (Exception ex) {
       log.error("Error wrting to file", ex);
       ex.printStackTrace();

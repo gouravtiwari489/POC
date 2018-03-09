@@ -3,6 +3,7 @@ package com.datagenerator.demo.utils;
 import static java.util.Comparator.comparingInt;
 import static java.util.stream.Collectors.toMap;
 
+import com.datagenerator.demo.domain.CustomUserDetails;
 import com.datagenerator.demo.exception.DependencyException;
 import java.io.File;
 import java.util.ArrayList;
@@ -12,8 +13,9 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Scanner;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -28,7 +30,7 @@ public class TableStructureExtractor {
   private static final String PRIMARY_KEY = "PRIMARY KEY ";
   private static final String CREATE_TABLE = "CREATE TABLE ";
 
-  @Autowired private CustomTokenConverter customTokenConverter;
+//  @Autowired private CustomTokenConverter customTokenConverter;
 
   public LinkedHashMap<String, LinkedHashMap<String, String>> searchforTableName(
       File file, boolean dependencyCheck) throws DependencyException, Exception {
@@ -142,8 +144,10 @@ public class TableStructureExtractor {
 
     LinkedHashMap<String, List<String>> sorted = sortMap(fkListMap);
     Map<Integer, List<String>> map = transform(sorted);
-    customTokenConverter.setAdditionalInfo("orderedFKList", map);
-    System.out.println(customTokenConverter.getAdditionalInfo("orderedFKList"));
+//    customTokenConverter.setAdditionalInfo("orderedFKList", map);
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
+    user.setOrderedFKListMap(map);
   }
 
   private LinkedHashMap<String, List<String>> sortMap(

@@ -4,7 +4,6 @@ import com.datagenerator.demo.domain.CustomUserDetails;
 import com.datagenerator.demo.domain.User;
 import com.datagenerator.demo.exception.AlreadyLoggedInException;
 import com.datagenerator.demo.serviceImpl.LogoutService;
-import com.datagenerator.demo.utils.CustomTokenConverter;
 import java.io.File;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +33,7 @@ public class LoginController {
 
   @Autowired private AuthorizationServerTokenServices tokenServices;
 
-  @Autowired private CustomTokenConverter customTokenConverter;
+//  @Autowired private CustomTokenConverter customTokenConverter;
 
   @Autowired LogoutService logoutService;
 
@@ -61,7 +60,10 @@ public class LoginController {
   public ResponseEntity<?> getUsersById(@PathVariable Boolean cont) throws Exception {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
-    customTokenConverter.setAdditionalInfo("CurrentUser", user);
+//    customTokenConverter.setAdditionalInfo("CurrentUser", user);
+    user.setMap(null);
+    user.setMappedData(null);
+    user.setMappedTables(null);
     Resource resource = new ClassPathResource("output\\" + user.getUsername());
     if (resource.exists()) {
       if (cont) {
