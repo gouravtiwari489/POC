@@ -1,5 +1,7 @@
 package com.datagenerator.demo.download.utils;
 
+import static com.datagenerator.demo.utils.DataGenUtil.removeSingleQuotes;
+
 import com.datagenerator.demo.domain.CustomUserDetails;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -29,7 +31,7 @@ public enum ExcelGenerationUtil implements GenerateDataInterface {
         List<String> l2 = l1.get(j);
         for (int k = 0; k < l2.size(); k++) {
           Cell cell = row.createCell(k);
-          cell.setCellValue(l2.get(k));
+          cell.setCellValue(removeSingleQuotes(l2.get(k)));
           if (j == 0) {
             cell.setCellStyle(style);
           }

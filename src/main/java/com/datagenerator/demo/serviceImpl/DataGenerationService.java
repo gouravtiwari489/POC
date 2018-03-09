@@ -3,7 +3,6 @@ package com.datagenerator.demo.serviceImpl;
 import com.datagenerator.demo.component.LoadFileGenerationObjects;
 import com.datagenerator.demo.domain.CustomUserDetails;
 import com.datagenerator.demo.download.utils.GenerateDataInterface;
-import com.datagenerator.demo.utils.CustomTokenConverter;
 import com.datagenerator.demo.utils.DataGenerationWorker;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -29,29 +28,29 @@ public class DataGenerationService {
   public static List<LinkedHashMap<String, LinkedHashMap<String, String>>> tablFieldMappingeMap =
       null;
 
-//  @Autowired private CustomTokenConverter customTokenConverter;
+  //  @Autowired private CustomTokenConverter customTokenConverter;
   @Autowired LoadFileGenerationObjects fileGenObj;
 
   @SuppressWarnings("unchecked")
   public void generateData(String updatedMappedData, String fileType, int rowCount)
       throws IOException {
 
-	  Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-	  CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
     /*tablFieldMappingeMap =
-        (List<LinkedHashMap<String, LinkedHashMap<String, String>>>)
-            customTokenConverter.getAdditionalInfo("mappedTables");*/
-	  tablFieldMappingeMap = user.getMappedTables();
+    (List<LinkedHashMap<String, LinkedHashMap<String, String>>>)
+        customTokenConverter.getAdditionalInfo("mappedTables");*/
+    tablFieldMappingeMap = user.getMappedTables();
 
     /*Map<Integer, List<String>> tablesMap =
-        (Map<Integer, List<String>>) customTokenConverter.getAdditionalInfo("orderedFKList");*/
-	  Map<Integer, List<String>> tablesMap = user.getOrderedFKListMap();
+    (Map<Integer, List<String>>) customTokenConverter.getAdditionalInfo("orderedFKList");*/
+    Map<Integer, List<String>> tablesMap = user.getOrderedFKListMap();
     log.info("tablFieldMappingeMap values after getting from context", tablFieldMappingeMap);
     log.info("tablesMap values after getting from context", tablesMap);
     GenerateDataInterface service = fileGenObj.getGenDataServiceMap().get(fileType);
     Map<String, LinkedHashMap<String, String>> map = json_to_map(updatedMappedData);
     threadService(tablesMap, fileType, rowCount, map, service);
-//    customTokenConverter.setAdditionalInfo("updatedMappedData", updatedMappedData);
+    //    customTokenConverter.setAdditionalInfo("updatedMappedData", updatedMappedData);
   }
 
   public void threadService(
@@ -63,7 +62,7 @@ public class DataGenerationService {
       throws IOException {
     try {
       /*CustomUserDetails user =
-          (CustomUserDetails) customTokenConverter.getAdditionalInfo("CurrentUser");*/
+      (CustomUserDetails) customTokenConverter.getAdditionalInfo("CurrentUser");*/
       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
       CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
       Map<String, List<String>> concurrentMap = new ConcurrentHashMap<>();
@@ -87,7 +86,7 @@ public class DataGenerationService {
         executor.shutdown();
         while (!executor.isTerminated()) {}
       }
-//      customTokenConverter.setAdditionalInfo(fileType, String.valueOf(rowCount));
+      //      customTokenConverter.setAdditionalInfo(fileType, String.valueOf(rowCount));
     } catch (Exception ex) {
       log.error("Error wrting to file", ex);
       ex.printStackTrace();

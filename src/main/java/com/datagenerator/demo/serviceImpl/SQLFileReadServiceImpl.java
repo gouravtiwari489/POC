@@ -27,7 +27,7 @@ public class SQLFileReadServiceImpl implements SQLFileReadService {
 
   @Autowired private FindWordMatchingPossibilities findWordMatchingPossibilities;
 
-//  @Autowired private CustomTokenConverter customTokenConverter;
+  //  @Autowired private CustomTokenConverter customTokenConverter;
 
   @Override
   public List<LinkedHashMap<String, LinkedHashMap<String, String>>> readSQLfile(
@@ -87,7 +87,7 @@ public class SQLFileReadServiceImpl implements SQLFileReadService {
     list.add(finalMappedMap);
     list2.add(finalInputMap);
     list2.add(finalMappedMap);
-//    customTokenConverter.setAdditionalInfo("mappedTables", list);
+    //    customTokenConverter.setAdditionalInfo("mappedTables", list);
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
     user.setMappedTables(list);

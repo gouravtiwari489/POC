@@ -1,6 +1,5 @@
 package com.datagenerator.demo.configuration;
 
-import com.datagenerator.demo.utils.CustomTokenConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,7 +33,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     endpoints
         .tokenStore(tokenStore())
-//        .tokenEnhancer(customTokenEnhancer())
+        //        .tokenEnhancer(customTokenEnhancer())
         .authenticationManager(authenticationManager);
   }
 

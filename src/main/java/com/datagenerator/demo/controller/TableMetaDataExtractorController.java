@@ -24,7 +24,7 @@ public class TableMetaDataExtractorController {
 
   @Autowired private FindWordMatchingPossibilities findWordMatchingPossibilities;
 
-//  @Autowired private CustomTokenConverter customTokenConverter;
+  //  @Autowired private CustomTokenConverter customTokenConverter;
 
   @GetMapping
   public ResponseEntity<LinkedHashMap<String, LinkedHashMap<String, String>>> extractTableMetaData()
@@ -37,7 +37,7 @@ public class TableMetaDataExtractorController {
     } catch (Exception e) {
       e.printStackTrace();
     }
-//    customTokenConverter.setAdditionalInfo("extractor", tableMap);
+    //    customTokenConverter.setAdditionalInfo("extractor", tableMap);
     return new ResponseEntity<LinkedHashMap<String, LinkedHashMap<String, String>>>(
         tableMap, HttpStatus.OK);
   }

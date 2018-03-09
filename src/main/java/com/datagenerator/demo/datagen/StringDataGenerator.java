@@ -1,5 +1,7 @@
 package com.datagenerator.demo.datagen;
 
+import static com.datagenerator.demo.utils.DataGenUtil.singleQuote;
+
 import com.datagenerator.demo.datagen.intf.IDataGenerator;
 import com.datagenerator.demo.domain.Field;
 import java.io.File;
@@ -38,33 +40,30 @@ public class StringDataGenerator implements IDataGenerator {
 
     } else {
       return generateRandomDataFromDataSets(field);
-
     }
   }
 
   private String generateUniqueDatawithNum(Field field) {
     begin++;
-    return field.getColumnName().substring(0, 4) + begin;
+    return singleQuote(field.getColumnName().substring(0, 4) + begin);
   }
 
   private String generateRandomDataFromDataSets(Field field) {
     String ColumnName = field.getColumnName();
     List<String> data = map.get(ColumnName.toLowerCase());
     if (data != null) {
-      return data.get(new Random().nextInt(data.size()));
+      return singleQuote(data.get(new Random().nextInt(data.size())));
     } else {
       return randomString(10);
-      
     }
   }
 
-
-  public  String randomString(int count) {
+  public String randomString(int count) {
     StringBuilder builder = new StringBuilder();
     while (count-- != 0) {
       int character = (int) (Math.random() * ALPHA_NUMERIC_STRING.length());
       builder.append(ALPHA_NUMERIC_STRING.charAt(character));
     }
-    return builder.toString();
+    return singleQuote(builder.toString());
   }
 }

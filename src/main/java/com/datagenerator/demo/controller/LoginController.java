@@ -33,7 +33,7 @@ public class LoginController {
 
   @Autowired private AuthorizationServerTokenServices tokenServices;
 
-//  @Autowired private CustomTokenConverter customTokenConverter;
+  //  @Autowired private CustomTokenConverter customTokenConverter;
 
   @Autowired LogoutService logoutService;
 
@@ -60,7 +60,7 @@ public class LoginController {
   public ResponseEntity<?> getUsersById(@PathVariable Boolean cont) throws Exception {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
-//    customTokenConverter.setAdditionalInfo("CurrentUser", user);
+    //    customTokenConverter.setAdditionalInfo("CurrentUser", user);
     user.setMap(null);
     user.setMappedData(null);
     user.setMappedTables(null);

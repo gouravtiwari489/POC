@@ -15,7 +15,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +36,7 @@ public class UploadController {
 
   @Autowired DataGenerationService dataGenerationService;
 
-//  @Autowired CustomTokenConverter customTokenConverter;
+  //  @Autowired CustomTokenConverter customTokenConverter;
 
   @Autowired LogoutService logoutService;
 
@@ -74,20 +73,22 @@ public class UploadController {
     log.info("@@@@@@@@@@@@@@@@@ rowCount   " + rowCount + "   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
-   
-    if (user.getMap()==null || !user.getMap().containsKey(fileType) || user.getMappedData() == null
-            || !user.getMappedData().equals(updatedMappedData)
-            || user.getMap().get(fileType) != rowCount) {
-        if(user.getMappedData() != null && !user.getMappedData().equals(updatedMappedData)) {
-            for (String string : fileTypes) {
-            	user.getMap().remove(string);
-            }
-            user.setMappedData(null);
-            logoutService.clearUserData("output/"+user.getUsername());
+
+    if (user.getMap() == null
+        || !user.getMap().containsKey(fileType)
+        || user.getMappedData() == null
+        || !user.getMappedData().equals(updatedMappedData)
+        || user.getMap().get(fileType) != rowCount) {
+      if (user.getMappedData() != null && !user.getMappedData().equals(updatedMappedData)) {
+        for (String string : fileTypes) {
+          user.getMap().remove(string);
         }
-        dataGenerationService.generateData(updatedMappedData, fileType, rowCount);
-        setFileTypeRowCountInUser(fileType, rowCount, user);
-        user.setMappedData(updatedMappedData);
+        user.setMappedData(null);
+        logoutService.clearUserData("output/" + user.getUsername());
+      }
+      dataGenerationService.generateData(updatedMappedData, fileType, rowCount);
+      setFileTypeRowCountInUser(fileType, rowCount, user);
+      user.setMappedData(updatedMappedData);
     }
 
     String filePath = ZipUtil.createZipFiles(fileType, user);
@@ -96,15 +97,14 @@ public class UploadController {
     isr.close();
     return bytes;
   }
-  
+
   private void setFileTypeRowCountInUser(String fileType, int rowCount, CustomUserDetails user) {
 
-		Map<String, Integer> map =user.getMap();
-		if(map==null)
-		{
-			map = new HashMap<>();
-			user.setMap(map);
-		}
-		  map.put(fileType, rowCount);
-	}
+    Map<String, Integer> map = user.getMap();
+    if (map == null) {
+      map = new HashMap<>();
+      user.setMap(map);
+    }
+    map.put(fileType, rowCount);
+  }
 }

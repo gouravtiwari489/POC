@@ -1,5 +1,9 @@
 package com.datagenerator.demo.download.utils;
 
+import static com.datagenerator.demo.utils.DataGenUtil.removeSingleQuotes;
+
+import com.datagenerator.demo.domain.CustomUserDetails;
+import com.google.gson.Gson;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -11,8 +15,6 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-import com.datagenerator.demo.domain.CustomUserDetails;
-import com.google.gson.Gson;
 
 public enum JSONGenerationUtil implements GenerateDataInterface {
   INSTANCE;
@@ -27,7 +29,7 @@ public enum JSONGenerationUtil implements GenerateDataInterface {
       jsonMap = new LinkedHashMap<>();
       List<String> data = excelData.get(i);
       for (int j = 0; j < data.size(); j++) {
-        jsonMap.put(headers.get(j), data.get(j));
+        jsonMap.put(headers.get(j), removeSingleQuotes(data.get(j)));
       }
       finalMap.add(jsonMap);
     }

@@ -1,5 +1,6 @@
 package com.datagenerator.demo.download.utils;
 
+import com.datagenerator.demo.domain.CustomUserDetails;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -10,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-import com.datagenerator.demo.domain.CustomUserDetails;
 
 public enum SQLGenerationUtil implements GenerateDataInterface {
   INSTANCE;

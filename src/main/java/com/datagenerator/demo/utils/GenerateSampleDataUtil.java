@@ -52,7 +52,7 @@ public class GenerateSampleDataUtil {
     field.setColumnName(entry.getKey());
     field.setDataType(values[0]);
     field.setLength(values[0]);
-    
+
     String primaryKey = linkedHashMap.get(tableName).get("PK");
     if (entry.getKey().equals(primaryKey)) {
       field.setPrimaryKey(true);

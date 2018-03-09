@@ -30,7 +30,7 @@ public class TableStructureExtractor {
   private static final String PRIMARY_KEY = "PRIMARY KEY ";
   private static final String CREATE_TABLE = "CREATE TABLE ";
 
-//  @Autowired private CustomTokenConverter customTokenConverter;
+  //  @Autowired private CustomTokenConverter customTokenConverter;
 
   public LinkedHashMap<String, LinkedHashMap<String, String>> searchforTableName(
       File file, boolean dependencyCheck) throws DependencyException, Exception {
@@ -144,7 +144,7 @@ public class TableStructureExtractor {
 
     LinkedHashMap<String, List<String>> sorted = sortMap(fkListMap);
     Map<Integer, List<String>> map = transform(sorted);
-//    customTokenConverter.setAdditionalInfo("orderedFKList", map);
+    //    customTokenConverter.setAdditionalInfo("orderedFKList", map);
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
     user.setOrderedFKListMap(map);
