@@ -1,0 +1,5 @@
+Manufacturer
+Vendor
+Shopper
+Retailer
+Farmer
