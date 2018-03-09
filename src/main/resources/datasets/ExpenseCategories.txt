@@ -1,0 +1,13 @@
+Rent
+Utilities
+Insurance
+Fees
+Wages
+Taxes
+Interest
+Supplies
+Depreciation
+Maintenance
+Travel
+Meals and Entertainment
+Training
