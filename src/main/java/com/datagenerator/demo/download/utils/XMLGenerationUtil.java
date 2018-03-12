@@ -1,19 +1,32 @@
 package com.datagenerator.demo.download.utils;
 
 import static com.datagenerator.demo.utils.DataGenUtil.removeSingleQuotes;
-
-import com.datagenerator.demo.domain.CustomUserDetails;
-import com.thoughtworks.xstream.XStream;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerFactoryConfigurationError;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
+import com.datagenerator.demo.domain.CustomUserDetails;
 
 public enum XMLGenerationUtil implements GenerateDataInterface {
   INSTANCE;
@@ -22,23 +35,29 @@ public enum XMLGenerationUtil implements GenerateDataInterface {
   public void generateData(
       String tableName, List<List<String>> excelData, String fileType, CustomUserDetails user) {
 
-    Map<String, String> fieldValueMap = null;
-    String dataXml = new String("<root>\n");
-    XStream xstream = new XStream();
-    xstream.alias("row", LinkedHashMap.class);
-    xstream.registerConverter(new MapEntryConverter());
+    DocumentBuilder builder = null;
+    try {
+      builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+    } catch (ParserConfigurationException e1) {
+      e1.printStackTrace();
+    }
+    Document document = builder.newDocument();
+    Element root = document.createElement("root");
     List<String> fields = excelData.get(0);
     for (int i = 1; i < excelData.size(); i++) {
-      fieldValueMap = new LinkedHashMap<>();
+      Element rowNode = document.createElement("row");
       List<String> values = excelData.get(i);
       for (int j = 0; j < values.size(); j++) {
-        fieldValueMap.put(fields.get(j), removeSingleQuotes(values.get(j)));
+        Element field = document.createElement(fields.get(j));
+        field.setTextContent(removeSingleQuotes(values.get(j)));
+        rowNode.appendChild(field);
       }
-      dataXml += xstream.toXML(fieldValueMap) + "\n";
+      root.appendChild(rowNode);
     }
-    dataXml += "</root>";
+    document.appendChild(root);
+
     try {
-      writeToFile(dataXml, tableName, fileType, user);
+      writeToFile(document, tableName, fileType, user);
     } catch (IOException e) {
       e.getMessage();
     }
@@ -47,6 +66,7 @@ public enum XMLGenerationUtil implements GenerateDataInterface {
   @Override
   public void writeToFile(Object obj, String tableName, String fileType, CustomUserDetails user)
       throws IOException, FileNotFoundException {
+
     String filePath;
     Resource resource = new ClassPathResource("output\\" + user.getUsername());
     if (!resource.exists()) {
@@ -59,9 +79,20 @@ public enum XMLGenerationUtil implements GenerateDataInterface {
     filePath =
         String.format(
             "%s\\%s.%s", resource.getFile().getPath() + "\\" + fileType, tableName, fileType);
-    BufferedWriter jsonFile = new BufferedWriter(new FileWriter(filePath));
-    jsonFile.write((String) obj);
-    jsonFile.flush();
-    jsonFile.close();
+    BufferedWriter xmlFile = new BufferedWriter(new FileWriter(filePath));
+
+    try {
+      Transformer transformer = TransformerFactory.newInstance().newTransformer();
+      Source source = new DOMSource((Document) obj);
+      Result result = new StreamResult(xmlFile);
+      transformer.transform(source, result);
+      xmlFile.flush();
+      xmlFile.close();
+
+    } catch (TransformerConfigurationException | TransformerFactoryConfigurationError e1) {
+      e1.printStackTrace();
+    } catch (TransformerException e) {
+      e.printStackTrace();
+    }
   }
 }
