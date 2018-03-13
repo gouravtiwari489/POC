@@ -229,12 +229,27 @@ public class TableStructureExtractor {
         // leave as it is in
         // order
         {
-          if (!isTablesOnCyclicDependencies(
-              parentOrderLevel, childOrderLevel, parentTable, child, tableMap)) {
+          List<String> childDependentTables =null;
+          if (isTablesOnCyclicDependenctysOnDiffPrioriTy(parentTable, child, tableMap))
+          {
+              if(parentOrderLevel > childOrderLevel)
+              {
+                orderedMap.get(childOrderLevel).remove(child);
+                addChildIntoMap(child, orderedMap, parentOrderLevel-1);
+                addChildIntoMap(parentTable+"-->>"+child, orderedMap, parentOrderLevel-1);
+                childDependentTables = findDependencies(child, child, tableMap);
+                childDependentTables.remove(parentTable);
+                findChildDependencies(child, orderedMap, parentOrderLevel, tableMap,childDependentTables);
+              }
+           }
+          else
+          {
             orderedMap.get(childOrderLevel).remove(child);
             parentOrderLevel = addChildIntoMap(child, orderedMap, parentOrderLevel);
-            findChildDependencies(child, orderedMap, parentOrderLevel, tableMap);
+            childDependentTables = findDependencies(child, child, tableMap);
+            findChildDependencies(child, orderedMap, parentOrderLevel, tableMap,childDependentTables);
           }
+          
         }
       } else {
         addChildIntoMap(child, orderedMap, parentOrderLevel);
@@ -245,15 +260,12 @@ public class TableStructureExtractor {
     }
   }
 
-  private boolean isTablesOnCyclicDependencies(
-      Integer parentOrderLevel,
-      Integer childOrderLevel,
+  private boolean isTablesOnCyclicDependenctysOnDiffPrioriTy(
       String parentTable,
       String child,
       LinkedHashMap<String, List<String>> tableMap) {
     boolean isTrue = false;
-    if (parentOrderLevel.intValue() == childOrderLevel.intValue()) {
-      for (Map.Entry<String, List<String>> entry : tableMap.entrySet()) {
+     for (Map.Entry<String, List<String>> entry : tableMap.entrySet()) {
         if (entry.getKey().equals(child)) {
           break;
         }
@@ -261,7 +273,6 @@ public class TableStructureExtractor {
           isTrue = true;
         }
       }
-    }
     return isTrue;
   }
 
@@ -282,10 +293,8 @@ public class TableStructureExtractor {
       String child,
       Map<Integer, List<String>> orderedMap,
       Integer parentOrderLevel,
-      LinkedHashMap<String, List<String>> tableMap) {
-
-    List<String> childDependentTables = findDependencies(child, child, tableMap);
-
+      LinkedHashMap<String, List<String>> tableMap, List<String> childDependentTables) {
+  
     for (String childTable : childDependentTables) {
       ListIterator<Integer> litt = new LinkedList<Integer>(orderedMap.keySet()).listIterator();
       while (litt.hasNext()) {
@@ -297,10 +306,10 @@ public class TableStructureExtractor {
             tables.remove(childTable);
             orderedMap.put(entry, tables);
             if (parentDependentTables.contains(child)) {
-              addChildIntoMap(childTable, orderedMap, parentOrderLevel - 1);
-              childTable = childTable + "-->>" + child;
-              addChildIntoMap(childTable, orderedMap, parentOrderLevel - 1);
-              continue;
+                addChildIntoMap(childTable, orderedMap, parentOrderLevel - 1);
+                childTable = childTable + "-->>" + child;
+                addChildIntoMap(childTable, orderedMap, parentOrderLevel - 1); 
+                continue;
             }
             addChildIntoMap(childTable, orderedMap, parentOrderLevel);
           }
