@@ -3,7 +3,9 @@ package com.datagenerator.demo.utils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -28,7 +30,7 @@ public class FindWordMatchingPossibilities {
   private static final String SUPPLYCHAINCATEGORY = "SupplyChain-dataset.txt";
   private static final String MANUFACTURINGCATEGORY = "Manufacturing-Categories.txt";
 
-  public Map<String, List<String>> findMatchingWord(String wordToFind, String domainType)
+  public Map<String, List<String>> findMatchingWord(String wordToFind, String domainType,String dataType)
       throws FileNotFoundException {
     String wordArr[] = null;
     Map<String, List<String>> matchingMap = null;
@@ -85,7 +87,24 @@ public class FindWordMatchingPossibilities {
      // System.out.println("matchField = "+elem.getKey()+" :: matchList = "+matchList.size());
     }
     scanner.close();
-    return matchingProbMap;
+    Map<String, List<String>> finalmatchingMap = new LinkedHashMap<>();
+		for (Map.Entry<String, List<String>> element : matchingProbMap.entrySet()) {
+			String[] split = element.getKey().split("-");
+			String[] split2 = split[1].split("\\^");
+			String[] inputTypeSplit = dataType.split("\\(");
+			List<String> dataTypes = new ArrayList(Arrays.asList(split2));
+			for (String type : dataTypes) {
+				if (type.equalsIgnoreCase(inputTypeSplit[0])) {
+					finalmatchingMap.put(split[0]+"-"+type, element.getValue());
+				}else {
+					finalmatchingMap.put(split[0]+"-"+inputTypeSplit[0], element.getValue());
+				}
+			}
+
+		}
+  //  return matchingProbMap;
+  	return finalmatchingMap;
+    
   }
 
   private String[] removeNullValues(String[] wordArr) {

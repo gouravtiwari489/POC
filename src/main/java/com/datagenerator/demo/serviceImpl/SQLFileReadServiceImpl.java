@@ -53,9 +53,9 @@ public class SQLFileReadServiceImpl implements SQLFileReadService {
           String cat = "";
           if (!inputColumnName.startsWith("PK") && !inputColumnName.startsWith("FK")) {
             Map<String, List<String>> matchedWords = new LinkedHashMap<>();
-
+             String dataType = inputTableFields.get(inputColumnName);
             matchedWords =
-                findWordMatchingPossibilities.findMatchingWord(inputColumnName, domainType);
+                findWordMatchingPossibilities.findMatchingWord(inputColumnName, domainType,dataType);
             if (matchedWords != null && !matchedWords.isEmpty()) {
               Set<String> entires = matchedWords.keySet();
               for (String ent : entires) {
