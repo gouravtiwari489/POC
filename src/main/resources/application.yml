@@ -28,9 +28,9 @@ security:
 dependencycheck:
               toggle: false
               
-logging:
-  path: logs
-  file: logs\das.log
+#logging:
+#  path: logs
+#  file: logs\das.log
   
 file:
   types: csv, xlsx, xml, sql, json

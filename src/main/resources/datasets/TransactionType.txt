@@ -1,5 +1,0 @@
-Cash Deposit
-Cash Withdrawl
-Cash Transfer
-Bank fees
-Interest
