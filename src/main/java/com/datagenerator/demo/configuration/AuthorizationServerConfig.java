@@ -10,6 +10,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
 @Configuration
 @EnableAuthorizationServer
@@ -33,14 +34,14 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     endpoints
         .tokenStore(tokenStore())
-        //        .tokenEnhancer(customTokenEnhancer())
+                .tokenEnhancer(jwtAccesToken())
         .authenticationManager(authenticationManager);
   }
 
-  /*@Bean
-  public CustomTokenConverter customTokenEnhancer() {
-    return new CustomTokenConverter();
-  }*/
+ @Bean
+  public JwtAccessTokenConverter jwtAccesToken() {
+    return new JwtAccessTokenConverter();
+  }
 
   @Bean
   public TokenStore tokenStore() {

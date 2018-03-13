@@ -11,21 +11,31 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 
 @Slf4j
+@Component
 public class ZipUtil {
+	
+  private static String fileDownloadPath;
 
+  @Value("${file.download.path}")
+  public void setPath(String path) {
+	 fileDownloadPath = path;
+  }
+	
   public static String createZipFiles(String fileType, CustomUserDetails currentUser)
       throws IOException {
 
     List<String> filePaths = new ArrayList<>();
-    Resource resource =
-        new ClassPathResource("output\\" + currentUser.getUsername() + "\\" + fileType);
-    String zipFilePath = String.format("%s\\%s.%s", resource.getFile().getPath(), "DAS", "zip");
-    File folder = new File(resource.getFile().getPath());
+    File resource = new File(fileDownloadPath + currentUser.getUsername() + "\\" + fileType);
+    String zipFilePath =
+        String.format("%s\\%s.%s", resource.getAbsoluteFile().getPath(), "DAS", "zip");
+    File folder = new File(resource.getAbsoluteFile().getPath());
     File[] listOfFiles = folder.listFiles();
 
     for (int i = 0; i < listOfFiles.length; i++) {
