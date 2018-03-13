@@ -22,16 +22,16 @@ public class TableStructureExtractorTest {
 
   @InjectMocks private TableStructureExtractor tableStructureExtractor;
 
-  @Mock private CustomTokenConverter customTokenConverter;
+//  @Mock private CustomTokenConverter customTokenConverter;
 
   @Test
   public void shouldCreateParentChildMapping() throws Exception {
 
     ClassLoader classLoader = getClass().getClassLoader();
     File file = new File(classLoader.getResource("mysql-test.sql").getFile());
-    doNothing()
-        .when(customTokenConverter)
-        .setAdditionalInfo("orderedFKList", new HashMap<Integer, List<String>>());
+//    doNothing()
+//        .when(customTokenConverter)
+//        .setAdditionalInfo("orderedFKList", new HashMap<Integer, List<String>>());
 
     LinkedHashMap<String, LinkedHashMap<String, String>> derivedList =
         tableStructureExtractor.searchforTableName(file, false);

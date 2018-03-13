@@ -16,8 +16,6 @@ import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 
 public enum ExcelGenerationUtil implements GenerateDataInterface {
   INSTANCE;
@@ -70,17 +68,18 @@ public enum ExcelGenerationUtil implements GenerateDataInterface {
   public void writeToFile(Object obj, String tableName, String fileType, CustomUserDetails user)
       throws IOException, FileNotFoundException {
     String filePath;
-    Resource resource = new ClassPathResource("output\\" + user.getUsername());
+    File resource = new File(fileDownloadPath + user.getUsername());
     if (!resource.exists()) {
-      new File("bin\\output\\" + user.getUsername()).mkdir();
+      new File(fileDownloadPath + user.getUsername()).mkdir();
     }
-    File file = new File(resource.getFile().getPath() + "/" + fileType);
+    File file = new File(resource.getAbsoluteFile().getPath() + "/" + fileType);
     if (!file.exists()) {
       file.mkdir();
     }
     filePath =
         String.format(
-            "%s\\%s.%s", resource.getFile().getPath() + "\\" + fileType, tableName, fileType);
+            "%s\\%s.%s",
+            resource.getAbsoluteFile().getPath() + "\\" + fileType, tableName, fileType);
     OutputStream excelFileToCreate = new FileOutputStream(new File(filePath));
     XSSFWorkbook workbook = (XSSFWorkbook) obj;
     workbook.write(excelFileToCreate);

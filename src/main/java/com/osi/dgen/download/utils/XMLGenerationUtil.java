@@ -2,13 +2,13 @@ package com.osi.dgen.download.utils;
 
 import static com.osi.dgen.utils.DataGenUtil.removeSingleQuotes;
 
-import com.osi.dgen.domain.CustomUserDetails;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -21,10 +21,11 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import com.osi.dgen.domain.CustomUserDetails;
 
 public enum XMLGenerationUtil implements GenerateDataInterface {
   INSTANCE;
@@ -66,17 +67,18 @@ public enum XMLGenerationUtil implements GenerateDataInterface {
       throws IOException, FileNotFoundException {
 
     String filePath;
-    Resource resource = new ClassPathResource("output\\" + user.getUsername());
+    File resource = new File(fileDownloadPath + user.getUsername());
     if (!resource.exists()) {
-      new File("bin\\output\\" + user.getUsername()).mkdir();
+      new File(fileDownloadPath + user.getUsername()).mkdir();
     }
-    File file = new File(resource.getFile().getPath() + "/" + fileType);
+    File file = new File(resource.getAbsoluteFile().getPath() + "/" + fileType);
     if (!file.exists()) {
       file.mkdir();
     }
     filePath =
         String.format(
-            "%s\\%s.%s", resource.getFile().getPath() + "\\" + fileType, tableName, fileType);
+            "%s\\%s.%s",
+            resource.getAbsoluteFile().getPath() + "\\" + fileType, tableName, fileType);
     BufferedWriter xmlFile = new BufferedWriter(new FileWriter(filePath));
 
     try {

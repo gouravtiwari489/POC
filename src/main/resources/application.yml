@@ -32,6 +32,11 @@ dependencycheck:
 #  path: logs
 #  file: logs\das.log
   
+file:
+  types: csv, xlsx, xml, sql, json
+  download:
+    path: output\\
+  
 
  
   

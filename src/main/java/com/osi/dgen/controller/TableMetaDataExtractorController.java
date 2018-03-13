@@ -48,7 +48,7 @@ public class TableMetaDataExtractorController {
       @RequestParam(name = "domainType", required = true) String domainType)
       throws ClassNotFoundException, IOException {
     Map<String, List<String>> matchingMap =
-        findWordMatchingPossibilities.findMatchingWord(wordToFind, domainType);
+        findWordMatchingPossibilities.findMatchingWord(wordToFind, domainType,null);
     return new ResponseEntity<Map<String, List<String>>>(matchingMap, HttpStatus.OK);
   }
 }

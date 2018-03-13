@@ -18,6 +18,7 @@ import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -40,7 +41,11 @@ public class UploadDownloadController {
 
   @Autowired LogoutService logoutService;
 
-  List<String> fileTypes = new ArrayList<>(Arrays.asList("csv", "xlsx", "xml", "sql", "json"));
+  @Value("${file.download.path}")
+  private String fileDownloadPath;
+  
+  @Value("${file.types}")
+  private String[] allFileTypes;
 
   @PostMapping("/upload")
   public ResponseEntity<List<LinkedHashMap<String, LinkedHashMap<String, String>>>> uploadFile(
@@ -74,6 +79,7 @@ public class UploadDownloadController {
     log.info("@@@@@@@@@@@@@@@@@ rowCount   " + rowCount + "   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
+    List<String> fileTypes = new ArrayList<>(Arrays.asList(allFileTypes));
 
     if (user.getMap() == null
         || !user.getMap().containsKey(fileType)
@@ -85,7 +91,7 @@ public class UploadDownloadController {
           user.getMap().remove(string);
         }
         user.setMappedData(null);
-        logoutService.clearUserData("output/" + user.getUsername());
+        logoutService.clearUserData(fileDownloadPath + user.getUsername());
       }
       dataGenerationService.generateData(updatedMappedData, fileType, rowCount, domainType);
       setFileTypeRowCountInUser(fileType, rowCount, user);

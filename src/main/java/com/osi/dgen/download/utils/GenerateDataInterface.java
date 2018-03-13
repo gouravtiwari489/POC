@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface GenerateDataInterface {
 
+  String fileDownloadPath = "output\\";
+
   public void generateData(
       String tableName, List<List<String>> excelData, String fileType, CustomUserDetails user);
 

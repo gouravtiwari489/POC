@@ -13,8 +13,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 
 public enum JSONGenerationUtil implements GenerateDataInterface {
   INSTANCE;
@@ -46,17 +44,18 @@ public enum JSONGenerationUtil implements GenerateDataInterface {
   public void writeToFile(Object obj, String tableName, String fileType, CustomUserDetails user)
       throws IOException, FileNotFoundException {
     String filePath;
-    Resource resource = new ClassPathResource("output\\" + user.getUsername());
+    File resource = new File(fileDownloadPath + user.getUsername());
     if (!resource.exists()) {
-      new File("bin\\output\\" + user.getUsername()).mkdir();
+      new File(fileDownloadPath + user.getUsername()).mkdir();
     }
-    File file = new File(resource.getFile().getPath() + "/" + fileType);
+    File file = new File(resource.getAbsoluteFile().getPath() + "/" + fileType);
     if (!file.exists()) {
       file.mkdir();
     }
     filePath =
         String.format(
-            "%s\\%s.%s", resource.getFile().getPath() + "\\" + fileType, tableName, fileType);
+            "%s\\%s.%s",
+            resource.getAbsoluteFile().getPath() + "\\" + fileType, tableName, fileType);
     BufferedWriter jsonFile = new BufferedWriter(new FileWriter(filePath));
 
     jsonFile.write((String) obj);

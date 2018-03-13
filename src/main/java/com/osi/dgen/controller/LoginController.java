@@ -7,6 +7,7 @@ import com.osi.dgen.serviceImpl.LogoutService;
 import java.io.File;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -37,6 +38,9 @@ public class LoginController {
 
   @Autowired LogoutService logoutService;
 
+  @Value("${file.download.path}")
+  private String fileDownloadPath;
+
   @PostMapping("/login")
   public ResponseEntity<HttpStatus> getAllEmps(@RequestBody User user) {
 
@@ -64,15 +68,15 @@ public class LoginController {
     user.setMap(null);
     user.setMappedData(null);
     user.setMappedTables(null);
-    Resource resource = new ClassPathResource("output\\" + user.getUsername());
+    File resource = new File(fileDownloadPath + user.getUsername());
     if (resource.exists()) {
       if (cont) {
-        logoutService.clearUserData("\\output\\" + user.getUsername());
+        logoutService.clearUserData(fileDownloadPath + user.getUsername());
       } else {
         throw new AlreadyLoggedInException("Warning! You already login somewhere");
       }
     }
-    new File("bin\\output\\" + user.getUsername()).mkdir();
+    new File("output\\" + user.getUsername()).mkdir();
     return new ResponseEntity<>(user, HttpStatus.OK);
   }
 
