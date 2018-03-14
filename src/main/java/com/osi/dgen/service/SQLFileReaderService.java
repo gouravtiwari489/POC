@@ -1,11 +1,5 @@
-package com.osi.dgen.serviceImpl;
+package com.osi.dgen.service;
 
-import com.osi.dgen.domain.CustomUserDetails;
-import com.osi.dgen.exception.DependencyException;
-import com.osi.dgen.repository.DomainRepository;
-import com.osi.dgen.service.SQLFileReadService;
-import com.osi.dgen.utils.FindWordMatchingPossibilities;
-import com.osi.dgen.utils.TableStructureExtractor;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
@@ -13,14 +7,21 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.osi.dgen.domain.CustomUserDetails;
+import com.osi.dgen.exception.DependencyException;
+import com.osi.dgen.repository.DomainRepository;
+import com.osi.dgen.utils.FindWordMatchingPossibilities;
+import com.osi.dgen.utils.TableStructureExtractor;
+
 @Service
-public class SQLFileReadServiceImpl implements SQLFileReadService {
+public class SQLFileReaderService {
 
   @Autowired DomainRepository domainRepository;
   @Autowired private TableStructureExtractor tableStructureExtractor;
@@ -29,7 +30,6 @@ public class SQLFileReadServiceImpl implements SQLFileReadService {
 
   //  @Autowired private CustomTokenConverter customTokenConverter;
 
-  @Override
   public List<LinkedHashMap<String, LinkedHashMap<String, String>>> readSQLfile(
       MultipartFile multiFile, String domainType, boolean dependencyCheck)
       throws DependencyException, Exception {

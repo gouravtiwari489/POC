@@ -2,7 +2,7 @@ package com.osi.dgen.utils;
 
 import com.osi.dgen.domain.CustomUserDetails;
 import com.osi.dgen.download.utils.GenerateDataInterface;
-import com.osi.dgen.serviceImpl.RelationalDataExtractor;
+
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;

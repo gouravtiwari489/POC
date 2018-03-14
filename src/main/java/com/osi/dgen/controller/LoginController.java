@@ -3,7 +3,8 @@ package com.osi.dgen.controller;
 import com.osi.dgen.domain.CustomUserDetails;
 import com.osi.dgen.domain.User;
 import com.osi.dgen.exception.AlreadyLoggedInException;
-import com.osi.dgen.serviceImpl.LogoutService;
+import com.osi.dgen.service.LogoutService;
+
 import java.io.File;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.osi.dgen.exception.DependencyException;
-import com.osi.dgen.service.SQLFileReadService;
-import com.osi.dgen.serviceImpl.DataGenerationService;
-import com.osi.dgen.serviceImpl.LogoutService;
+import com.osi.dgen.service.DataGenerationService;
+import com.osi.dgen.service.LogoutService;
+import com.osi.dgen.service.SQLFileReaderService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class UploadController {
 
-  @Autowired SQLFileReadService sqlFileReadService;
+  @Autowired SQLFileReaderService sqlFileReadService;
 
   @Autowired DataGenerationService dataGenerationService;
 
