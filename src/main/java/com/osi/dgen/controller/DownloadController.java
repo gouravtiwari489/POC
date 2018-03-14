@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.osi.dgen.domain.CustomUserDetails;
-import com.osi.dgen.serviceImpl.DataGenerationService;
-import com.osi.dgen.serviceImpl.LogoutService;
+import com.osi.dgen.service.DataGenerationService;
+import com.osi.dgen.service.LogoutService;
 import com.osi.dgen.utils.ZipUtil;
 
 import lombok.extern.slf4j.Slf4j;

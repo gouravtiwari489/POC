@@ -1,4 +1,4 @@
-package com.osi.dgen.serviceImpl;
+package com.osi.dgen.utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;

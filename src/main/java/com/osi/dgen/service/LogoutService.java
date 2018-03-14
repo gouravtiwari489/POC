@@ -1,4 +1,4 @@
-package com.osi.dgen.serviceImpl;
+package com.osi.dgen.service;
 
 import java.io.File;
 import java.util.List;
