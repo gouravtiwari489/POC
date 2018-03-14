@@ -1,14 +1,19 @@
 package com.osi.dgen.serviceImpl;
 
 import java.io.File;
+import java.util.List;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import com.osi.dgen.controller.DownloadController;
+import com.osi.dgen.domain.CustomUserDetails;
 
 @Slf4j
 @Service
 public class LogoutService {
 
-  public void clearUserData(String userFolderName) {
+public void clearUserData(String userFolderName) {
     File resource = new File(userFolderName);
 
     if (resource.exists()) {
@@ -26,4 +31,14 @@ public class LogoutService {
       directory.delete();
     }
   }
+
+public void clearPreExistingUserData(String fileDownloadPath, String updatedMappedData, CustomUserDetails user, List<String> fileTypes) {
+		if (user.getMappedData() != null && !user.getMappedData().equals(updatedMappedData)) {
+			for (String string : fileTypes) {
+				user.getMap().remove(string);
+			}
+			user.setMappedData(null);
+			clearUserData(fileDownloadPath + user.getUsername());
+		}
+	}
 }
