@@ -1,8 +1,5 @@
 package com.osi.dgen.utils;
 
-import static java.util.Comparator.comparingInt;
-import static java.util.stream.Collectors.toMap;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -13,13 +10,8 @@ import java.util.Map;
 import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import com.osi.dgen.domain.CustomUserDetails;
-import com.osi.dgen.domain.Field;
-import com.osi.dgen.domain.Table;
 import com.osi.dgen.exception.DependencyException;
 
 @Component
@@ -37,7 +29,6 @@ public class TableStructureExtractor {
   public LinkedHashMap<String, LinkedHashMap<String, String>> searchforTableName(
       File file, boolean dependencyCheck) throws DependencyException, Exception {
     LinkedHashMap<String, LinkedHashMap<String, String>> tableMap = new LinkedHashMap<>();
-    List<Table> tables = new ArrayList<>();
     final Scanner scanner = new Scanner(file);
     String tableName = "", primaryKey = "";
     LinkedHashMap<String, String> fieldMap = null;
@@ -102,8 +93,6 @@ public class TableStructureExtractor {
 		}
     scanner.close();
     reOrderTableStructure(tableMap, dependencyCheck);
-    
-    tables = getTableData(tableMap);
     return tableMap;
   }
 
@@ -141,29 +130,7 @@ public class TableStructureExtractor {
       }
     }
 
-    LinkedHashMap<String, List<String>> sorted = sortMap(fkListMap);
-    Map<Integer, List<String>> map = transform(sorted);
-    //    customTokenConverter.setAdditionalInfo("orderedFKList", map);
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
-    user.setOrderedFKListMap(map);
-  }
-
-  private LinkedHashMap<String, List<String>> sortMap(
-      LinkedHashMap<String, List<String>> inputMap) {
-    return inputMap
-        .entrySet()
-        .stream()
-        .sorted(comparingInt(e -> e.getValue().size()))
-        .collect(
-            toMap(
-                Map.Entry::getKey,
-                Map.Entry::getValue,
-                (a, b) -> {
-                  throw new AssertionError();
-                },
-                LinkedHashMap::new));
-  }
+   }
 
   private LinkedHashMap<String, List<String>> createFKListMap(
       LinkedHashMap<String, LinkedHashMap<String, String>> tableMap) {
@@ -331,44 +298,5 @@ public class TableStructureExtractor {
     return dependentTables;
   }
   
-  private List<Table> getTableData(LinkedHashMap<String, LinkedHashMap<String, String>> tableMap){
-	  
-	  List<Table> tables = new ArrayList<>();
-	  
-	  for (Map.Entry<String, LinkedHashMap<String, String>> entry : tableMap.entrySet()) {
-		  Table table = new Table();
-		  table.setTableName(entry.getKey());
-		  List<Field> columns = new ArrayList<>();
-		  LinkedHashMap<String, String> fields = entry.getValue();
-			for (Map.Entry<String, String> fieldEntry : fields.entrySet()) {
-					Field field = new Field();
-					boolean flag = false;
-					field.setColumnName(fieldEntry.getKey());
-					field.setDataType(fieldEntry.getValue());
-					if (fields.get("PK").contains(field.getColumnName()))
-						field.setPrimaryKey(true);
-					//if (fields.keySet().contains(field.getColumnName())) {
-					if (fieldEntry.getKey().startsWith("FK")) {
-						String fkKey = fieldEntry.getKey();
-						String[] fkKeySplit = fkKey.split("->");
-						String referenceValues = fieldEntry.getValue();
-						String[] referenceValuesSplit = referenceValues.split("\\(");
-						for(Field fld:columns ) {
-							if(fkKeySplit[1].equalsIgnoreCase(fld.getColumnName())) {
-								fld.setForeignKey(true);
-								fld.setReferenceTable(referenceValuesSplit[0]);
-								fld.setReferenceColumn(referenceValuesSplit[0].replace(")", ""));
-							}
-						}
-						flag = true;
-						
-					}
-					if(!flag && !field.getColumnName().startsWith("PK"))
-					 columns.add(field);
-			}
-		  table.setFields(columns);
-		  tables.add(table);
-	  }
-	  return tables;
-  }
+  
 }

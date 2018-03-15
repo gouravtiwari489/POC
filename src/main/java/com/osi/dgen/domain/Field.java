@@ -19,6 +19,8 @@ public class Field implements Serializable{
   private String  referenceTable;
   private String  referenceColumn;
   private String defaultValue;
+  private String mappingCategory;
+  private String mappingType;
   
   
 }
