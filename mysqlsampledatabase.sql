@@ -35,6 +35,7 @@ CREATE TABLE `employees` (
   `employeeNumber` int(11) NOT NULL,
   `lastName` varchar(50) NOT NULL,
   `firstName` varchar(50) NOT NULL,
+  `age` int(11) NOT NULL,
   `extension` varchar(10) NOT NULL,
   `email` varchar(100) NOT NULL,
   `officeCode` varchar(10) NOT NULL,
@@ -43,7 +44,8 @@ CREATE TABLE `employees` (
   PRIMARY KEY (`employeeNumber`),
   KEY `reportsTo` (`reportsTo`),
   KEY `officeCode` (`officeCode`),
-  CONSTRAINT `employees_ibfk_2` FOREIGN KEY (`officeCode`) REFERENCES `offices` (`officeCode`)
+  CONSTRAINT `employees_ibfk_2` FOREIGN KEY (`officeCode`) REFERENCES `offices` (`officeCode`),
+  CONSTRAINT emp_age CHECK (age>=18 AND age<=70 )
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Data for the table `employees` */
@@ -63,7 +65,8 @@ CREATE TABLE `offices` (
   `country` varchar(50) NOT NULL,
   `postalCode` varchar(15) NOT NULL,
   `territory` varchar(10) NOT NULL,
-  PRIMARY KEY (`officeCode`)
+  PRIMARY KEY (`officeCode`),
+  CHECK ((country='India' AND pub_city='Mumbai') OR (country='India' AND pub_city='New Delhi')) 
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Data for the table `offices` */
@@ -92,7 +95,7 @@ DROP TABLE IF EXISTS `orders`;
 
 CREATE TABLE `orders` (
   `orderNumber` int(11) NOT NULL,
-  `orderDate` date NOT NULL,
+  `orderDate` date NOT NULL CHECK (orderDate LIKE '--/--/----'),
   `requiredDate` date NOT NULL,
   `shippedDate` date DEFAULT NULL,
   `status` varchar(15) NOT NULL,
