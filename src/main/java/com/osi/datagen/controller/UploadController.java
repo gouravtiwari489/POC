@@ -11,10 +11,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.osi.datagen.domain.Table;
 import com.osi.datagen.exception.DependencyException;
 import com.osi.datagen.service.DataGenerationService;
 import com.osi.datagen.service.LogoutService;
 import com.osi.datagen.service.SQLFileReaderService;
+
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -36,7 +39,7 @@ public class UploadController {
   private String[] allFileTypes;
 
   @PostMapping("/upload")
-  public ResponseEntity<List<LinkedHashMap<String, LinkedHashMap<String, String>>>> uploadFile(
+  public ResponseEntity<List<Table>> uploadFile(
       @RequestParam(name = "file", required = true) MultipartFile multipartFile,
       @RequestParam(name = "domainType", required = true) String domainType,
       @RequestParam(name = "dependencyToggle", required = true) String dependencyToggle)
@@ -46,9 +49,9 @@ public class UploadController {
         "@@@@@@@@@@@@@@@@@ dependencyToggle   "
             + dependencyCheck
             + "   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-    List<LinkedHashMap<String, LinkedHashMap<String, String>>> list = null;
+    List<Table> list = null;
     list = sqlFileReadService.readSQLfile(multipartFile, domainType, dependencyCheck);
-    return new ResponseEntity<List<LinkedHashMap<String, LinkedHashMap<String, String>>>>(
+    return new ResponseEntity<List<Table>>(
         list, HttpStatus.OK);
   }
 

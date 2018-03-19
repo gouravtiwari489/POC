@@ -37,10 +37,10 @@ public class StringDataGenerator implements IDataGenerator {
 
   @Override
   public String generateData(Field field) {
-    if (field.isPrimaryKey()) {
+    /*if (field.isPrimaryKey()) {
       return generateUniqueDatawithNum(field);
 
-    } else {
+    } else*/ {
       return generateRandomDataFromDataSets(field);
     }
   }

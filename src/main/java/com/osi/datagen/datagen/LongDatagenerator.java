@@ -11,9 +11,9 @@ public class LongDatagenerator implements IDataGenerator {
   @Override
   public String generateData(Field field) {
 
-    if (field.isPrimaryKey()) {
+    /*if (field.isPrimaryKey()) {
       return generateUniqueData();
-    } else {
+    } else*/ {
       return generateRandomData();
     }
   }

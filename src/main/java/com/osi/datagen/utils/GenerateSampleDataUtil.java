@@ -56,11 +56,11 @@ public class GenerateSampleDataUtil {
     field.setLength(values[0]);
 
     String primaryKey = linkedHashMap.get(tableName).get("PK");
-    if (entry.getKey().equals(primaryKey)) {
+    /*if (entry.getKey().equals(primaryKey)) {
       field.setPrimaryKey(true);
     } else {
       field.setPrimaryKey(false);
-    }
+    }*/
     return field;
   }
 }
