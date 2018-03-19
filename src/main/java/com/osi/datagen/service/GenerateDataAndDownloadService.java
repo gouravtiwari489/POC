@@ -23,8 +23,8 @@ public class GenerateDataAndDownloadService {
   
   public  byte[] generateDataAndDownload(String fileType, int rowCount, String domainType, TableList tables) throws IOException {
     
-    boolean isRequestAlreadyPresent=userRequestValidator.IsSameRequestPresnt(fileType, tables, rowCount);
-    if(!isRequestAlreadyPresent){
+    boolean isPresent=userRequestValidator.IsSameRequestPresnt(fileType, tables, rowCount);
+    if(!isPresent){
       dataGenerationService.generateData(tables, fileType, rowCount, domainType);
     }
     

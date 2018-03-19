@@ -29,10 +29,10 @@ public class UploadController {
     log.info(
         " dependencyToggle   "
             + dependencyCheck);
-    TableList list = null;
-    list = sqlFileReadService.readSQLfile(multipartFile, domainType, dependencyCheck);
+    TableList tableList = null;
+    tableList = sqlFileReadService.readSQLfile(multipartFile, domainType, dependencyCheck);
     return new ResponseEntity<TableList>(
-        list, HttpStatus.OK);
+        tableList, HttpStatus.OK);
   }
 
 }

@@ -3,10 +3,8 @@ package com.osi.datagen.controller;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.osi.datagen.domain.Table;
 import com.osi.datagen.utils.FindWordMatchingPossibilities;
 import com.osi.datagen.utils.TableStructureExtractor;
@@ -28,7 +25,6 @@ public class TableMetaDataExtractorController {
 
   @Autowired private FindWordMatchingPossibilities findWordMatchingPossibilities;
 
-  //  @Autowired private CustomTokenConverter customTokenConverter;
 
   @GetMapping
   public ResponseEntity<List<Table>> extractTableMetaData()

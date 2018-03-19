@@ -3,6 +3,8 @@ package com.osi.datagen.utils;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import com.osi.datagen.domain.CustomUserDetails;
 import com.osi.datagen.domain.Table;
 import com.osi.datagen.download.utils.GenerateDataInterface;
@@ -16,6 +18,7 @@ public class DataGenerationWorker implements Runnable {
   private String fileType;
   private Map<String, List<String>> concurrentMap;
   private String domainType;
+  private GenerateDataInterface service;
 
   public DataGenerationWorker(
       String tableName,
@@ -31,12 +34,13 @@ public class DataGenerationWorker implements Runnable {
   }
 
   public DataGenerationWorker(Table table, int rowCount, String fileType,
-      Map<String, List<String>> concurrentMap,  String domainType) {
+      Map<String, List<String>> concurrentMap,  String domainType,GenerateDataInterface service) {
         this.table=table;
         this.rowCount = rowCount;
         this.fileType = fileType;
         this.concurrentMap = concurrentMap;
         this.domainType = domainType;
+        this.service=service;
   }
 
   @Override
@@ -58,9 +62,11 @@ public class DataGenerationWorker implements Runnable {
               rowCount,
               concurrentMap,
               domainType);
-      concurrentMap.putAll(
-          RelationalDataExtractor.extractdata(tablFieldMappingeMap.get(0), excelData, tableName));
-      service.generateData(tableName, excelData, this.fileType, user);
+     /* concurrentMap.putAll(
+          RelationalDataExtractor.extractdata(tablFieldMappingeMap.get(0), excelData, tableName));*/
+      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+      CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
+      service.generateData(table.getTableName(), excelData, this.fileType, user);
     } catch (Exception e) {
       e.printStackTrace();
     }
