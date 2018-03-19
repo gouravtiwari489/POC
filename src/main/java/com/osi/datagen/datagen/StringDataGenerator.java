@@ -1,4 +1,4 @@
-package com.osi.datagen.datagen;
+/*package com.osi.datagen.datagen;
 
 import static com.osi.datagen.utils.DataGenUtil.singleQuote;
 import java.io.File;
@@ -31,16 +31,14 @@ public class StringDataGenerator implements IDataGenerator {
       e.printStackTrace();
     }
   }
-  /*static {
-
-  }*/
+  
 
   @Override
   public String generateData(Field field) {
     /*if (field.isPrimaryKey()) {
       return generateUniqueDatawithNum(field);
 
-    } else*/ {
+    } else{
       return generateRandomDataFromDataSets(field);
     }
   }
@@ -69,3 +67,4 @@ public class StringDataGenerator implements IDataGenerator {
     return singleQuote(builder.toString());
   }
 }
+*/

@@ -48,7 +48,7 @@ public class ZipUtil {
     return zipFilePath;
   }
 
-  private static void zipFiles(List<String> files, String zipPath) {
+  private static void zipFiles(List<String> files, String zipPath) throws IOException {
 
     FileOutputStream fos = null;
     ZipOutputStream zipOut = null;
@@ -68,13 +68,14 @@ public class ZipUtil {
         }
         zipOut.closeEntry();
         fis.close();
-        //input.delete(); uncomment when we have implementation of diff folder for each file type
       }
       zipOut.close();
     } catch (FileNotFoundException e) {
       log.error(e.getMessage());
+     throw new FileNotFoundException();
     } catch (IOException e) {
       log.error(e.getMessage());
+      throw new IOException();
     } finally {
       try {
         if (fos != null) {
@@ -83,6 +84,7 @@ public class ZipUtil {
         }
       } catch (Exception ex) {
         log.error(ex.getMessage());
+        throw new IOException();
       }
     }
   }

@@ -2,11 +2,10 @@ package com.osi.datagen.service;
 
 import java.io.File;
 import java.util.List;
-
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import com.osi.datagen.controller.DownloadController;
 import com.osi.datagen.domain.CustomUserDetails;
+import com.osi.datagen.domain.TableList;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -31,8 +30,8 @@ public void clearUserData(String userFolderName) {
     }
   }
 
-public void clearPreExistingUserData(String fileDownloadPath, String updatedMappedData, CustomUserDetails user, List<String> fileTypes) {
-		if (user.getMappedData() != null && !user.getMappedData().equals(updatedMappedData)) {
+public void clearPreExistingUserData(String fileDownloadPath, TableList tables, CustomUserDetails user, List<String> fileTypes) {
+		if (user.getMappedData() != null && !user.getMappedData().equals(tables)) {
 			for (String string : fileTypes) {
 				user.getMap().remove(string);
 			}

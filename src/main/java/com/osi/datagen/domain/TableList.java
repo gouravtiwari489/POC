@@ -12,5 +12,16 @@ public class TableList implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	private List<Table>  tables;
+	
+	
+	public boolean isCyclicDependencyFound(){
+	  
+	  
+	
+	  
+	   return false;
+	}
+	
+	
 
 }

@@ -4,20 +4,17 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import com.osi.datagen.domain.CustomUserDetails;
+import com.osi.datagen.domain.Table;
 import com.osi.datagen.download.utils.GenerateDataInterface;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class DataGenerationWorker implements Runnable {
-
-  private String tableName;
-  private LinkedHashMap<String, String> fieldMap;
+  
+  private Table table;
   private int rowCount;
-  private GenerateDataInterface service;
   private String fileType;
-  private List<LinkedHashMap<String, LinkedHashMap<String, String>>> tablFieldMappingeMap;
   private Map<String, List<String>> concurrentMap;
-  private CustomUserDetails user;
   private String domainType;
 
   public DataGenerationWorker(
@@ -30,39 +27,36 @@ public class DataGenerationWorker implements Runnable {
       GenerateDataInterface service,
       CustomUserDetails user,
       String domainType) {
+   
+  }
 
-    this.tableName = tableName;
-    this.service = service;
-    this.fieldMap = fieldMap;
-    this.rowCount = rowCount;
-    this.fileType = fileType;
-    this.tablFieldMappingeMap = tablFieldMappingeMap;
-    this.concurrentMap = concurrentMap;
-    this.user = user;
-    this.domainType = domainType;
+  public DataGenerationWorker(Table table, int rowCount, String fileType,
+      Map<String, List<String>> concurrentMap,  String domainType) {
+        this.table=table;
+        this.rowCount = rowCount;
+        this.fileType = fileType;
+        this.concurrentMap = concurrentMap;
+        this.domainType = domainType;
   }
 
   @Override
   public void run() {
 
     try {
-      generateData(tableName);
+      generateData(table);
     } catch (Exception e) {
       e.printStackTrace();
     }
-    log.info("data generation completed for " + tableName);
+    log.info("data generation completed for " + table.getTableName());
   }
 
-  private void generateData(String tableName) {
+  private void generateData(Table table) {
     try {
 
       List<List<String>> excelData =
-          GenerateSampleDataUtil.generateData(
-              fieldMap,
-              tablFieldMappingeMap.get(0),
+          GenerateSampleDataUtil.generateData(table,
               rowCount,
               concurrentMap,
-              tableName,
               domainType);
       concurrentMap.putAll(
           RelationalDataExtractor.extractdata(tablFieldMappingeMap.get(0), excelData, tableName));

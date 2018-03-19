@@ -1,4 +1,4 @@
-package com.osi.datagen.datagen;
+/*package com.osi.datagen.datagen;
 
 import java.util.Random;
 import com.osi.datagen.datagen.intf.IDataGenerator;
@@ -11,9 +11,9 @@ public class LongDatagenerator implements IDataGenerator {
   @Override
   public String generateData(Field field) {
 
-    /*if (field.isPrimaryKey()) {
+    if (field.isPrimaryKey()) {
       return generateUniqueData();
-    } else*/ {
+    } else {
       return generateRandomData();
     }
   }
@@ -29,3 +29,5 @@ public class LongDatagenerator implements IDataGenerator {
     return begin + "";
   }
 }
+
+*/
