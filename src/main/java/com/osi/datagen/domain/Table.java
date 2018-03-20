@@ -14,9 +14,9 @@ public class Table implements Serializable {
   private static final long serialVersionUID = 1L;
   private String tableName;
   private List<Field> fields;
-  List<Constraint> constraints;
-  List<ForigenKeyConstraint> forigenKeys;
-  List<CheckConstraint> checkConstraints;
+  private List<Constraint> constraints;
+  private List<ForigenKeyConstraint> forigenKeys;
+  private List<CheckConstraint> checkConstraints;
 
   public List<String> getFieldsNames() {
 
@@ -30,6 +30,26 @@ public class Table implements Serializable {
         .filter(cons -> cons.getConstraintType().equalsIgnoreCase("PRIMARY KEY")).findFirst();
     return constraint.get();
   }
+  
+  
+  public List<Field> getPrimaryKeyFields() {
+
+    Constraint constraint=getPrimaryKey();
+    return constraint.getColumns().stream().map(c->getField(c)).collect(Collectors.toList());
+  }
+  
+  public List<Constraint> getUniqueKeys() {
+
+   return constraints.stream()
+        .filter(cons -> cons.getConstraintType().equalsIgnoreCase("UNIQUE KEY")).collect(Collectors.toList());
+  }
+
+ public List<List<Field>> getUniqueKeyFields() {
+
+   List<Constraint> constraints=getUniqueKeys();
+   
+   return constraints.stream().map(constr->getFields(constr.getColumns())).collect(Collectors.toList());
+   }
 
 
   public boolean isSelfDependencyFound() {
@@ -41,7 +61,16 @@ public class Table implements Serializable {
       return true;
     }
   }
+
+  public Field getField(String columnName) {
+    return fields.stream()
+        .filter(f->f.getColumnName().equalsIgnoreCase(columnName)).findFirst().get();
+  }
   
+  public List<Field> getFields(List<String> columnNames) {
+    return fields.stream()
+        .filter(f->columnNames.contains(f.getColumnName())).collect(Collectors.toList());
+  }
  
 
 }
