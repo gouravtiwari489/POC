@@ -36,10 +36,28 @@ public class TableStructureExtractor {
     Table table = null;
     final Scanner scanner = new Scanner(file);
     String tableName = "", primaryKey = "";
+    String multiLineUncommented="";
+    boolean isMultiLine=false;
     int count = 0;
     int fkCount = 1;
 		while (scanner.hasNextLine()) {
-			final String lineFromFile = scanner.nextLine();
+			final String readLine = scanner.nextLine().trim();
+			String lineFromFile = readLine.replaceAll("(--.*)|(((/\\*)+?[\\w\\W]+?(\\*/)+))",""); //remove Single line comment
+			//remove Multiline comments
+			if(lineFromFile.indexOf("/*")>-1 )
+			{
+				multiLineUncommented=lineFromFile.substring(0, lineFromFile.indexOf("/*"));
+				isMultiLine=true;
+			}
+			if(isMultiLine && !(lineFromFile.indexOf("*/")>-1))
+			{
+				continue;
+			}
+			else if(isMultiLine)
+			{
+				isMultiLine=false;
+				lineFromFile=multiLineUncommented;
+			}
 			if (lineFromFile != null && !lineFromFile.isEmpty() && !lineFromFile.startsWith("/*")
 					&& !lineFromFile.startsWith("--")) {
 				if (lineFromFile.contains(CREATE_TABLE)) {
