@@ -1,16 +1,15 @@
 package com.osi.datagen.domain;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class TableList implements Serializable{
+public class TableList {
 	
-	private static final long serialVersionUID = 1L;
 	private List<Table>  tables;
 	
 	
