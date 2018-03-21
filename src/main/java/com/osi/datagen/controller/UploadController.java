@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import com.osi.datagen.domain.TableList;
 import com.osi.datagen.exception.DependencyException;
-import com.osi.datagen.service.SQLFileReaderService;
+import com.osi.datagen.parsing.service.SQLFileReaderService;
 import lombok.extern.slf4j.Slf4j;
 
 

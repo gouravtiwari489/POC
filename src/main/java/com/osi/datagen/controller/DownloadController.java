@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import com.osi.datagen.datageneration.service.GenerateDataAndDownloadService;
 import com.osi.datagen.domain.TableList;
-import com.osi.datagen.service.GenerateDataAndDownloadService;
 import lombok.extern.slf4j.Slf4j;
 
 

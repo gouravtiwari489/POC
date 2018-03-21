@@ -13,7 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.osi.datagen.domain.Table;
-import com.osi.datagen.utils.TableStructureExtractor;
+import com.osi.datagen.parsing.service.TableStructureExtractor;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
