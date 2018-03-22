@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class MappedCategory {
+public class MappingCategory {
 
 	private String mappingCategory;
 	private String mappingType;

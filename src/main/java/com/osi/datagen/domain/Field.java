@@ -2,6 +2,7 @@ package com.osi.datagen.domain;
 
 import java.io.Serializable;
 import java.util.List;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +16,8 @@ public class Field implements Serializable{
   private String columnName;
   private String dataType;
   private String length;
-  private List<MappedCategory> mappedCategory;
+  private List<MappingCategory> mappingCategeries;
+  private String mappedCategory;
+  private String mappedType;
   private String defaultValue;
-  
 }

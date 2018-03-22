@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import com.osi.datagen.domain.Field;
-import com.osi.datagen.domain.MappedCategory;
+import com.osi.datagen.domain.MappingCategory;
 import com.osi.datagen.domain.Table;
 import com.osi.datagen.domain.TableList;
 import com.osi.datagen.exception.DependencyException;
@@ -43,15 +43,15 @@ public class SQLFileReaderService {
             matchedWords = findWordMatchingPossibilities.findMatchingWord(inputColumnName, domainType,dataType);
             if (matchedWords != null && !matchedWords.isEmpty()) {
               Set<String> entires = matchedWords.keySet();
-              List<MappedCategory> mappedCategory = new ArrayList<>();
+              List<MappingCategory> mappingCategory = new ArrayList<>();
               for (String ent : entires) {
-            	  MappedCategory category = new MappedCategory();
+            	  MappingCategory category = new MappingCategory();
             	  String[] splitString = ent.split("-");
             	  category.setMappingCategory(splitString[0]);
             	  category.setMappingType(splitString[1]);
-            	  mappedCategory.add(category);
+            	  mappingCategory.add(category);
               }
-              inputColumn.setMappedCategory(mappedCategory);
+              inputColumn.setMappingCategeries(mappingCategory);
             }
         }
       }
