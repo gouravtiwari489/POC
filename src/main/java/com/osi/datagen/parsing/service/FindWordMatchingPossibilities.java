@@ -11,8 +11,10 @@ import java.util.Map;
 import java.util.Scanner;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
+@Slf4j
 public class FindWordMatchingPossibilities {
 
   @Value("${match.threshold}")
@@ -64,7 +66,7 @@ public class FindWordMatchingPossibilities {
       for (String matchField : list) {
         Float matchProb = computeProbability(wordToFind, matchField);
         if (matchProb == 1.0f) {
-        	System.out.println("matchingProbMap is:::"+matchingProbMap.toString());
+        	log.info("matchingProbMap is:::"+matchingProbMap.toString());
           matchingProbMap.clear();
           matchList.add(matchField);
           matchingProbMap.put(elem.getKey(), matchList);
@@ -150,7 +152,7 @@ public class FindWordMatchingPossibilities {
         }
       }
     }
-    System.out.println(
+   log.info(
         "Probability for " + word1 + " = " + word2 + " is : " + Math.abs(match / word2.length()));
     return Math.abs(match / word2.length());
   }

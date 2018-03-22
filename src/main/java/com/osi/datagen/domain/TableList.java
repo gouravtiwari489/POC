@@ -2,7 +2,7 @@ package com.osi.datagen.domain;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,7 +12,7 @@ public class TableList {
 	
 	private List<Table>  tables;
 	
-	
+	@JsonIgnore
 	public boolean isCyclicDependencyFound(){
 	  
 	  
@@ -21,7 +21,7 @@ public class TableList {
 	   return false;
 	}
 	
-	
+	@JsonIgnore
 	public List<Table> getChildTables(Table table){
 	   return tables.stream()
 	  .filter(t->t.getForigenKeys().stream().

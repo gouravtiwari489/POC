@@ -53,6 +53,15 @@ public class Table  {
    
    return constraints.stream().map(constr->getFields(constr.getColumns())).collect(Collectors.toList());
    }
+  
+  
+  @JsonIgnore
+  public List<Field> getForeginKeyFields() {
+
+    List<ForigenKeyConstraint> constraints=getForigenKeys();
+    
+    return constraints.stream().map(constr->getField(constr.getKeyName())).collect(Collectors.toList());
+    }
 
   @JsonIgnore
   public boolean isSelfDependencyFound() {

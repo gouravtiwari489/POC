@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import com.osi.datagen.domain.CustomUserDetails;
 import com.osi.datagen.domain.Table;
+import com.osi.datagen.domain.Tuple;
 import com.osi.datagen.filegeneration.util.GenerateDataInterface;
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,7 +17,7 @@ public class DataGenerationWorker implements Runnable {
   private Table table;
   private int rowCount;
   private String fileType;
-  private Map<String, List<String>> concurrentMap;
+  private Map<Tuple, List<String>> concurrentMap;
   private String domainType;
   private GenerateDataInterface service;
 
@@ -34,7 +35,7 @@ public class DataGenerationWorker implements Runnable {
   }
 
   public DataGenerationWorker(Table table, int rowCount, String fileType,
-      Map<String, List<String>> concurrentMap,  String domainType,GenerateDataInterface service) {
+      Map<Tuple, List<String>> concurrentMap,  String domainType,GenerateDataInterface service) {
         this.table=table;
         this.rowCount = rowCount;
         this.fileType = fileType;

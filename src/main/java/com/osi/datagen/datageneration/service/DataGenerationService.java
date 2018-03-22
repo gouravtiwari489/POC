@@ -8,9 +8,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.osi.datagen.domain.Field;
 import com.osi.datagen.domain.Table;
 import com.osi.datagen.domain.TableList;
+import com.osi.datagen.domain.Tuple;
 import com.osi.datagen.filegeneration.util.GenerateDataInterface;
 import com.osi.datagen.filegeneration.util.LoadFileGenerationObjects;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +24,7 @@ public class DataGenerationService {
   public void generateData(
       TableList tables, String fileType, int rowCount, String domainType)
       throws IOException {
-    Map<String, List<String>> concurrentMap = new ConcurrentHashMap<>();
+    Map<Tuple, List<String>> concurrentMap = new ConcurrentHashMap<>();
     threadServicePrimaryDataGeneration(tables, fileType, rowCount, domainType,concurrentMap);
     GenerateDataInterface service = fileGenObj.getGenDataServiceMap().get(fileType);
     threadService(tables, fileType, rowCount, domainType,concurrentMap,service);
@@ -33,17 +33,12 @@ public class DataGenerationService {
   private void threadServicePrimaryDataGeneration(TableList tables,
       String fileType,
       int rowCount,
-      String domainType,Map<String, List<String>> concurrentMap) {
+      String domainType,Map<Tuple, List<String>> concurrentMap) {
     for (Table table : tables.getTables()) {
-     
-      List<Field> primarkeyFields=table.getPrimaryKeyFields();
-      List<List<Field>> uniqueKeyFields=table.getUniqueKeyFields();
-      
       ExecutorService executor = Executors.newFixedThreadPool(tables.getTables().size());
         Runnable dataGenerationWorker =
-            new PrimaryDataGenerationWorker(primarkeyFields,
-                uniqueKeyFields,
-                domainType,rowCount,concurrentMap);
+            new PrimaryDataGenerationWorker(table,
+                domainType,rowCount,tables.getChildTables(table),concurrentMap);
         executor.execute(dataGenerationWorker);
       executor.shutdown();
       while (!executor.isTerminated()) {}
@@ -58,7 +53,7 @@ public class DataGenerationService {
       String fileType,
       int rowCount,
       String domainType,
-      Map<String, List<String>> concurrentMap,GenerateDataInterface service)
+      Map<Tuple, List<String>> concurrentMap,GenerateDataInterface service)
       throws IOException {
       log.info("creating thread pool");
         ExecutorService executor = Executors.newFixedThreadPool(tableList.getTables().size());

@@ -3,14 +3,15 @@ package com.osi.datagen.datageneration.service;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
-import com.osi.datagen.domain.Field;
+import com.osi.datagen.domain.Table;
+import com.osi.datagen.domain.Tuple;
 
 public class PrimaryDataGenerationWorker implements Runnable {
-  private List<Field> primaryKeyFields;
-  private List<List<Field>> uniqueKeyFields;
+  private Table table;
   private String domainType;
   private int rowCount;
-  private Map<String, List<String>> concurrentMap;
+  private Map<Tuple, List<String>> concurrentMap;
+  private List<Table> childTables;
   
   public PrimaryDataGenerationWorker(
       int rowCount,
@@ -18,13 +19,13 @@ public class PrimaryDataGenerationWorker implements Runnable {
       String domainType) {
    
   }
-  public PrimaryDataGenerationWorker(List<Field> primarkeyFields, List<List<Field>> uniqueKeyFields,
-      String domainType, int rowCount, Map<String, List<String>> concurrentMap) {
-    this.primaryKeyFields=primarkeyFields;
-    this.uniqueKeyFields=uniqueKeyFields;
+  public PrimaryDataGenerationWorker(Table table,
+      String domainType, int rowCount, List<Table> childTables, Map<Tuple, List<String>> concurrentMap) {
+    this.table=table;
     this.domainType=domainType;
     this.rowCount=rowCount;
     this.concurrentMap=concurrentMap;
+    this.childTables=childTables;
   }
 
   @Override
@@ -39,14 +40,17 @@ public class PrimaryDataGenerationWorker implements Runnable {
   }
 
   private void generateUniqueKeyData() throws ParseException {
-        GenerateSampleDataUtil.generateUniquData(uniqueKeyFields,
+        GenerateSampleDataUtil.generateUniqueData(table.getUniqueKeyFields(),table.getTableName(),
             rowCount,
-            domainType,concurrentMap);
+            domainType,childTables,concurrentMap);
+        
+        
+        
     
   }
   private void generatePrimaryKeyData() throws ParseException {
    
-        GenerateSampleDataUtil.generateDataForColumn(primaryKeyFields, rowCount,domainType,concurrentMap);
+        GenerateSampleDataUtil.generatePrimaryKeyData(table.getPrimaryKeyFields(),table.getTableName(), rowCount,domainType,childTables,concurrentMap);
     
   }
 }
