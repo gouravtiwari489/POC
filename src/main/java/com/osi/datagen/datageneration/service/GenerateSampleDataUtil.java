@@ -23,7 +23,7 @@ public class GenerateSampleDataUtil {
       List<String> row = new ArrayList<String>();
       for (Field field : table.getFields()) {
         List<String> fkValues =
-            concurrentMap.get(table.getTableName() + "." + field.getColumnName());
+            concurrentMap.get(new Tuple(table.getTableName() ,field.getColumnName()));
         if (fkValues != null) {
           row.add(fkValues.get(i));
         } else {

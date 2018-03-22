@@ -2,13 +2,18 @@ package com.osi.datagen.domain;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
+@EqualsAndHashCode
 public class CustomUserDetails implements UserDetails {
 
   private static final long serialVersionUID = 1L;
@@ -19,13 +24,11 @@ public class CustomUserDetails implements UserDetails {
 
   Collection<? extends GrantedAuthority> authorities;
 
-  private String mappedData;
+  private TableList tables;
+  
+  private Map<String,Integer> map;
 
-  private Map<String, Integer> map;
-
-  Map<Integer, List<String>> orderedFKListMap;
-
-  List<LinkedHashMap<String, LinkedHashMap<String, String>>> mappedTables;
+ 
 
   public CustomUserDetails(User byUserName) {
     this.username = byUserName.getUsername();
@@ -73,36 +76,4 @@ public class CustomUserDetails implements UserDetails {
     return true;
   }
 
-  public String getMappedData() {
-    return mappedData;
-  }
-
-  public void setMappedData(String mappedData) {
-    this.mappedData = mappedData;
-  }
-
-  public Map<String, Integer> getMap() {
-    return map;
-  }
-
-  public void setMap(Map<String, Integer> map) {
-    this.map = map;
-  }
-
-  public Map<Integer, List<String>> getOrderedFKListMap() {
-    return orderedFKListMap;
-  }
-
-  public void setOrderedFKListMap(Map<Integer, List<String>> orderedFKListMap) {
-    this.orderedFKListMap = orderedFKListMap;
-  }
-
-  public List<LinkedHashMap<String, LinkedHashMap<String, String>>> getMappedTables() {
-    return mappedTables;
-  }
-
-  public void setMappedTables(
-      List<LinkedHashMap<String, LinkedHashMap<String, String>>> mappedTables) {
-    this.mappedTables = mappedTables;
-  }
 }

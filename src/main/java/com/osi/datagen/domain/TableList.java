@@ -3,18 +3,20 @@ package com.osi.datagen.domain;
 import java.util.List;
 import java.util.stream.Collectors;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@EqualsAndHashCode
 public class TableList {
 	
 	private List<Table>  tables;
 	
 	@JsonIgnore
 	public boolean isCyclicDependencyFound(){
-	  
+
 	  
 	
 	  

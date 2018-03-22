@@ -63,8 +63,6 @@ public class DataGenerationWorker implements Runnable {
               rowCount,
               concurrentMap,
               domainType);
-     /* concurrentMap.putAll(
-          RelationalDataExtractor.extractdata(tablFieldMappingeMap.get(0), excelData, tableName));*/
       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
       CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
       service.generateData(table.getTableName(), excelData, this.fileType, user);

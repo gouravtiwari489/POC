@@ -31,11 +31,11 @@ public void clearUserData(String userFolderName) {
   }
 
 public void clearPreExistingUserData(String fileDownloadPath, TableList tables, CustomUserDetails user, List<String> fileTypes) {
-		if (user.getMappedData() != null && !user.getMappedData().equals(tables)) {
+		if (user.getTables()!= null && !user.getTables().equals(tables)) {
 			for (String string : fileTypes) {
 				user.getMap().remove(string);
 			}
-			user.setMappedData(null);
+			user.setTables(null);
 			clearUserData(fileDownloadPath + user.getUsername());
 		}
 	}

@@ -22,13 +22,11 @@ public class UserRequestValidator {
   public String[] fileTypes;
 
   
-
   public boolean IsSameRequestPresnt(String fileType, TableList tables, int rowCount) {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
-
     if (user.getMap() == null || !user.getMap().containsKey(fileType)
-        || user.getMappedData() == null || !user.getMappedData().equals(tables)
+        || user.getTables() == null || !user.getTables().equals(tables)
         || user.getMap().get(fileType) != rowCount) {
       logoutService.clearPreExistingUserData(fileDownloadPath, tables, user,
           Arrays.asList(fileTypes));

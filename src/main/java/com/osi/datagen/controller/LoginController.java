@@ -61,10 +61,7 @@ public class LoginController {
   public ResponseEntity<?> getUsersById(@PathVariable Boolean cont) throws Exception {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
-    //    customTokenConverter.setAdditionalInfo("CurrentUser", user);
-    user.setMap(null);
-    user.setMappedData(null);
-    user.setMappedTables(null);
+    user.setTables(null);
     File resource = new File(fileDownloadPath + user.getUsername());
     if (resource.exists()) {
       if (cont) {
