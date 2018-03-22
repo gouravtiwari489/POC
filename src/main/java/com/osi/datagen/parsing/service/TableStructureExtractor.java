@@ -20,11 +20,11 @@ public class TableStructureExtractor {
   String toggleCheck;
 
   private static final String ENGINE = "ENGINE";
-  private static final String REFERENCES = "REFERENCES ";
-  private static final String FOREIGN_KEY = "FOREIGN KEY ";
-  private static final String PRIMARY_KEY = "PRIMARY KEY ";
+  private static final String REFERENCES = "REFERENCES";
+  private static final String FOREIGN_KEY = "FOREIGN KEY";
+  private static final String PRIMARY_KEY = "PRIMARY KEY";
   private static final String CREATE_TABLE = "CREATE TABLE ";
-  private static final String CONSTRAINT = "CONSTRAINT ";
+  private static final String CONSTRAINT = "CONSTRAINT";
   private static final String CHECK = "CHECK";
   public List<Table> searchforTableName(
       File file, boolean dependencyCheck) throws DependencyException, Exception {
@@ -95,7 +95,7 @@ public class TableStructureExtractor {
 					if(lineFromFile.contains(FOREIGN_KEY)) {
 						ForigenKeyConstraint fkConstraint = new ForigenKeyConstraint();
 						String[] fieldString = lineFromFile.split(FOREIGN_KEY);
-						fkConstraint.setConstraintName(fieldString[0].replace(CONSTRAINT, "").replaceAll("`", ""));
+						fkConstraint.setConstraintName(fieldString[0].replace(CONSTRAINT, "").replaceAll("`", "").trim());
 						String[] fieldString2 = fieldString[1].split(REFERENCES);
 						System.out.println("fieldString for fk is::" + fieldString2[0] + "--" + fieldString2[1]);
 						String test1 = fieldString2[0].replace("(", "").replace(")", "").replace("`", "").replace(" ", "");
@@ -106,7 +106,7 @@ public class TableStructureExtractor {
 						fkConstraint.setKeyName(test1);
 						String[] test3 = test2.split("\\(");
 						fkConstraint.setReferenceTable(test3[0]);
-						fkConstraint.setReferenceColumn(test3[1].replace("\\)", ""));
+						fkConstraint.setReferenceColumn(test3[1].replaceAll("[^\\_,a-zA-Z0-9]+", ""));
 						forigenKeysList.add(fkConstraint);
 					}else if(lineFromFile.contains(CHECK)) {
 						CheckConstraint checkConstraint = new CheckConstraint();
@@ -142,8 +142,8 @@ public class TableStructureExtractor {
 					coulmnField.setColumnName(splitString[0]);
 					coulmnField.setDataType(splitString[1]);
 					if(splitString.length>2) {
-						coulmnField.setDefaultValue(splitString[2]+" "+splitString[3]);
-						constraint.setConstraintType(splitString[2]+" "+splitString[3]);
+						coulmnField.setDefaultValue(splitString[2]+" "+splitString[3].replace(",", ""));
+						constraint.setConstraintType(splitString[2]+" "+splitString[3].replace(",", ""));
 						pkColumList.add(splitString[0]);
 					}
 					constraint.setColumns(pkColumList);
