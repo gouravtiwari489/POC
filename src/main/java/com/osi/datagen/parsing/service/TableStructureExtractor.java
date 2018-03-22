@@ -81,12 +81,12 @@ public class TableStructureExtractor {
 						pkString2 = primaryKey.split(",");
 						if (pkString2.length > 1) {
 							primaryKey = pkString2[0] + "," + pkString2[1];
-							pkColumList.add(pkString2[0].replaceAll("[^\\,a-zA-Z0-9]+", ""));
-							pkColumList.add(pkString2[1].replaceAll("[^\\,a-zA-Z0-9]+", ""));
+							pkColumList.add(pkString2[0].replaceAll("[^\\_,a-zA-Z0-9]+", ""));
+							pkColumList.add(pkString2[1].replaceAll("[^\\_,a-zA-Z0-9]+", ""));
 						}
 						else {
 							primaryKey = pkString2[0];
-							pkColumList.add(pkString2[0].replaceAll("[^\\,a-zA-Z0-9]+", ""));
+							pkColumList.add(pkString2[0].replaceAll("[^\\_,a-zA-Z0-9]+", ""));
 						}
 					}
 					constraint.setColumns(pkColumList);
@@ -112,7 +112,7 @@ public class TableStructureExtractor {
 						CheckConstraint checkConstraint = new CheckConstraint();
 						String[] chkConstraintSplit = lineFromFile.split(CHECK);
 						checkConstraint.setConstraintName(chkConstraintSplit[0].replace(CONSTRAINT, "").replaceAll("`", "").trim());
-						checkConstraint.setValue(chkConstraintSplit[1].replaceAll("[^\\>= ,a-zA-Z0-9]+", "").trim());
+						checkConstraint.setValue(chkConstraintSplit[1].replaceAll("[^\\>=_ ,a-zA-Z0-9]+", "").trim());
 						checkConstraintsList.add(checkConstraint);
 					}
 				}else if(lineFromFile.contains(CHECK)) {
@@ -137,7 +137,7 @@ public class TableStructureExtractor {
 					List<String> pkColumList = new ArrayList<>();
 					Constraint constraint = new Constraint();
 					Field coulmnField = new Field();
-					String lineFromFile1 = lineFromFile.trim().replaceAll("[^\\(),a-zA-Z0-9]+", " ").trim();
+					String lineFromFile1 = lineFromFile.trim().replaceAll("[^\\()_,a-zA-Z0-9]+", " ").trim();
 					String[] splitString =  lineFromFile1.split(" ");
 					coulmnField.setColumnName(splitString[0]);
 					coulmnField.setDataType(splitString[1]);
