@@ -63,9 +63,9 @@ public class GenerateSampleDataUtil {
     
     List<String> row=new ArrayList<>();   
       for (int i = 1; i <= rowCount; i++) {
-          IDataGenerator generator =
-              DataGenFactory.createDataGenerator(field.getDataType(), domainType);
-          row.add(generator.generateData(field));
+        IUniqueDataGenerator generator =
+              DataGenFactory.createUniqueDataGenerator(field.getDataType(), domainType);
+          row.add(generator.generateUniqueData(field));
   }
 
 return row;

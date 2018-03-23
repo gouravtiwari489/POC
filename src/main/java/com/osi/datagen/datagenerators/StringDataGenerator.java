@@ -9,10 +9,11 @@ import org.apache.commons.io.FileUtils;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import com.osi.datagen.datageneration.service.IDataGenerator;
+import com.osi.datagen.datageneration.service.IUniqueDataGenerator;
 import com.osi.datagen.domain.Field;
 import static com.osi.datagen.datageneration.service.DataGenUtil.*;
 
-public class StringDataGenerator implements IDataGenerator {
+public class StringDataGenerator implements IDataGenerator,IUniqueDataGenerator {
   public static Map<String, List<String>> map = new HashMap<>();
   private int begin = 1000;
   private static final String ALPHA_NUMERIC_STRING = "abcdefghijklmnopqrstuvwxyz";

@@ -1,9 +1,11 @@
 package com.osi.datagen.datagenerators;
+import java.text.ParseException;
 import java.util.Random;
 import com.osi.datagen.datageneration.service.IDataGenerator;
+import com.osi.datagen.datageneration.service.IUniqueDataGenerator;
 import com.osi.datagen.domain.Field;
 
-public class LongDatagenerator implements IDataGenerator {
+public class LongDatagenerator implements IDataGenerator,IUniqueDataGenerator {
 
   int begin = 10000;
 
@@ -20,7 +22,10 @@ public class LongDatagenerator implements IDataGenerator {
     return ((new Random().nextInt(end - begin) + 1) + begin) + "";
   }
 
-  public String generateUniqueData() {
+ 
+
+  @Override
+  public String generateUniqueData(Field field) throws ParseException {
     begin++;
     return begin + "";
   }
