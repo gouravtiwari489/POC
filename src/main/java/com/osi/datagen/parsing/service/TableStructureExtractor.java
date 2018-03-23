@@ -159,7 +159,12 @@ public class TableStructureExtractor {
 					String lineFromFile1 = lineFromFile.trim().replaceAll(FIELDEXP, " ").trim();
 					String[] splitString =  lineFromFile1.split(" ");
 					coulmnField.setColumnName(splitString[0]);
-					coulmnField.setDataType(splitString[1]);
+					String[] lengthSplit = splitString[1].split("\\(");
+					if(lengthSplit.length>1) {
+					  coulmnField.setDataType(lengthSplit[0].replaceAll("[^\\,a-zA-Z0-9]+", ""));
+					  coulmnField.setLength(lengthSplit[1].replaceAll("[^\\,a-zA-Z0-9]+", ""));
+					}else
+						coulmnField.setDataType(lengthSplit[0].replace(",", ""));
 					if(splitString.length>2) {
 						coulmnField.setDefaultValue(splitString[2]+" "+splitString[3].replace(",", ""));
 						constraint.setConstraintType(splitString[2]+" "+splitString[3].replace(",", ""));
