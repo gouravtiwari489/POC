@@ -20,4 +20,5 @@ public class Field implements Serializable{
   private String mappedCategory;
   private String mappedType;
   private String defaultValue;
+  private String incrementValue;
 }

@@ -18,7 +18,7 @@ public class TableStructureExtractor {
 
   @Value("${dependencycheck.toggle}")
   String toggleCheck;
-
+  
   private static final String ENGINE = "ENGINE";
   private static final String REFERENCES = "REFERENCES";
   private static final String FOREIGN_KEY = "FOREIGN KEY";
@@ -26,6 +26,13 @@ public class TableStructureExtractor {
   private static final String CREATE_TABLE = "CREATE TABLE ";
   private static final String CONSTRAINT = "CONSTRAINT";
   private static final String CHECK = "CHECK";
+  private static final String UNIQUE_KEY = "UNIQUE KEY";
+  
+  private static final String FIELDEXP =  "[^\\()_,a-zA-Z0-9]+";
+  private static final String CHECKEXP = "[^\\>=_ ,a-zA-Z0-9]+";
+  private static final String PRIFOREIGNEXP = "[^\\_,a-zA-Z0-9]+";
+  private static final String COMMENGTEXP = "(--.*)|(((/\\*)+?[\\w\\W]+?(\\*/)+))";
+  
   public List<Table> searchforTableName(
       File file, boolean dependencyCheck) throws DependencyException, Exception {
     List<Field> fieldsList = new  ArrayList<>();
@@ -42,7 +49,7 @@ public class TableStructureExtractor {
     int fkCount = 1;
 		while (scanner.hasNextLine()) {
 			final String readLine = scanner.nextLine().trim();
-			String lineFromFile = readLine.replaceAll("(--.*)|(((/\\*)+?[\\w\\W]+?(\\*/)+))",""); //remove Single line comment
+			String lineFromFile = readLine.replaceAll(COMMENGTEXP,""); //remove Single line comment
 			//remove Multiline comments
 			if(lineFromFile.indexOf("/*")>-1 )
 			{
@@ -75,20 +82,25 @@ public class TableStructureExtractor {
 					primaryKey = "";
 					count = 0;
 					String[] pkString = lineFromFile.split(PRIMARY_KEY);
-					primaryKey = pkString[1].split(" ")[0].replace("`", "");
-					String[] pkString2 = null;
+					primaryKey = pkString[1].replaceAll("[^\\,_,a-zA-Z0-9]+","");
+					String[] pkSplit = primaryKey.split(",");
+					for(String pkColumn:pkSplit) {
+						if(pkColumn!=null && !pkColumn.isEmpty())
+						   pkColumList.add(pkColumn);
+					}
+					/*String[] pkString2 = null;
 					if (primaryKey.endsWith(",")) {
 						pkString2 = primaryKey.split(",");
 						if (pkString2.length > 1) {
 							primaryKey = pkString2[0] + "," + pkString2[1];
-							pkColumList.add(pkString2[0].replaceAll("[^\\_,a-zA-Z0-9]+", ""));
-							pkColumList.add(pkString2[1].replaceAll("[^\\_,a-zA-Z0-9]+", ""));
+							pkColumList.add(pkString2[0].replaceAll(PRIFOREIGNEXP, ""));
+							pkColumList.add(pkString2[1].replaceAll(PRIFOREIGNEXP, ""));
 						}
 						else {
 							primaryKey = pkString2[0];
-							pkColumList.add(pkString2[0].replaceAll("[^\\_,a-zA-Z0-9]+", ""));
+							pkColumList.add(pkString2[0].replaceAll(PRIFOREIGNEXP, ""));
 						}
-					}
+					}*/
 					constraint.setColumns(pkColumList);
 					constraintList.add(constraint);
 				} else if (lineFromFile.contains(CONSTRAINT)) {
@@ -106,13 +118,20 @@ public class TableStructureExtractor {
 						fkConstraint.setKeyName(test1);
 						String[] test3 = test2.split("\\(");
 						fkConstraint.setReferenceTable(test3[0]);
-						fkConstraint.setReferenceColumn(test3[1].replaceAll("[^\\_,a-zA-Z0-9]+", ""));
+						fkConstraint.setReferenceColumn(test3[1].replaceAll(PRIFOREIGNEXP, ""));
 						forigenKeysList.add(fkConstraint);
+					}else if(lineFromFile.contains(UNIQUE_KEY)) {
+						Constraint constraint = new Constraint();
+						List<String> uniqueList =  new ArrayList<>();
+						String[] uniqueSplit = lineFromFile.split(UNIQUE_KEY);
+						constraint.setConstraintName("Unique");
+						
+						
 					}else if(lineFromFile.contains(CHECK)) {
 						CheckConstraint checkConstraint = new CheckConstraint();
 						String[] chkConstraintSplit = lineFromFile.split(CHECK);
 						checkConstraint.setConstraintName(chkConstraintSplit[0].replace(CONSTRAINT, "").replaceAll("`", "").trim());
-						checkConstraint.setValue(chkConstraintSplit[1].replaceAll("[^\\>=_ ,a-zA-Z0-9]+", "").trim());
+						checkConstraint.setValue(chkConstraintSplit[1].replaceAll(CHECKEXP, "").trim());
 						checkConstraintsList.add(checkConstraint);
 					}
 				}else if(lineFromFile.contains(CHECK)) {
@@ -137,7 +156,7 @@ public class TableStructureExtractor {
 					List<String> pkColumList = new ArrayList<>();
 					Constraint constraint = new Constraint();
 					Field coulmnField = new Field();
-					String lineFromFile1 = lineFromFile.trim().replaceAll("[^\\()_,a-zA-Z0-9]+", " ").trim();
+					String lineFromFile1 = lineFromFile.trim().replaceAll(FIELDEXP, " ").trim();
 					String[] splitString =  lineFromFile1.split(" ");
 					coulmnField.setColumnName(splitString[0]);
 					coulmnField.setDataType(splitString[1]);
@@ -145,6 +164,9 @@ public class TableStructureExtractor {
 						coulmnField.setDefaultValue(splitString[2]+" "+splitString[3].replace(",", ""));
 						constraint.setConstraintType(splitString[2]+" "+splitString[3].replace(",", ""));
 						pkColumList.add(splitString[0]);
+						if(splitString.length>4) {
+							coulmnField.setIncrementValue(splitString[4].replace(",", ""));
+						}
 					}
 					constraint.setColumns(pkColumList);
 					constraintList.add(constraint);
