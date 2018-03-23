@@ -1,7 +1,5 @@
 package com.osi.datagen.datagenerators;
-/*package com.osi.datagen.datagen;
 
-import static com.osi.datagen.utils.DataGenUtil.singleQuote;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
@@ -10,8 +8,9 @@ import java.util.Random;
 import org.apache.commons.io.FileUtils;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-import com.osi.datagen.datagen.intf.IDataGenerator;
+import com.osi.datagen.datageneration.service.IDataGenerator;
 import com.osi.datagen.domain.Field;
+import static com.osi.datagen.datageneration.service.DataGenUtil.*;
 
 public class StringDataGenerator implements IDataGenerator {
   public static Map<String, List<String>> map = new HashMap<>();
@@ -32,19 +31,14 @@ public class StringDataGenerator implements IDataGenerator {
       e.printStackTrace();
     }
   }
-  
 
   @Override
   public String generateData(Field field) {
-    /*if (field.isPrimaryKey()) {
-      return generateUniqueDatawithNum(field);
-
-    } else{
+  
       return generateRandomDataFromDataSets(field);
-    }
   }
 
-  private String generateUniqueDatawithNum(Field field) {
+  public String generateUniqueData(Field field) {
     begin++;
     return singleQuote(field.getColumnName().substring(0, 4) + begin);
   }
@@ -68,4 +62,4 @@ public class StringDataGenerator implements IDataGenerator {
     return singleQuote(builder.toString());
   }
 }
-*/
+

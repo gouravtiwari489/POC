@@ -6,18 +6,18 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @EqualsAndHashCode
+@ToString
 public class TableList {
 	
 	private List<Table>  tables;
 	
 	@JsonIgnore
 	public boolean isCyclicDependencyFound(){
-
-	  
 	
 	  
 	   return false;

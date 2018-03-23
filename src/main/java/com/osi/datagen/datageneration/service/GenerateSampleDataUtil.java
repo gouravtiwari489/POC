@@ -19,7 +19,7 @@ public class GenerateSampleDataUtil {
     List<List<String>> records = new ArrayList<List<String>>();
     records.add(new ArrayList<String>(table.getFieldsNames()));
 
-    for (int i = 1; i <= rowCount; i++) {
+    for (int i = 1; i < rowCount; i++) {
       List<String> row = new ArrayList<String>();
       for (Field field : table.getFields()) {
         List<String> fkValues =
@@ -34,7 +34,9 @@ public class GenerateSampleDataUtil {
       }
       records.add(row);
     }
-
+    for (Field field : table.getFields()) {
+    concurrentMap.remove(new Tuple(table.getTableName() ,field.getColumnName()));
+    }
     return records;
   }
 
@@ -46,12 +48,12 @@ public class GenerateSampleDataUtil {
       List<String> data=generateDataForField(field, rowCount, domainType);      
       concurrentMap.put(new Tuple(tableName, field.getColumnName()),data);
       for (Table table : childTables) {
-        List<String> strs= table.getForigenKeys().stream()
+        List<String> columns= table.getForigenKeys().stream()
          .filter(fk->fk.getReferenceTable().equals(tableName)&&fk.getReferenceColumn().equals(field.getColumnName()))
          .map(k->k.getKeyName())
          .collect(Collectors.toList());
-     strs.forEach(str->{
-       concurrentMap.put(new Tuple(tableName,str),data);
+        columns.forEach(column->{
+          concurrentMap.put(new Tuple(tableName,column),data);
      });
     }
   }
@@ -77,12 +79,12 @@ return row;
         List<String> data=generateDataForField(field, rowCount, domainType);
         concurrentMap.put(new Tuple(tableName,field.getColumnName()),data);
         for (Table table : childTables) {
-         List<String> strs= table.getForigenKeys().stream()
+         List<String> columns= table.getForigenKeys().stream()
           .filter(fk->fk.getReferenceTable().equals(tableName)&&fk.getReferenceColumn().equals(field.getColumnName()))
           .map(k->k.getKeyName())
           .collect(Collectors.toList());
-      strs.forEach(str->{
-        concurrentMap.put(new Tuple(tableName,str),data);
+         columns.forEach(column->{
+        concurrentMap.put(new Tuple(tableName,column),data);
       });
       
         }

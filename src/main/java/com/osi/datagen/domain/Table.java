@@ -8,10 +8,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @EqualsAndHashCode
+@ToString
 public class Table  {
 
   private String tableName;
@@ -29,23 +31,29 @@ public class Table  {
   }
   @JsonIgnore
   public Constraint getPrimaryKey() {
-
+    if(constraints!=null && !constraints.isEmpty()){
     Optional<Constraint> constraint = constraints.stream()
-        .filter(cons -> cons.getConstraintType().equalsIgnoreCase("PRIMARY KEY")).findFirst();
-    return constraint.get();
+        .filter(cons -> cons !=null && cons.getConstraintType().equalsIgnoreCase("PRIMARY KEY")).findFirst();
+    return constraint.isPresent()?constraint.get():null;
+    }
+    return null;
   }
   
   @JsonIgnore
   public List<Field> getPrimaryKeyFields() {
 
     Constraint constraint=getPrimaryKey();
+    if(constraint!=null){
     return constraint.getColumns().stream().map(c->getField(c)).collect(Collectors.toList());
+    }else{
+      return null;
+    }
   }
   @JsonIgnore
   public List<Constraint> getUniqueKeys() {
 
    return constraints.stream()
-        .filter(cons -> cons.getConstraintType().equalsIgnoreCase("UNIQUE KEY")).collect(Collectors.toList());
+        .filter(cons -> cons !=null && cons.getConstraintType().equalsIgnoreCase("UNIQUE KEY")).collect(Collectors.toList());
   }
   @JsonIgnore
  public List<List<Field>> getUniqueKeyFields() {
@@ -73,6 +81,14 @@ public class Table  {
     } else {
       return true;
     }
+  }
+  
+  @JsonIgnore
+  public List<ForigenKeyConstraint> getSelfDependencies() {
+    return
+        forigenKeys.stream().filter(fk -> fk.getReferenceTable().equals(tableName))
+        .collect(Collectors.toList());
+   
   }
   @JsonIgnore
   public Field getField(String columnName) {

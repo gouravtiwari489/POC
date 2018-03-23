@@ -1,10 +1,7 @@
 package com.osi.datagen.datageneration.service;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import com.osi.datagen.domain.CustomUserDetails;
 import com.osi.datagen.domain.Table;
 import com.osi.datagen.domain.Tuple;
@@ -20,28 +17,22 @@ public class DataGenerationWorker implements Runnable {
   private Map<Tuple, List<String>> concurrentMap;
   private String domainType;
   private GenerateDataInterface service;
-
-  public DataGenerationWorker(
-      String tableName,
-      LinkedHashMap<String, String> fieldMap,
-      int rowCount,
-      String fileType,
-      List<LinkedHashMap<String, LinkedHashMap<String, String>>> tablFieldMappingeMap,
-      Map<String, List<String>> concurrentMap,
-      GenerateDataInterface service,
-      CustomUserDetails user,
-      String domainType) {
-   
+  private CustomUserDetails user;
+  
+  public DataGenerationWorker(){
   }
+  
+ 
 
   public DataGenerationWorker(Table table, int rowCount, String fileType,
-      Map<Tuple, List<String>> concurrentMap,  String domainType,GenerateDataInterface service) {
+      Map<Tuple, List<String>> concurrentMap,  String domainType,GenerateDataInterface service,CustomUserDetails user) {
         this.table=table;
         this.rowCount = rowCount;
         this.fileType = fileType;
         this.concurrentMap = concurrentMap;
         this.domainType = domainType;
         this.service=service;
+        this.user=user;
   }
 
   @Override
@@ -63,8 +54,7 @@ public class DataGenerationWorker implements Runnable {
               rowCount,
               concurrentMap,
               domainType);
-      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-      CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
+    
       service.generateData(table.getTableName(), excelData, this.fileType, user);
     } catch (Exception e) {
       e.printStackTrace();

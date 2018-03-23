@@ -23,14 +23,14 @@ public class DownloadController {
 				@RequestParam(name = "fileType", required = true) String fileType,
 				@RequestParam(name = "rowCount", required = true) int rowCount,
 				@RequestParam(name = "domainType", required = true) String domainType,
-				@RequestParam(name = "tableList", required = true) TableList tables)
+				@RequestParam(name = "tableList", required = true) String tableList)
 						throws IOException {
 			log.info("rowCount ::" + rowCount);
 			log.info("fileType ::" + fileType);
 			log.info("domainType ::" + domainType);
-			log.info("tableList ::" + tables);
+			log.info("tableList ::" + tableList);
 			
-			return generateDataAndDownloadService.generateDataAndDownload(fileType,rowCount,domainType,tables);
+			return generateDataAndDownloadService.generateDataAndDownload(fileType,rowCount,domainType,tableList);
 			
 		}
 }

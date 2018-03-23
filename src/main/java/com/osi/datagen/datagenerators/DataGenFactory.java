@@ -10,10 +10,10 @@ public class DataGenFactory {
   public static IDataGenerator createDataGenerator(String type, String domainType) {
     IDataGenerator dataGen = null;
     if (map.isEmpty()) {
-   //   map.put("string", new StringDataGenerator(domainType));
+      map.put("string", new StringDataGenerator(domainType));
       map.put("double", new DoubleDataGenerator());
       map.put("bytes", new ByteDataGenerator());
-    //  map.put("long", new LongDatagenerator());
+      map.put("long", new LongDatagenerator());
       map.put("date", new DateDataGenerator());
       map.put("datetime", new DateTimeDataGenerator());
       map.put("timestamp", new TimeStampDataGenerator());

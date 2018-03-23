@@ -7,7 +7,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import com.osi.datagen.domain.CustomUserDetails;
 import com.osi.datagen.domain.Table;
 import com.osi.datagen.domain.TableList;
 import com.osi.datagen.domain.Tuple;
@@ -57,6 +60,8 @@ public class DataGenerationService {
       throws IOException {
       log.info("creating thread pool");
         ExecutorService executor = Executors.newFixedThreadPool(tableList.getTables().size());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
         for (Table table : tableList.getTables()) {
           Runnable dataGenerationWorker =
               new DataGenerationWorker(
@@ -64,7 +69,7 @@ public class DataGenerationService {
                   rowCount,
                   fileType,
                   concurrentMap,
-                  domainType,service);
+                  domainType,service,user);
           executor.execute(dataGenerationWorker);
         }
         executor.shutdown();

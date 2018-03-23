@@ -1,8 +1,6 @@
 package com.osi.datagen.datagenerators;
-/*package com.osi.datagen.datagen;
-
 import java.util.Random;
-import com.osi.datagen.datagen.intf.IDataGenerator;
+import com.osi.datagen.datageneration.service.IDataGenerator;
 import com.osi.datagen.domain.Field;
 
 public class LongDatagenerator implements IDataGenerator {
@@ -12,11 +10,8 @@ public class LongDatagenerator implements IDataGenerator {
   @Override
   public String generateData(Field field) {
 
-    if (field.isPrimaryKey()) {
-      return generateUniqueData();
-    } else {
+   
       return generateRandomData();
-    }
   }
 
   public String generateRandomData() {
@@ -31,4 +26,3 @@ public class LongDatagenerator implements IDataGenerator {
   }
 }
 
-*/
