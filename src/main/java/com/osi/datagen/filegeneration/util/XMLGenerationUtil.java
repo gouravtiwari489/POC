@@ -52,7 +52,7 @@ public enum XMLGenerationUtil implements GenerateDataInterface {
       root.appendChild(rowNode);
     }
     document.appendChild(root);
-
+    excelData.clear();
     try {
       writeToFile(document, tableName, fileType, user);
     } catch (IOException e) {

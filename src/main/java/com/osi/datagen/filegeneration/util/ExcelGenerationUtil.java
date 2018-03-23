@@ -15,7 +15,8 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import com.osi.datagen.domain.CustomUserDetails;
-
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 public enum ExcelGenerationUtil implements GenerateDataInterface {
   INSTANCE;
 
@@ -44,6 +45,7 @@ public enum ExcelGenerationUtil implements GenerateDataInterface {
   @Override
   public void generateData(
       String tableName, List<List<String>> excelData, String fileType, CustomUserDetails user) {
+    log.info(Thread.currentThread().getName()+" "+ tableName+" generateData started");
     int rownum = 0;
     try {
       XSSFWorkbook workbook = new XSSFWorkbook();
@@ -57,6 +59,8 @@ public enum ExcelGenerationUtil implements GenerateDataInterface {
       font.setBoldweight(XSSFFont.BOLDWEIGHT_BOLD);
       style.setFont(font);
       addContent(excelData, firstSheet, rownum, style);
+      excelData.clear();
+      log.info(Thread.currentThread().getName()+" "+ tableName+" generateData ended");
       writeToFile(workbook, tableName, fileType, user);
     } catch (Exception e) {
       e.printStackTrace();
@@ -66,6 +70,7 @@ public enum ExcelGenerationUtil implements GenerateDataInterface {
   @Override
   public void writeToFile(Object obj, String tableName, String fileType, CustomUserDetails user)
       throws IOException, FileNotFoundException {
+    log.info(Thread.currentThread().getName()+" "+ tableName+" excel write started");
     String filePath;
     File resource = new File(fileDownloadPath + user.getUsername());
     if (!resource.exists()) {
@@ -83,5 +88,6 @@ public enum ExcelGenerationUtil implements GenerateDataInterface {
     XSSFWorkbook workbook = (XSSFWorkbook) obj;
     workbook.write(excelFileToCreate);
     excelFileToCreate.close();
+    log.info(Thread.currentThread().getName()+" "+ tableName+" excel write ended");
   }
 }

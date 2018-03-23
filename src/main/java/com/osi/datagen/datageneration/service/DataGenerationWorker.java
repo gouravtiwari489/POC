@@ -48,13 +48,14 @@ public class DataGenerationWorker implements Runnable {
 
   private void generateData(Table table) {
     try {
-
+long start=System.currentTimeMillis();
       List<List<String>> excelData =
           GenerateSampleDataUtil.generateData(table,
               rowCount,
               concurrentMap,
               domainType);
-    
+      long end=System.currentTimeMillis();
+      log.info("time taken for data genration "+table.getTableName() + (end -start));
       service.generateData(table.getTableName(), excelData, this.fileType, user);
     } catch (Exception e) {
       e.printStackTrace();

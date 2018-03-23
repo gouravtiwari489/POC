@@ -32,6 +32,7 @@ public enum JSONGenerationUtil implements GenerateDataInterface {
     }
     Gson gs = new Gson();
     String gss = gs.toJson(finalMap);
+    excelData.clear();
     try {
       writeToFile(gss, tableName, fileType, user);
     } catch (IOException e) {

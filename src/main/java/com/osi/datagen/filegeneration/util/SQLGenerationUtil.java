@@ -35,6 +35,7 @@ public enum SQLGenerationUtil implements GenerateDataInterface {
         sb.append(");");
         rows.add(sb.toString().toUpperCase());
       }
+      excelData.clear();
       writeToFile(rows, tableName, fileType, user);
     } catch (Exception e) {
       // TODO: handle exception

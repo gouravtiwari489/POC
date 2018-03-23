@@ -59,7 +59,7 @@ public class DataGenerationService {
       Map<Tuple, List<String>> concurrentMap,GenerateDataInterface service)
       throws IOException {
       log.info("creating thread pool");
-        ExecutorService executor = Executors.newFixedThreadPool(tableList.getTables().size());
+        ExecutorService executor = Executors.newFixedThreadPool(5);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
         for (Table table : tableList.getTables()) {

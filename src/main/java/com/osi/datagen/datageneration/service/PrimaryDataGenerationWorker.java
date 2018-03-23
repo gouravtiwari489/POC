@@ -8,7 +8,8 @@ import java.util.Random;
 import com.osi.datagen.domain.ForigenKeyConstraint;
 import com.osi.datagen.domain.Table;
 import com.osi.datagen.domain.Tuple;
-
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 public class PrimaryDataGenerationWorker implements Runnable {
   private Table table;
   private String domainType;
@@ -41,7 +42,7 @@ public class PrimaryDataGenerationWorker implements Runnable {
       if(table.getUniqueKeyFields()!=null){
           generateUniqueKeyData();
       }
-     
+     log.info("unique field generation completed for table"+table.getTableName());
     } catch (Exception e) {
       e.printStackTrace();
     }
