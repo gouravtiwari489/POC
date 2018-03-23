@@ -33,7 +33,7 @@ public class Table  {
   public Constraint getPrimaryKey() {
     if(constraints!=null && !constraints.isEmpty()){
     Optional<Constraint> constraint = constraints.stream()
-        .filter(cons -> cons !=null && cons.getConstraintType().equalsIgnoreCase("PRIMARY KEY")).findFirst();
+        .filter(cons -> cons.getConstraintType() !=null && cons.getConstraintType().equalsIgnoreCase("PRIMARY KEY")).findFirst();
     return constraint.isPresent()?constraint.get():null;
     }
     return null;
