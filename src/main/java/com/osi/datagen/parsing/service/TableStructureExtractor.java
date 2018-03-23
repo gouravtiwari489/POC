@@ -88,19 +88,6 @@ public class TableStructureExtractor {
 						if(pkColumn!=null && !pkColumn.isEmpty())
 						   pkColumList.add(pkColumn);
 					}
-					/*String[] pkString2 = null;
-					if (primaryKey.endsWith(",")) {
-						pkString2 = primaryKey.split(",");
-						if (pkString2.length > 1) {
-							primaryKey = pkString2[0] + "," + pkString2[1];
-							pkColumList.add(pkString2[0].replaceAll(PRIFOREIGNEXP, ""));
-							pkColumList.add(pkString2[1].replaceAll(PRIFOREIGNEXP, ""));
-						}
-						else {
-							primaryKey = pkString2[0];
-							pkColumList.add(pkString2[0].replaceAll(PRIFOREIGNEXP, ""));
-						}
-					}*/
 					constraint.setColumns(pkColumList);
 					constraintList.add(constraint);
 				} else if (lineFromFile.contains(CONSTRAINT)) {
@@ -109,7 +96,6 @@ public class TableStructureExtractor {
 						String[] fieldString = lineFromFile.split(FOREIGN_KEY);
 						fkConstraint.setConstraintName(fieldString[0].replace(CONSTRAINT, "").replaceAll("`", "").trim());
 						String[] fieldString2 = fieldString[1].split(REFERENCES);
-						System.out.println("fieldString for fk is::" + fieldString2[0] + "--" + fieldString2[1]);
 						String test1 = fieldString2[0].replace("(", "").replace(")", "").replace("`", "").replace(" ", "");
 						String test2 = fieldString2[1].replace(" ", "").replace("`", "").replace(",", "")
 								.replace("ONUPDATECASCADE", "");
@@ -120,13 +106,6 @@ public class TableStructureExtractor {
 						fkConstraint.setReferenceTable(test3[0]);
 						fkConstraint.setReferenceColumn(test3[1].replaceAll(PRIFOREIGNEXP, ""));
 						forigenKeysList.add(fkConstraint);
-					}else if(lineFromFile.contains(UNIQUE_KEY)) {
-						Constraint constraint = new Constraint();
-						List<String> uniqueList =  new ArrayList<>();
-						String[] uniqueSplit = lineFromFile.split(UNIQUE_KEY);
-						constraint.setConstraintName("Unique");
-						
-						
 					}else if(lineFromFile.contains(CHECK)) {
 						CheckConstraint checkConstraint = new CheckConstraint();
 						String[] chkConstraintSplit = lineFromFile.split(CHECK);
@@ -134,6 +113,24 @@ public class TableStructureExtractor {
 						checkConstraint.setValue(chkConstraintSplit[1].replaceAll(CHECKEXP, "").trim());
 						checkConstraintsList.add(checkConstraint);
 					}
+				}else if(lineFromFile.contains(UNIQUE_KEY)) {
+					Constraint constraint = new Constraint();
+					constraint.setConstraintType(UNIQUE_KEY);
+					List<String> uniqueList =  new ArrayList<>();
+					String uniquekey= lineFromFile.replace(UNIQUE_KEY, "");
+					String[] split1 = uniquekey.split(" ");
+					if (split1.length > 1) {
+						constraint.setConstraintName(split1[1]);
+						String uniqueKey = split1[2].replaceAll("[^\\,_,a-zA-Z0-9]+", "");
+						String[] pkSplit = uniqueKey.split(",");
+						for (String uqniColumn : pkSplit) {
+							if (uqniColumn != null && !uqniColumn.isEmpty())
+								uniqueList.add(uqniColumn);
+						}
+					}
+					constraint.setColumns(uniqueList);
+					constraintList.add(constraint);
+					
 				}else if(lineFromFile.contains(CHECK)) {
 					CheckConstraint checkConstraint = new CheckConstraint();
 					String[] chkConstraintSplit = lineFromFile.split(CHECK);
@@ -174,7 +171,8 @@ public class TableStructureExtractor {
 						}
 					}
 					constraint.setColumns(pkColumList);
-					constraintList.add(constraint);
+					if(constraint.getConstraintType()!=null && !constraint.getConstraintType().isEmpty())
+				     	constraintList.add(constraint);
 					fieldsList.add(coulmnField);
 					String[] fieldString = lineFromFile1.split(" ");
 					if (fieldString.length >= 2) {
