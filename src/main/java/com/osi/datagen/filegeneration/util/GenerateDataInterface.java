@@ -1,9 +1,9 @@
 package com.osi.datagen.filegeneration.util;
 
+import com.osi.datagen.domain.CustomUserDetails;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
-import com.osi.datagen.domain.CustomUserDetails;
 
 public interface GenerateDataInterface {
 

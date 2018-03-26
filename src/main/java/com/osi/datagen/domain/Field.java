@@ -2,7 +2,6 @@ package com.osi.datagen.domain;
 
 import java.io.Serializable;
 import java.util.List;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +11,7 @@ import lombok.ToString;
 @Setter
 @EqualsAndHashCode
 @ToString
-public class Field implements Serializable{
+public class Field implements Serializable {
 
   private static final long serialVersionUID = 1L;
   private String columnName;

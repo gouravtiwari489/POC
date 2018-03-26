@@ -1,14 +1,14 @@
 package com.osi.datagen;
 
+import com.osi.datagen.domain.CustomUserDetails;
+import com.osi.datagen.domain.Role;
+import com.osi.datagen.domain.User;
+import com.osi.datagen.repository.UserRepository;
 import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import com.osi.datagen.domain.CustomUserDetails;
-import com.osi.datagen.domain.Role;
-import com.osi.datagen.domain.User;
-import com.osi.datagen.repository.UserRepository;
 
 @SpringBootApplication
 public class DaSApplication {

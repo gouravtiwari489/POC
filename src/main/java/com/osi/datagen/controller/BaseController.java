@@ -1,12 +1,12 @@
 package com.osi.datagen.controller;
 
+import com.osi.datagen.domain.TestObject;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import com.osi.datagen.domain.TestObject;
 
 @Getter
 @Setter

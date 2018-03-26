@@ -1,9 +1,10 @@
 package com.osi.datagen.datagenerators;
 
 import static com.osi.datagen.datageneration.service.DataGenUtil.singleQuote;
-import java.sql.Timestamp;
+
 import com.osi.datagen.datageneration.service.IDataGenerator;
 import com.osi.datagen.domain.Field;
+import java.sql.Timestamp;
 
 public class TimeStampDataGenerator implements IDataGenerator {
 

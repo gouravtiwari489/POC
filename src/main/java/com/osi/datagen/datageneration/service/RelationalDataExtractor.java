@@ -32,11 +32,11 @@ public class RelationalDataExtractor {
   }
 
   private static List<String> copyData(
-      List<List<String>> excelData, Map<String, String> map, String FieldName) {
+      List<List<String>> excelData, Map<String, String> map, String fieldName) {
     List<String> data = null;
     int counter = 0;
     for (Entry<String, String> entry : map.entrySet()) {
-      if (entry.getKey().equals(FieldName)) {
+      if (entry.getKey().equals(fieldName)) {
         data = getColumndata(excelData, counter);
       } else {
 

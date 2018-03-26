@@ -34,11 +34,11 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     endpoints
         .tokenStore(tokenStore())
-                .tokenEnhancer(jwtAccesToken())
+        .tokenEnhancer(jwtAccesToken())
         .authenticationManager(authenticationManager);
   }
 
- @Bean
+  @Bean
   public JwtAccessTokenConverter jwtAccesToken() {
     return new JwtAccessTokenConverter();
   }

@@ -9,6 +9,6 @@ import lombok.ToString;
 @ToString
 public class MappingCategory {
 
-	private String mappingCategory;
-	private String mappingType;
+  private String mappingCategory;
+  private String mappingType;
 }

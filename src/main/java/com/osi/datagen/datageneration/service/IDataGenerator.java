@@ -1,7 +1,7 @@
 package com.osi.datagen.datageneration.service;
 
-import java.text.ParseException;
 import com.osi.datagen.domain.Field;
+import java.text.ParseException;
 
 public interface IDataGenerator {
 

@@ -9,9 +9,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Slf4j
@@ -27,16 +27,20 @@ public class FindWordMatchingPossibilities {
   private static final String SUPPLYCHAINCATEGORY = "SupplyChain-dataset.txt";
   private static final String MANUFACTURINGCATEGORY = "Manufacturing-Categories.txt";
 
-  public Map<String, List<String>> findMatchingWord(String wordToFind, String domainType,String dataType)
-      throws FileNotFoundException {
-    String wordArr[] = null;
+  public Map<String, List<String>> findMatchingWord(
+      String wordToFind, String domainType, String dataType) throws FileNotFoundException {
+    String[] wordArr = null;
     Map<String, List<String>> matchingMap = null;
     ClassLoader classLoader = getClass().getClassLoader();
 
     String datasetFileName = null;
-    if (domainType.equalsIgnoreCase(HRMS)) datasetFileName = HRMSCATEGORY;
-    else if (domainType.equalsIgnoreCase(SUPPLYCHAIN)) datasetFileName = SUPPLYCHAINCATEGORY;
-    else if (domainType.equalsIgnoreCase(MANUFACTURING)) datasetFileName = MANUFACTURINGCATEGORY;
+    if (domainType.equalsIgnoreCase(HRMS)) {
+      datasetFileName = HRMSCATEGORY;
+    } else if (domainType.equalsIgnoreCase(SUPPLYCHAIN)) {
+      datasetFileName = SUPPLYCHAINCATEGORY;
+    } else if (domainType.equalsIgnoreCase(MANUFACTURING)) {
+      datasetFileName = MANUFACTURINGCATEGORY;
+    }
 
     File file = new File(classLoader.getResource(datasetFileName).getFile());
 
@@ -47,7 +51,8 @@ public class FindWordMatchingPossibilities {
       wordArr = removeNullValues(wordArr);
       matchingMap = findMatchingWords(wordArr, matchingMap, file);
 
-      int splitLength = 3, len = wordArr.length;
+      int splitLength = 3;
+      int len = wordArr.length;
       while (matchingMap.size() > 1) {
         wordArr = splitWordToFind(wordToFind, wordArr, splitLength);
         wordArr = removeNullValues(wordArr);
@@ -66,44 +71,43 @@ public class FindWordMatchingPossibilities {
       for (String matchField : list) {
         Float matchProb = computeProbability(wordToFind, matchField);
         if (matchProb == 1.0f) {
-        	log.info("matchingProbMap is:::"+matchingProbMap.toString());
+          log.info("matchingProbMap is:::" + matchingProbMap.toString());
           matchingProbMap.clear();
           matchList.add(matchField);
           matchingProbMap.put(elem.getKey(), matchList);
           isAdd = true;
           break;
-        } else if(!isAdd && matchProb.compareTo(Float.valueOf(threshold)) >= 0.0f) {
-             matchList.add(matchField);
+        } else if (!isAdd && matchProb.compareTo(Float.valueOf(threshold)) >= 0.0f) {
+          matchList.add(matchField);
         }
       }
-      if(isAdd){
-    	  break;
+      if (isAdd) {
+        break;
       }
       if (!matchList.isEmpty() && null != matchList) {
-        if(!matchingProbMap.containsKey(elem.getKey()))
-             matchingProbMap.put(elem.getKey(), matchList);
+        if (!matchingProbMap.containsKey(elem.getKey())) {
+          matchingProbMap.put(elem.getKey(), matchList);
+        }
       }
-     // System.out.println("matchField = "+elem.getKey()+" :: matchList = "+matchList.size());
+      // System.out.println("matchField = "+elem.getKey()+" :: matchList = "+matchList.size());
     }
 
     Map<String, List<String>> finalmatchingMap = new LinkedHashMap<>();
-		for (Map.Entry<String, List<String>> element : matchingProbMap.entrySet()) {
-			String[] split = element.getKey().split("-");
-			String[] split2 = split[1].split("\\^");
-			String[] inputTypeSplit = dataType.split("\\(");
-			List<String> dataTypes = new ArrayList<>(Arrays.asList(split2));
-			for (String type : dataTypes) {
-				if (type.equalsIgnoreCase(inputTypeSplit[0])) {
-					finalmatchingMap.put(split[0]+"-"+type, element.getValue());
-				}else {
-					finalmatchingMap.put(split[0]+"-"+inputTypeSplit[0], element.getValue());
-				}
-			}
-
-		}
-  //  return matchingProbMap;
-  	return finalmatchingMap;
-    
+    for (Map.Entry<String, List<String>> element : matchingProbMap.entrySet()) {
+      String[] split = element.getKey().split("-");
+      String[] split2 = split[1].split("\\^");
+      String[] inputTypeSplit = dataType.split("\\(");
+      List<String> dataTypes = new ArrayList<>(Arrays.asList(split2));
+      for (String type : dataTypes) {
+        if (type.equalsIgnoreCase(inputTypeSplit[0])) {
+          finalmatchingMap.put(split[0] + "-" + type, element.getValue());
+        } else {
+          finalmatchingMap.put(split[0] + "-" + inputTypeSplit[0], element.getValue());
+        }
+      }
+    }
+    //  return matchingProbMap;
+    return finalmatchingMap;
   }
 
   private String[] removeNullValues(String[] wordArr) {
@@ -120,7 +124,8 @@ public class FindWordMatchingPossibilities {
   }
 
   private Map<String, List<String>> findMatchingWords(
-      String[] wordArr, Map<String, List<String>> matchingMap, File file) throws FileNotFoundException{
+      String[] wordArr, Map<String, List<String>> matchingMap, File file)
+      throws FileNotFoundException {
     matchingMap = new HashMap<>();
     Scanner scanner = new Scanner(file);
     while (scanner.hasNextLine()) {
@@ -128,7 +133,7 @@ public class FindWordMatchingPossibilities {
       for (int i = 0; i < wordArr.length; i++) {
         if (lineFromFile.toLowerCase().contains(wordArr[i].toLowerCase())) {
           List<String> list = new ArrayList<>();
-          String arr[] = lineFromFile.split(" ");
+          String[] arr = lineFromFile.split(" ");
           for (int a = 1; a < arr.length; a++) {
             if (arr[a].toLowerCase().contains(wordArr[i].toLowerCase())) {
               list.add(arr[a]);
@@ -148,11 +153,13 @@ public class FindWordMatchingPossibilities {
       for (int j = 0 + i; j < word2.length(); j++) {
         if (word1.charAt(i) == word2.charAt(j)) {
           match++;
-          if (i < word1.length() - 1) i++;
+          if (i < word1.length() - 1) {
+            i++;
+          }
         }
       }
     }
-   log.info(
+    log.info(
         "Probability for " + word1 + " = " + word2 + " is : " + Math.abs(match / word2.length()));
     return Math.abs(match / word2.length());
   }
@@ -175,29 +182,29 @@ public class FindWordMatchingPossibilities {
     }
     return wordArr;
   }
-  
+
   private Map<String, List<String>> findForExactWordMatch(
-	      String wordToFind, Map<String, List<String>> matchingMap, File file)
-	      throws FileNotFoundException {
-	    Scanner scanner = new Scanner(file);
-	    matchingMap = new HashMap<>();
-	    while (scanner.hasNextLine()) {
-	      final String lineFromFile = scanner.nextLine();
-	      if (lineFromFile.contains(wordToFind)) {
-	        List<String> list = new ArrayList<>();
-	        String arr[] = lineFromFile.split(" ");
-	        for (int a = 1; a < arr.length; a++) {
-	          if (arr[a].equals(wordToFind)) {
-	            list.add(arr[a]);
-	            break;
-	          }
-	        }
-	        scanner.close();
-	        matchingMap.put(arr[0], list);
-	        return matchingMap;
-	      }
-	    }
-	    scanner.close();
-	    return null;
-	  }
+      String wordToFind, Map<String, List<String>> matchingMap, File file)
+      throws FileNotFoundException {
+    Scanner scanner = new Scanner(file);
+    matchingMap = new HashMap<>();
+    while (scanner.hasNextLine()) {
+      final String lineFromFile = scanner.nextLine();
+      if (lineFromFile.contains(wordToFind)) {
+        List<String> list = new ArrayList<>();
+        String[] arr = lineFromFile.split(" ");
+        for (int a = 1; a < arr.length; a++) {
+          if (arr[a].equals(wordToFind)) {
+            list.add(arr[a]);
+            break;
+          }
+        }
+        scanner.close();
+        matchingMap.put(arr[0], list);
+        return matchingMap;
+      }
+    }
+    scanner.close();
+    return null;
+  }
 }

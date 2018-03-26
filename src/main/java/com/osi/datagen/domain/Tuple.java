@@ -9,9 +9,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @EqualsAndHashCode
-public class Tuple  {
-  
-  private String tableName;
-  private String Columnname;
+public class Tuple {
 
+  private String tableName;
+  private String columnName;
 }

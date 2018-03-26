@@ -1,7 +1,7 @@
 package com.osi.datagen.repository;
 
-import org.springframework.data.mongodb.repository.MongoRepository;
 import com.osi.datagen.domain.User;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface UserRepository extends MongoRepository<User, Integer> {
 

@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Getter
 @Setter
@@ -25,10 +25,8 @@ public class CustomUserDetails implements UserDetails {
   Collection<? extends GrantedAuthority> authorities;
 
   private TableList tables;
-  
-  private Map<String,Integer> map;
 
- 
+  private Map<String, Integer> map;
 
   public CustomUserDetails(User byUserName) {
     this.username = byUserName.getUsername();
@@ -75,5 +73,4 @@ public class CustomUserDetails implements UserDetails {
   public boolean isEnabled() {
     return true;
   }
-
 }

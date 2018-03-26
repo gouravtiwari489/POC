@@ -14,5 +14,4 @@ public class ForigenKeyConstraint {
   private String referenceTable;
   private String referenceColumn;
   private String keyName;
-  
 }

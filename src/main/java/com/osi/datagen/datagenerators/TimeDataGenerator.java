@@ -1,10 +1,11 @@
 package com.osi.datagen.datagenerators;
 
 import static com.osi.datagen.datageneration.service.DataGenUtil.singleQuote;
-import java.sql.Time;
-import java.util.Random;
+
 import com.osi.datagen.datageneration.service.IDataGenerator;
 import com.osi.datagen.domain.Field;
+import java.sql.Time;
+import java.util.Random;
 
 public class TimeDataGenerator implements IDataGenerator {
 

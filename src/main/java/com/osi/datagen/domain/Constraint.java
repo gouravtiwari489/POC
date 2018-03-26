@@ -12,7 +12,6 @@ import lombok.ToString;
 @ToString
 public class Constraint {
   private String constraintName;
-  private String ConstraintType;
+  private String constraintType;
   private List<String> columns;
-
 }

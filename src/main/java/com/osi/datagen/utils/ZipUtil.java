@@ -1,5 +1,6 @@
 package com.osi.datagen.utils;
 
+import com.osi.datagen.domain.CustomUserDetails;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,23 +11,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import com.osi.datagen.domain.CustomUserDetails;
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
 public class ZipUtil {
-	
+
   private static String fileDownloadPath;
 
   @Value("${file.download.path}")
   public void setPath(String path) {
-	 fileDownloadPath = path;
+    fileDownloadPath = path;
   }
-	
+
   public static String createZipFiles(String fileType, CustomUserDetails currentUser)
       throws IOException {
 
@@ -72,7 +71,7 @@ public class ZipUtil {
       zipOut.close();
     } catch (FileNotFoundException e) {
       log.error(e.getMessage());
-     throw new FileNotFoundException();
+      throw new FileNotFoundException();
     } catch (IOException e) {
       log.error(e.getMessage());
       throw new IOException();

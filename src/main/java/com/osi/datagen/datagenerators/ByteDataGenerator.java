@@ -1,12 +1,12 @@
 package com.osi.datagen.datagenerators;
 
 import static com.osi.datagen.datageneration.service.DataGenUtil.singleQuote;
-import java.text.ParseException;
-import java.util.Random;
 
-import org.springframework.security.crypto.codec.Base64;
 import com.osi.datagen.datageneration.service.IDataGenerator;
 import com.osi.datagen.domain.Field;
+import java.text.ParseException;
+import java.util.Random;
+import org.springframework.security.crypto.codec.Base64;
 
 public class ByteDataGenerator implements IDataGenerator {
 

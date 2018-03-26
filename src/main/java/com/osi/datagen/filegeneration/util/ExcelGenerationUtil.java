@@ -1,12 +1,15 @@
 package com.osi.datagen.filegeneration.util;
 
 import static com.osi.datagen.datageneration.service.DataGenUtil.removeSingleQuotes;
+
+import com.osi.datagen.domain.CustomUserDetails;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
@@ -14,8 +17,7 @@ import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import com.osi.datagen.domain.CustomUserDetails;
-import lombok.extern.slf4j.Slf4j;
+
 @Slf4j
 public enum ExcelGenerationUtil implements GenerateDataInterface {
   INSTANCE;
@@ -37,20 +39,19 @@ public enum ExcelGenerationUtil implements GenerateDataInterface {
         rownum++;
       }
     } catch (Exception e) {
-      e.printStackTrace();
-    } finally {
+      log.info(e.getMessage());
+      throw new Exception();
     }
   }
 
   @Override
   public void generateData(
       String tableName, List<List<String>> excelData, String fileType, CustomUserDetails user) {
-    log.info(Thread.currentThread().getName()+" "+ tableName+" generateData started");
+    log.info(Thread.currentThread().getName() + " " + tableName + " generateData started");
     int rownum = 0;
     try {
       XSSFWorkbook workbook = new XSSFWorkbook();
       workbook.createSheet(tableName);
-      XSSFSheet firstSheet = workbook.getSheet(tableName);
       XSSFCellStyle style = workbook.createCellStyle();
       style.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
       style.setFillPattern(XSSFCellStyle.SOLID_FOREGROUND);
@@ -58,9 +59,10 @@ public enum ExcelGenerationUtil implements GenerateDataInterface {
       font.setColor(IndexedColors.BLACK.getIndex());
       font.setBoldweight(XSSFFont.BOLDWEIGHT_BOLD);
       style.setFont(font);
+      XSSFSheet firstSheet = workbook.getSheet(tableName);
       addContent(excelData, firstSheet, rownum, style);
       excelData.clear();
-      log.info(Thread.currentThread().getName()+" "+ tableName+" generateData ended");
+      log.info(Thread.currentThread().getName() + " " + tableName + " generateData ended");
       writeToFile(workbook, tableName, fileType, user);
     } catch (Exception e) {
       e.printStackTrace();
@@ -70,7 +72,7 @@ public enum ExcelGenerationUtil implements GenerateDataInterface {
   @Override
   public void writeToFile(Object obj, String tableName, String fileType, CustomUserDetails user)
       throws IOException, FileNotFoundException {
-    log.info(Thread.currentThread().getName()+" "+ tableName+" excel write started");
+    log.info(Thread.currentThread().getName() + " " + tableName + " excel write started");
     String filePath;
     File resource = new File(fileDownloadPath + user.getUsername());
     if (!resource.exists()) {
@@ -88,6 +90,6 @@ public enum ExcelGenerationUtil implements GenerateDataInterface {
     XSSFWorkbook workbook = (XSSFWorkbook) obj;
     workbook.write(excelFileToCreate);
     excelFileToCreate.close();
-    log.info(Thread.currentThread().getName()+" "+ tableName+" excel write ended");
+    log.info(Thread.currentThread().getName() + " " + tableName + " excel write ended");
   }
 }
