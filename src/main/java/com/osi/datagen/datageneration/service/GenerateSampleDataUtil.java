@@ -65,7 +65,7 @@ public class GenerateSampleDataUtil {
                 .collect(Collectors.toList());
         columns.forEach(
             column -> {
-              concurrentMap.put(new Tuple(tableName, column), data);
+              concurrentMap.put(new Tuple(table.getTableName(), column), data);
             });
       }
     }
