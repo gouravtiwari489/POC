@@ -20,14 +20,16 @@ public class DownloadController {
       @RequestParam(name = "fileType", required = true) String fileType,
       @RequestParam(name = "rowCount", required = true) int rowCount,
       @RequestParam(name = "domainType", required = true) String domainType,
-      @RequestParam(name = "tableList", required = true) String tableList)
+      @RequestParam(name = "tableList", required = true) String tableList,
+      @RequestParam(name = "preferredLocale", required = true) String preferredLocale)
       throws IOException {
     log.info("rowCount ::" + rowCount);
     log.info("fileType ::" + fileType);
     log.info("domainType ::" + domainType);
     log.info("tableList ::" + tableList);
+    log.info("preferredLocale ::" + preferredLocale);
 
     return generateDataAndDownloadService.generateDataAndDownload(
-        fileType, rowCount, domainType, tableList);
+        fileType, rowCount, domainType, tableList,preferredLocale);
   }
 }

@@ -18,8 +18,8 @@ public class DataGenerationWorker implements Runnable {
   private String domainType;
   private GenerateDataInterface service;
   private CustomUserDetails user;
+  private String preferredLocale;
 
-  public DataGenerationWorker() {}
 
   public DataGenerationWorker(
       Table table,
@@ -28,7 +28,8 @@ public class DataGenerationWorker implements Runnable {
       Map<Tuple, List<String>> concurrentMap,
       String domainType,
       GenerateDataInterface service,
-      CustomUserDetails user) {
+      CustomUserDetails user, String preferredLocale) {
+    
     this.table = table;
     this.rowCount = rowCount;
     this.fileType = fileType;
@@ -36,6 +37,7 @@ public class DataGenerationWorker implements Runnable {
     this.domainType = domainType;
     this.service = service;
     this.user = user;
+    this.preferredLocale=preferredLocale;
   }
 
   @Override
@@ -53,7 +55,7 @@ public class DataGenerationWorker implements Runnable {
     try {
       long start = System.currentTimeMillis();
       List<List<String>> excelData =
-          GenerateSampleDataUtil.generateData(table, rowCount, concurrentMap, domainType);
+          GenerateSampleDataUtil.generateData(table, rowCount, concurrentMap, domainType,preferredLocale);
       long end = System.currentTimeMillis();
       log.info("time taken for data genration " + table.getTableName() + (end - start));
       service.generateData(table.getTableName(), excelData, this.fileType, user);
