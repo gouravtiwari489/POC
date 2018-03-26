@@ -46,7 +46,7 @@ public class StringDataGenerator implements IDataGenerator, IUniqueDataGenerator
   }
 
   private String generateRandomDataFromDataSets(Field field) {
-    String columnName = field.getColumnName();
+    String columnName = field.getMappedCategory();
     List<String> data = map.get(columnName.toLowerCase());
     if (data != null) {
       return singleQuote(data.get(new Random().nextInt(data.size())));
