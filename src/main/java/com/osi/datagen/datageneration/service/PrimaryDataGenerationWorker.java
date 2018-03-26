@@ -67,11 +67,12 @@ public class PrimaryDataGenerationWorker implements Runnable {
       fks.forEach(
           fk -> {
             List<String> values =
-                concurrentMap.get(new Tuple(table.getTableName(), fk.getReferenceColumn()));
+                concurrentMap.get(new Tuple(table.getTableName(), fk.getKeyName()));
             List<String> depValues = new ArrayList<>();
             for (int i = 0; i < rowCount; i++) {
               depValues.add(values.get(new Random().nextInt(values.size())));
             }
+            concurrentMap.put(new Tuple(table.getTableName(), fk.getKeyName()),depValues);
           });
     }
   }
