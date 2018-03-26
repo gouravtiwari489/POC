@@ -1,5 +1,6 @@
 package com.osi.datagen.datageneration.service;
 
+import com.osi.datagen.datagenerators.DataGenFactory;
 import com.osi.datagen.domain.CustomUserDetails;
 import com.osi.datagen.domain.Table;
 import com.osi.datagen.domain.TableList;
@@ -27,6 +28,7 @@ public class DataGenerationService {
   public void generateData(TableList tables, String fileType, int rowCount, String domainType, String preferredLocale)
       throws IOException {
     Map<Tuple, List<String>> concurrentMap = new ConcurrentHashMap<>();
+    DataGenFactory.map.clear();
     threadServicePrimaryDataGeneration(tables, fileType, rowCount, domainType, concurrentMap);
     GenerateDataInterface service = fileGenObj.getGenDataServiceMap().get(fileType);
     threadService(tables, fileType, rowCount, domainType, concurrentMap, service,preferredLocale);
