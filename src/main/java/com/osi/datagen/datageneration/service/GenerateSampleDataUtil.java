@@ -20,13 +20,13 @@ public class GenerateSampleDataUtil {
     List<List<String>> records = new ArrayList<List<String>>();
     records.add(new ArrayList<String>(table.getFieldsNames()));
 
-    for (int i = 1; i < rowCount; i++) {
+    for (int i = 1; i <= rowCount; i++) {
       List<String> row = new ArrayList<String>();
       for (Field field : table.getFields()) {
         List<String> fkValues =
             concurrentMap.get(new Tuple(table.getTableName(), field.getColumnName()));
         if (fkValues != null) {
-          row.add(fkValues.get(i));
+          row.add(fkValues.get(i-1));
         } else {
           IDataGenerator generator =
               DataGenFactory.createDataGenerator(field.getDataType(), domainType);
