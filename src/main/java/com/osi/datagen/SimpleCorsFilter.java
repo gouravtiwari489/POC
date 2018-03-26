@@ -13,10 +13,18 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import eu.bitwalker.useragentutils.UserAgent;
+import lombok.Getter;
+
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
+@Getter
 public class SimpleCorsFilter implements Filter {
 
+  private String remoteAddress;
+  private Integer remotePort;
+  private String remoteBrowser;
+	  
   public SimpleCorsFilter() {}
 
   @Override
@@ -31,6 +39,12 @@ public class SimpleCorsFilter implements Filter {
         "Access-Control-Allow-Headers",
         "x-requested-with, content-type, authorization,responseType");
     HttpServletRequest request = (HttpServletRequest) req;
+    
+    remoteAddress = req.getRemoteAddr();
+    remotePort = req.getRemotePort();
+    UserAgent userAgent = UserAgent.parseUserAgentString(request.getHeader("User-Agent"));
+    remoteBrowser = userAgent.getBrowser().getName(); 
+    
     if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
       response.setStatus(HttpServletResponse.SC_OK);
     } else {
