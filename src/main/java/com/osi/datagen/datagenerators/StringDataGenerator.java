@@ -94,7 +94,7 @@ public class StringDataGenerator implements IDataGenerator, IUniqueDataGenerator
   }
 
  private void getCommonData() {
-    Resource resource = new ClassPathResource(DasConstants.DATASETS_PATH + "ROOT");
+    Resource resource = new ClassPathResource(DasConstants.DATASETS_PATH + DasConstants.DATASETS_COMMONS);
     try {
       resource.getFile().getPath();
 
