@@ -18,7 +18,8 @@ public class LoadFileGenerationObjects {
   public void init() {
 
     genDataServiceMap = new HashMap<String, GenerateDataInterface>();
-    genDataServiceMap.put("csv", CsvGenerationUtil.INSTANCE);
+    //genDataServiceMap.put("csv", CsvGenerationUtil.INSTANCE);
+    genDataServiceMap.put("csv", CSVGenerationManualUtil.INSTANCE);
     genDataServiceMap.put("xlsx", ExcelGenerationUtil.INSTANCE);
     genDataServiceMap.put("sql", SqlGenerationUtil.INSTANCE);
     genDataServiceMap.put("xml", XmlGenerationUtil.INSTANCE);
