@@ -27,9 +27,9 @@ public class DbDataTypeConfigReader {
 
   public static String getJavaType(String str) {
     String javaType = null;
-    String[] dataTypes = str.split("[\\(\\)]");
+    String dataTypes = str.split("[\\(\\)]")[0];
     for (Map.Entry<String, String> entry : map.entrySet()) {
-      if (entry.getKey().contains(dataTypes[0])) {
+      if (entry.getKey().contains(dataTypes)) {
         javaType = entry.getValue();
         break;
       }

@@ -2,32 +2,37 @@ package com.osi.datagen.filegeneration.util;
 
 import static com.osi.datagen.datageneration.service.DataGenUtil.removeSingleQuotes;
 
-import com.osi.datagen.domain.CustomUserDetails;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
+
 import lombok.extern.slf4j.Slf4j;
+
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFFont;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import com.osi.datagen.domain.CustomUserDetails;
 
 @Slf4j
 public enum ExcelGenerationUtil implements GenerateDataInterface {
   INSTANCE;
 
   public void addContent(
-      List<List<String>> l1, XSSFSheet firstSheet, int rownum, XSSFCellStyle style)
+      List<List<String>> l1, Sheet firstSheet, int rownum, CellStyle style)
       throws Exception {
     try {
       for (int j = 0; j < l1.size(); j++) {
-        XSSFRow row = firstSheet.createRow(rownum);
+        Row row = firstSheet.createRow(rownum);
         List<String> l2 = l1.get(j);
         for (int k = 0; k < l2.size(); k++) {
           Cell cell = row.createCell(k);
@@ -50,16 +55,16 @@ public enum ExcelGenerationUtil implements GenerateDataInterface {
     log.info(Thread.currentThread().getName() + " " + tableName + " generateData started");
     int rownum = 0;
     try {
-      XSSFWorkbook workbook = new XSSFWorkbook();
+      SXSSFWorkbook workbook = new SXSSFWorkbook();
       workbook.createSheet(tableName);
-      XSSFCellStyle style = workbook.createCellStyle();
+      CellStyle style = workbook.createCellStyle();
       style.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
       style.setFillPattern(XSSFCellStyle.SOLID_FOREGROUND);
-      XSSFFont font = workbook.createFont();
+      Font font = workbook.createFont();
       font.setColor(IndexedColors.BLACK.getIndex());
       font.setBoldweight(XSSFFont.BOLDWEIGHT_BOLD);
       style.setFont(font);
-      XSSFSheet firstSheet = workbook.getSheet(tableName);
+      Sheet firstSheet = workbook.getSheet(tableName);
       addContent(excelData, firstSheet, rownum, style);
       excelData.clear();
       log.info(Thread.currentThread().getName() + " " + tableName + " generateData ended");
@@ -87,8 +92,9 @@ public enum ExcelGenerationUtil implements GenerateDataInterface {
             "%s\\%s.%s",
             resource.getAbsoluteFile().getPath() + "\\" + fileType, tableName, fileType);
     OutputStream excelFileToCreate = new FileOutputStream(new File(filePath));
-    XSSFWorkbook workbook = (XSSFWorkbook) obj;
+    SXSSFWorkbook workbook = (SXSSFWorkbook) obj;
     workbook.write(excelFileToCreate);
+    excelFileToCreate.flush();
     excelFileToCreate.close();
     log.info(Thread.currentThread().getName() + " " + tableName + " excel write ended");
   }

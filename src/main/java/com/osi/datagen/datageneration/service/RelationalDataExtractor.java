@@ -21,10 +21,10 @@ public class RelationalDataExtractor {
       for (Entry<String, String> map : entry.getValue().entrySet()) {
 
         if (map.getValue().contains(tableName) && map.getKey().contains("FK")) {
-          String[] str = map.getValue().split("[\\(\\)]");
+          String str = map.getValue().split("[\\(\\)]")[1];
           dataMap.put(
               entry.getKey() + "." + map.getKey().split("->")[1],
-              copyData(excelData, linkedHashMap.get(tableName), str[1]));
+              copyData(excelData, linkedHashMap.get(tableName), str));
         }
       }
     }

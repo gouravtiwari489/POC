@@ -1,15 +1,18 @@
 package com.osi.datagen.datagenerators;
 
 import static com.osi.datagen.datageneration.service.DataGenUtil.singleQuote;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+
 import org.apache.commons.io.FileUtils;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+
 import com.osi.datagen.constant.DasConstants;
 import com.osi.datagen.datageneration.service.IDataGenerator;
 import com.osi.datagen.datageneration.service.IUniqueDataGenerator;
@@ -18,8 +21,7 @@ import com.osi.datagen.domain.Field;
 public class StringDataGenerator implements IDataGenerator, IUniqueDataGenerator {
   public static Map<String, List<String>> map = new HashMap<>();
   private int begin = 1000;
-  private static final String ALPHA_NUMERIC_STRING = "abcdefghijklmnopqrstuvwxyz";
-
+  
   public StringDataGenerator(String domainType, String preferredLocale) {
     try {
       Resource resource = new ClassPathResource("datasets//" + domainType);
@@ -65,8 +67,8 @@ public class StringDataGenerator implements IDataGenerator, IUniqueDataGenerator
   public String randomString(int count) {
     StringBuilder builder = new StringBuilder();
     while (count-- != 0) {
-      int character = (int) (Math.random() * ALPHA_NUMERIC_STRING.length());
-      builder.append(ALPHA_NUMERIC_STRING.charAt(character));
+      int character = (int) (Math.random() * DasConstants.ALPHA_NUMERIC_STRING.length());
+      builder.append(DasConstants.ALPHA_NUMERIC_STRING.charAt(character));
     }
     return singleQuote(builder.toString());
   }
