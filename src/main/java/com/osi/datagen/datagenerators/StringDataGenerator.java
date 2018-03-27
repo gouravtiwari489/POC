@@ -87,13 +87,13 @@ public class StringDataGenerator implements IDataGenerator, IUniqueDataGenerator
           map.put(file.getName().split("\\.")[0].toLowerCase(), lines);
         }
       }
-      getCommonData();
+    //  getCommonData();
     } catch (IOException e) {
       e.printStackTrace();
     }
   }
 
- private void getCommonData() {
+ /*private void getCommonData() {
     Resource resource = new ClassPathResource(DasConstants.DATASETS_PATH + DasConstants.DATASETS_COMMONS);
     try {
       resource.getFile().getPath();
@@ -109,5 +109,5 @@ public class StringDataGenerator implements IDataGenerator, IUniqueDataGenerator
     } catch (IOException e) {
       e.printStackTrace();
     }
-  }
+  }*/
 }
