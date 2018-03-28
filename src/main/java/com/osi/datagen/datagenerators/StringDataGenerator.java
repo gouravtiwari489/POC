@@ -87,27 +87,28 @@ public class StringDataGenerator implements IDataGenerator, IUniqueDataGenerator
           map.put(file.getName().split("\\.")[0].toLowerCase(), lines);
         }
       }
-    //  getCommonData();
+      getCommonData(preferredLocale);
     } catch (IOException e) {
       e.printStackTrace();
     }
   }
 
- /*private void getCommonData() {
-    Resource resource = new ClassPathResource(DasConstants.DATASETS_PATH + DasConstants.DATASETS_COMMONS);
-    try {
-      resource.getFile().getPath();
+	private void getCommonData(String preferredLocale) {
+		Resource resource = new ClassPathResource(
+				DasConstants.DATASETS_PATH + DasConstants.DATASETS_COMMONS + "//" + preferredLocale);
+		try {
+			resource.getFile().getPath();
 
-      File[] files = new File(resource.getFile().getPath()).listFiles();
+			File[] files = new File(resource.getFile().getPath()).listFiles();
 
-      for (File file : files) {
-        if (!file.isDirectory()) {
-          List<String> lines = FileUtils.readLines(file, DasConstants.DATASETS_CHARACTERSET);
-          map.put(file.getName().split("\\.")[0].toLowerCase(), lines);
-        }
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-  }*/
+			for (File file : files) {
+				if (!file.isDirectory()) {
+					List<String> lines = FileUtils.readLines(file, DasConstants.DATASETS_CHARACTERSET);
+					map.put(file.getName().split("\\.")[0].toLowerCase(), lines);
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }
