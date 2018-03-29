@@ -24,11 +24,12 @@ public class GenerateDataAndDownloadService {
   @Autowired private DataGenerationService dataGenerationService;
 
   public byte[] generateDataAndDownload(
-      String fileType, int rowCount, String domainType, String json, String preferredLocale) throws IOException {
+      String fileType, int rowCount, String domainType, String json, String preferredLocale)
+      throws IOException {
     TableList tables = json_to_object(json);
     boolean isPresent = userRequestValidator.isSameRequestPresnt(fileType, tables, rowCount);
     if (!isPresent) {
-      dataGenerationService.generateData(tables, fileType, rowCount, domainType,preferredLocale);
+      dataGenerationService.generateData(tables, fileType, rowCount, domainType, preferredLocale);
     }
 
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

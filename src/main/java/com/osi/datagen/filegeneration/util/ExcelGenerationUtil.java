@@ -2,15 +2,14 @@ package com.osi.datagen.filegeneration.util;
 
 import static com.osi.datagen.datageneration.service.DataGenUtil.removeSingleQuotes;
 
+import com.osi.datagen.domain.CustomUserDetails;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
-
 import lombok.extern.slf4j.Slf4j;
-
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
@@ -21,14 +20,11 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 
-import com.osi.datagen.domain.CustomUserDetails;
-
 @Slf4j
 public enum ExcelGenerationUtil implements GenerateDataInterface {
   INSTANCE;
 
-  public void addContent(
-      List<List<String>> l1, Sheet firstSheet, int rownum, CellStyle style)
+  public void addContent(List<List<String>> l1, Sheet firstSheet, int rownum, CellStyle style)
       throws Exception {
     try {
       for (int j = 0; j < l1.size(); j++) {

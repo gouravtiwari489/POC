@@ -23,30 +23,30 @@ public interface DasConstants {
   String DEFAULT_EXCEPTION_MESSAGE = "Please contact your administrator";
   String DATABASE_CONNECTION_EXCEPTION_MESSAGE = "Unable to connect to database";
 
+  String HRMS = "HRMS";
+  String SUPPLYCHAIN = "SupplyChain";
+  String MANUFACTURING = "Manufacturing";
+  String CRM = "CRM";
+  String RETAIL = "Retail";
+  String PURCHASE = "Purchase";
+  String LOGISTICS = "Logistics";
+  String FINANCIAL = "Financial";
+  String HRMSCATEGORY = "HRMS-dataset.txt";
+  String SUPPLYCHAINCATEGORY = "SupplyChain-dataset.txt";
+  String MANUFACTURINGCATEGORY = "Manufacturing-Categories.txt";
 
-	String HRMS = "HRMS";
-	String SUPPLYCHAIN = "SupplyChain";
-	String MANUFACTURING = "Manufacturing";
-	String CRM = "CRM";
-	String RETAIL = "Retail";
-	String PURCHASE = "Purchase";
-	String LOGISTICS = "Logistics";
-	String FINANCIAL = "Financial";
-	String HRMSCATEGORY = "HRMS-dataset.txt";
-	String SUPPLYCHAINCATEGORY = "SupplyChain-dataset.txt";
-	String MANUFACTURINGCATEGORY = "Manufacturing-Categories.txt";
+  String DATASETS_PATH = "datasets\\";
+  String COUNTRY_CODES_DATASETS_PATH = "datasets\\Commons\\CountryCode.txt";
 
-	String DATASETS_PATH = "datasets\\";
+  String OUTPUT_FILE_NAME = "DAS";
 
-	String OUTPUT_FILE_NAME = "DAS";
-
-	String SQL_AND = "AND";
-	String SQL_OR = "OR";
-	String SQL_IN = "IN";
-	String SQL_BETWEEN = "BETWEEN";
-	String SQL_NOT_IN = "NOT IN";
-	String SQL_LIKE = "LIKE";
-	String ADMIN = "admin";
-	String DEFAULT_USER = "user";
-	String DEFAULT_PASSWORD = "user";
+  String SQL_AND = "AND";
+  String SQL_OR = "OR";
+  String SQL_IN = "IN";
+  String SQL_BETWEEN = "BETWEEN";
+  String SQL_NOT_IN = "NOT IN";
+  String SQL_LIKE = "LIKE";
+  String ADMIN = "admin";
+  String DEFAULT_USER = "user";
+  String DEFAULT_PASSWORD = "user";
 }

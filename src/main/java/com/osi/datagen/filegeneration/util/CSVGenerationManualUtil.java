@@ -1,6 +1,7 @@
 package com.osi.datagen.filegeneration.util;
 
 import static com.osi.datagen.datageneration.service.DataGenUtil.removeSingleQuotes;
+
 import com.osi.datagen.constant.DasConstants;
 import com.osi.datagen.domain.CustomUserDetails;
 import java.io.BufferedWriter;
@@ -23,7 +24,7 @@ public enum CSVGenerationManualUtil implements GenerateDataInterface {
       List<String> data = excelData.get(i);
       String commaSeparatedRow =
           data.stream()
-          .map(j -> removeSingleQuotes(j))
+              .map(j -> removeSingleQuotes(j))
               .collect(Collectors.joining(DasConstants.COMMA_SEPRATOR));
       csvData.append(commaSeparatedRow + DasConstants.NEWLINE_CHARACTER);
     }

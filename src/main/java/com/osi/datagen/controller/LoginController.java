@@ -1,8 +1,12 @@
 package com.osi.datagen.controller;
 
+import com.osi.datagen.constant.DasConstants;
+import com.osi.datagen.domain.CustomUserDetails;
+import com.osi.datagen.domain.User;
+import com.osi.datagen.exception.AlreadyLoggedInException;
+import com.osi.datagen.service.LogoutService;
 import java.io.File;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
@@ -21,12 +25,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.osi.datagen.constant.DasConstants;
-import com.osi.datagen.domain.CustomUserDetails;
-import com.osi.datagen.domain.User;
-import com.osi.datagen.exception.AlreadyLoggedInException;
-import com.osi.datagen.service.LogoutService;
 
 @Scope("request")
 @RestController

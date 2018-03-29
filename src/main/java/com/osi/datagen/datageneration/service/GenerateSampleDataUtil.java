@@ -15,9 +15,13 @@ import org.springframework.stereotype.Service;
 public class GenerateSampleDataUtil {
 
   public static List<List<String>> generateData(
-      Table table, int rowCount, Map<Tuple, List<String>> concurrentMap, String domainType,String preferredLocale)
+      Table table,
+      int rowCount,
+      Map<Tuple, List<String>> concurrentMap,
+      String domainType,
+      String preferredLocale)
       throws ParseException {
-    System.out.println("table"+table);
+    System.out.println("table" + table);
     List<List<String>> records = new ArrayList<List<String>>();
     records.add(new ArrayList<String>(table.getFieldsNames()));
 
@@ -27,12 +31,13 @@ public class GenerateSampleDataUtil {
         List<String> fkValues =
             concurrentMap.get(new Tuple(table.getTableName(), field.getColumnName()));
         if (fkValues != null) {
-          row.add(fkValues.get(i-1));
+          row.add(fkValues.get(i - 1));
         } else {
           synchronized (GenerateSampleDataUtil.class) {
-          IDataGenerator generator =
-              DataGenFactory.createDataGenerator(field.getDataType(), domainType,preferredLocale);
-          row.add(generator.generateData(field));
+            IDataGenerator generator =
+                DataGenFactory.createDataGenerator(
+                    field.getDataType(), domainType, preferredLocale);
+            row.add(generator.generateData(field));
           }
         }
       }

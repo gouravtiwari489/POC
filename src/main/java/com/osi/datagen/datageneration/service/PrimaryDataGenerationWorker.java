@@ -72,7 +72,7 @@ public class PrimaryDataGenerationWorker implements Runnable {
             for (int i = 0; i < rowCount; i++) {
               depValues.add(values.get(new Random().nextInt(values.size())));
             }
-            concurrentMap.put(new Tuple(table.getTableName(), fk.getKeyName()),depValues);
+            concurrentMap.put(new Tuple(table.getTableName(), fk.getKeyName()), depValues);
           });
     }
   }

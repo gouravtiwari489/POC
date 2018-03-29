@@ -21,6 +21,7 @@ import com.osi.datagen.domain.Field;
 public class StringDataGenerator implements IDataGenerator, IUniqueDataGenerator {
   public static Map<String, List<String>> map = new HashMap<>();
   private int begin = 1000;
+  private String countryCode;
   
   public StringDataGenerator(String domainType, String preferredLocale) {
     try {
@@ -34,7 +35,8 @@ public class StringDataGenerator implements IDataGenerator, IUniqueDataGenerator
         }
       }
       String[] locale = preferredLocale.split("-");
-      getLocaleData(locale[1], domainType); 
+      getLocaleData(locale[1], domainType);
+      setCountryCode(locale[1]);
       }
     catch (Exception e) {
       e.printStackTrace();
@@ -58,10 +60,22 @@ public class StringDataGenerator implements IDataGenerator, IUniqueDataGenerator
     String columnName = field.getMappedCategory();
     List<String> data = map.get(columnName.toLowerCase());
     if (data != null) {
-      return singleQuote(data.get(new Random().nextInt(data.size())));
-    } else {
-      return randomString(10);
+    	return singleQuote(data.get(new Random().nextInt(data.size())));
+    }  else if (columnName.toLowerCase().contains("mobile") || 
+    		columnName.toLowerCase().contains("phone")) {
+    	return Integer.parseInt(field.getLength()) >=14 ? singleQuote("+" + this.countryCode + " " + generateMobileNumber(10)) :
+    		singleQuote(generateMobileNumber(Integer.parseInt(field.getLength())).toString());
     }
+    return randomString(10);
+  }
+  
+  public Long generateMobileNumber(int count) {
+	  StringBuilder number = new StringBuilder();
+	  while (count-- != 0) {
+		  int singleDigit = (int) (Math.random() * 10);
+		  number.append(singleDigit);
+	  }
+	  return Long.parseLong(number.toString());
   }
 
   public String randomString(int count) {
@@ -92,6 +106,24 @@ public class StringDataGenerator implements IDataGenerator, IUniqueDataGenerator
       e.printStackTrace();
     }
   }
+  
+  public void setCountryCode(String locale) {
+
+	    Resource resource =
+	        new ClassPathResource(DasConstants.COUNTRY_CODES_DATASETS_PATH);
+	    try {
+	      File file = resource.getFile();
+	      List<String> countryCodes = FileUtils.readLines(file, DasConstants.DATASETS_CHARACTERSET);
+	      for (String countryCode : countryCodes) {
+	        if (countryCode.split(" ")[0].equals(locale)) {
+	          this.countryCode = countryCode.split(" ")[1];
+	          break;
+	        }
+	      }
+	    } catch (IOException e) {
+	      e.printStackTrace();
+	    }
+	  }
 
 	private void getCommonData(String preferredLocale) {
 		Resource resource = new ClassPathResource(

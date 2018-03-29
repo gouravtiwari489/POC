@@ -1,7 +1,7 @@
 package com.osi.datagen.controller;
 
-import com.osi.datagen.service.LogoutService;
 import com.osi.datagen.configuration.CustomInMemoryTokenStore;
+import com.osi.datagen.service.LogoutService;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,7 +22,7 @@ public class OauthController {
   @Autowired LogoutService logoutService;
 
   @Autowired private ConsumerTokenServices consumerTokenServices;
-  
+
   @Autowired CustomInMemoryTokenStore customInMemoryTokenStore;
 
   @Value("${file.download.path}")
@@ -36,8 +36,7 @@ public class OauthController {
       HttpSession session, OAuth2Authentication authentication, @RequestParam String userName) {
 
     logoutService.clearUserData(fileDownloadPath + userName);
-    OAuth2AccessToken token =
-    		customInMemoryTokenStore.getAccessTokenWhileLogout(authentication);
+    OAuth2AccessToken token = customInMemoryTokenStore.getAccessTokenWhileLogout(authentication);
     if (token != null) {
       consumerTokenServices.revokeToken(token.getValue());
       tokenStore.removeAccessToken(token);

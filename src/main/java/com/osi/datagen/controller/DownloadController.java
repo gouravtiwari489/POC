@@ -30,6 +30,6 @@ public class DownloadController {
     log.info("preferredLocale ::" + preferredLocale);
 
     return generateDataAndDownloadService.generateDataAndDownload(
-        fileType, rowCount, domainType, tableList,preferredLocale);
+        fileType, rowCount, domainType, tableList, preferredLocale);
   }
 }

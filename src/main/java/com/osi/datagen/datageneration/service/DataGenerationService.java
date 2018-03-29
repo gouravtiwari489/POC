@@ -25,13 +25,14 @@ public class DataGenerationService {
 
   @Autowired LoadFileGenerationObjects fileGenObj;
 
-  public void generateData(TableList tables, String fileType, int rowCount, String domainType, String preferredLocale)
+  public void generateData(
+      TableList tables, String fileType, int rowCount, String domainType, String preferredLocale)
       throws IOException {
     Map<Tuple, List<String>> concurrentMap = new ConcurrentHashMap<>();
     DataGenFactory.map.clear();
     threadServicePrimaryDataGeneration(tables, fileType, rowCount, domainType, concurrentMap);
     GenerateDataInterface service = fileGenObj.getGenDataServiceMap().get(fileType);
-    threadService(tables, fileType, rowCount, domainType, concurrentMap, service,preferredLocale);
+    threadService(tables, fileType, rowCount, domainType, concurrentMap, service, preferredLocale);
   }
 
   private void threadServicePrimaryDataGeneration(
@@ -57,7 +58,8 @@ public class DataGenerationService {
       int rowCount,
       String domainType,
       Map<Tuple, List<String>> concurrentMap,
-      GenerateDataInterface service, String preferredLocale)
+      GenerateDataInterface service,
+      String preferredLocale)
       throws IOException {
     log.info("creating thread pool");
     ExecutorService executor = Executors.newFixedThreadPool(5);
@@ -66,7 +68,7 @@ public class DataGenerationService {
     for (Table table : tableList.getTables()) {
       Runnable dataGenerationWorker =
           new DataGenerationWorker(
-              table, rowCount, fileType, concurrentMap, domainType, service, user,preferredLocale);
+              table, rowCount, fileType, concurrentMap, domainType, service, user, preferredLocale);
       executor.execute(dataGenerationWorker);
     }
     executor.shutdown();

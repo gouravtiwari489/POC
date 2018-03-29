@@ -9,10 +9,11 @@ public class DataGenFactory {
   public static HashMap<String, IDataGenerator> map = new HashMap<>();
   public static HashMap<String, IUniqueDataGenerator> UniqueGenmap = new HashMap<>();
 
-  public static IDataGenerator createDataGenerator(String type, String domainType, String preferredLocale) {
+  public static IDataGenerator createDataGenerator(
+      String type, String domainType, String preferredLocale) {
     IDataGenerator dataGen = null;
     if (map.isEmpty()) {
-      map.put("string", new StringDataGenerator(domainType,preferredLocale));
+      map.put("string", new StringDataGenerator(domainType, preferredLocale));
       map.put("double", new DoubleDataGenerator());
       map.put("bytes", new ByteDataGenerator());
       map.put("long", new LongDatagenerator());
