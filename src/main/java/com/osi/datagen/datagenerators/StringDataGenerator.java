@@ -89,7 +89,7 @@ public class StringDataGenerator implements IDataGenerator, IUniqueDataGenerator
   
   private void getLocaleData(String preferredLocale, String domainType) {
     Resource resource =
-       new ClassPathResource(DasConstants.DATASETS_PATH + domainType + "//" + preferredLocale);
+       new ClassPathResource(DasConstants.DATASETS_PATH.concat(domainType).concat("//").concat(preferredLocale));
     try {
       resource.getFile().getPath();
 

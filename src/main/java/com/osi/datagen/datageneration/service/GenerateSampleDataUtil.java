@@ -19,9 +19,8 @@ public class GenerateSampleDataUtil {
       int rowCount,
       Map<Tuple, List<String>> concurrentMap,
       String domainType,
-      String preferredLocale)
+      String preferredLocale, DataGenFactory dataGenFactory)
       throws ParseException {
-    System.out.println("table" + table);
     List<List<String>> records = new ArrayList<List<String>>();
     records.add(new ArrayList<String>(table.getFieldsNames()));
 
@@ -33,12 +32,9 @@ public class GenerateSampleDataUtil {
         if (fkValues != null) {
           row.add(fkValues.get(i - 1));
         } else {
-          synchronized (GenerateSampleDataUtil.class) {
-            IDataGenerator generator =
-                DataGenFactory.createDataGenerator(
-                    field.getDataType(), domainType, preferredLocale);
-            row.add(generator.generateData(field));
-          }
+          IDataGenerator generator =
+        		  dataGenFactory.findDataGenerator(field.getDataType());
+          row.add(generator.generateData(field));
         }
       }
       records.add(row);
@@ -55,10 +51,11 @@ public class GenerateSampleDataUtil {
       int rowCount,
       String domainType,
       List<Table> childTables,
-      Map<Tuple, List<String>> concurrentMap)
+      Map<Tuple, List<String>> concurrentMap,
+      DataGenFactory dataGenFactory)
       throws ParseException {
     for (Field field : primaryKeyFields) {
-      List<String> data = generateDataForField(field, rowCount, domainType);
+      List<String> data = generateDataForField(field, rowCount,dataGenFactory);
       concurrentMap.put(new Tuple(tableName, field.getColumnName()), data);
       for (Table table : childTables) {
         List<String> columns =
@@ -79,13 +76,14 @@ public class GenerateSampleDataUtil {
     }
   }
 
-  private static List<String> generateDataForField(Field field, int rowCount, String domainType)
+  private static List<String> generateDataForField(Field field, int rowCount, 
+		  											DataGenFactory dataGenFactory)
       throws ParseException {
 
-    List<String> row = new ArrayList<>();
+    List<String> row = new ArrayList<>(rowCount);
     for (int i = 1; i <= rowCount; i++) {
       IUniqueDataGenerator generator =
-          DataGenFactory.createUniqueDataGenerator(field.getDataType(), domainType);
+    		  dataGenFactory.findUniqueDataGenerator(field.getDataType());
       row.add(generator.generateUniqueData(field));
     }
 
@@ -98,11 +96,12 @@ public class GenerateSampleDataUtil {
       int rowCount,
       String domainType,
       List<Table> childTables,
-      Map<Tuple, List<String>> concurrentMap)
+      Map<Tuple, List<String>> concurrentMap,
+      DataGenFactory dataGenFactory)
       throws ParseException {
     for (List<Field> list : uniqueKeyFields) {
       for (Field field : list) {
-        List<String> data = generateDataForField(field, rowCount, domainType);
+        List<String> data = generateDataForField(field, rowCount,dataGenFactory);
         concurrentMap.put(new Tuple(tableName, field.getColumnName()), data);
         for (Table table : childTables) {
           List<String> columns =

@@ -1,5 +1,6 @@
 package com.osi.datagen.datageneration.service;
 
+import com.osi.datagen.datagenerators.DataGenFactory;
 import com.osi.datagen.domain.ForigenKeyConstraint;
 import com.osi.datagen.domain.Table;
 import com.osi.datagen.domain.Tuple;
@@ -17,6 +18,7 @@ public class PrimaryDataGenerationWorker implements Runnable {
   private int rowCount;
   private Map<Tuple, List<String>> concurrentMap;
   private List<Table> childTables;
+  private DataGenFactory dataGenFactory;
 
   public PrimaryDataGenerationWorker(int rowCount, String fileType, String domainType) {}
 
@@ -25,12 +27,13 @@ public class PrimaryDataGenerationWorker implements Runnable {
       String domainType,
       int rowCount,
       List<Table> childTables,
-      Map<Tuple, List<String>> concurrentMap) {
+      Map<Tuple, List<String>> concurrentMap, DataGenFactory dgf) {
     this.table = table;
     this.domainType = domainType;
     this.rowCount = rowCount;
     this.concurrentMap = concurrentMap;
     this.childTables = childTables;
+    this.dataGenFactory=dgf;
   }
 
   @Override
@@ -51,14 +54,15 @@ public class PrimaryDataGenerationWorker implements Runnable {
 
   private void generateUniqueKeyData() throws ParseException {
 
-    GenerateSampleDataUtil.generateUniqueData(
-        table.getUniqueKeyFields(),
-        table.getTableName(),
-        rowCount,
-        domainType,
-        childTables,
-        concurrentMap);
-    generateSelfDependencyData();
+	  GenerateSampleDataUtil.generateUniqueData(
+		        table.getUniqueKeyFields(),
+		        table.getTableName(),
+		        rowCount,
+		        domainType,
+		        childTables,
+		        concurrentMap,
+		        dataGenFactory);
+		    generateSelfDependencyData();
   }
 
   private void generateSelfDependencyData() {
@@ -85,7 +89,8 @@ public class PrimaryDataGenerationWorker implements Runnable {
         rowCount,
         domainType,
         childTables,
-        concurrentMap);
+        concurrentMap,
+        dataGenFactory);
     generateSelfDependencyData();
   }
 }
