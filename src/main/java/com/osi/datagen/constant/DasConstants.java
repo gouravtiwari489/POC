@@ -5,7 +5,8 @@ public interface DasConstants {
   String COMMA_SEPRATOR = ",";
   String NEWLINE_CHARACTER = "\n";
   String ALREADY_LOGGEDIN_EXCEPTION_MESSAGE = "Warning! You already login somewhere";
-  String DATE_DATA_GENERATOR_BEGIN_TIME = "1900-01-01 00:00:00";
+  String DATE_DATA_GENERATOR_BEGIN_DATE = "2000-01-01 00:00:00";
+  String DATE_DATA_GENERATOR_END_DATE = "2040-01-01 00:00:00";
   String DATE_TIME_DATA_GENERATOR_OFFSET = "2012-01-01 00:00:00";
   String DATE_TIME_DATA_GENERATOR_END = "2013-01-01 00:00:00";
   double DOUBLE_DATA_GENERATOR_BEGIN = 1000d;
@@ -37,6 +38,8 @@ public interface DasConstants {
 
   String DATASETS_PATH = "datasets\\";
   String COUNTRY_CODES_DATASETS_PATH = "datasets\\Commons\\CountryCode.txt";
+  String PAST_DATES_FIELDSETS_PATH = "datasets\\Commons\\PastDatesFieldsets.txt";
+  String FUTURE_DATES_FIELDSETS_PATH = "datasets\\Commons\\FutureDatesFieldsets.txt";
 
   String OUTPUT_FILE_NAME = "DAS";
 
