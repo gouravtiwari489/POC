@@ -32,7 +32,9 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
             "/swagger-ui.html",
             "/swagger-resources/**",
             "/v2/api-docs/**",
-            "/token**")
+            "/token**",
+            "/users",
+            "/is-registered-user")
         .permitAll()
         .anyRequest()
         .authenticated()
