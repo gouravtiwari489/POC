@@ -4,6 +4,7 @@ import static com.osi.datagen.datageneration.service.DataGenUtil.singleQuote;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,7 +59,42 @@ public class StringDataGenerator implements IDataGenerator, IUniqueDataGenerator
 
   private String generateRandomDataFromDataSets(Field field) {
     String columnName = field.getMappedCategory();
-    List<String> data = map.get(columnName.toLowerCase());
+    List<String> data = new ArrayList<>();
+    List<String> societyList = map.get("societyname");
+	List<String> streetList = map.get("street");
+	List<String> maleNames = map.get("mempfname");
+	List<String> femaleNames = map.get("fempfname");
+	List<String> lastNames = map.get("emplname");
+    if(columnName.equalsIgnoreCase("Address")) {
+    		for(String society :  societyList) {
+    			for(String street : streetList) {
+    				data.add( Math.random() + society + street);
+    			}
+    		}
+    } else if(columnName.equalsIgnoreCase("AddressLine1")) {
+    	int randomPrefix = 1000;
+    		for(String society : societyList) {
+    			data.add( randomPrefix++ + society);
+    		}
+    } else if(columnName.equalsIgnoreCase("AddressLine2")) {
+    		for(String street : streetList) {
+    			data.add(street);
+    		}
+    } else if(columnName.equalsIgnoreCase("Name"))  {
+    	    for(String mfname : maleNames) {
+    	    	for(String lname : lastNames) {
+    	    		data.add(mfname +" "+ lname);
+    	    	}
+    	    }
+    	    for(String ffname : femaleNames) {
+    	    	for(String lname : lastNames) {
+    	    		data.add(ffname +" "+ lname);
+    	    	}
+    	    }
+    }
+    else {
+     data = map.get(columnName.toLowerCase());
+    }
     if (data != null) {
     	return singleQuote(data.get(new Random().nextInt(data.size())));
     }  else if (columnName.toLowerCase().contains("mobile") || 

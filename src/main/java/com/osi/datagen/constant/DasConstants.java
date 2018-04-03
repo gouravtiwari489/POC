@@ -52,4 +52,5 @@ public interface DasConstants {
   String ADMIN = "admin";
   String DEFAULT_USER = "user";
   String DEFAULT_PASSWORD = "user";
+  String EMAIL_PREFIX = "@das.com";
 }

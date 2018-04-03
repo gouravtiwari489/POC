@@ -1,6 +1,8 @@
 package com.osi.datagen.datageneration.service;
 
+import com.osi.datagen.constant.DasConstants;
 import com.osi.datagen.datagenerators.DataGenFactory;
+import static com.osi.datagen.datageneration.service.DataGenUtil.removeSingleQuotes;
 import com.osi.datagen.domain.Field;
 import com.osi.datagen.domain.Table;
 import com.osi.datagen.domain.Tuple;
@@ -34,9 +36,14 @@ public class GenerateSampleDataUtil {
         } else {
           IDataGenerator generator =
         		  dataGenFactory.findDataGenerator(field.getDataType());
-          row.add(generator.generateData(field));
+          if(field.getColumnName().contains("email")) {
+  			getEmail(records, row);
+            } else {
+            row.add(generator.generateData(field));
+            }
         }
       }
+      
       records.add(row);
     }
     for (Field field : table.getFields()) {
@@ -44,6 +51,24 @@ public class GenerateSampleDataUtil {
     }
     return records;
   }
+  
+  private static void getEmail(List<List<String>> records, List<String> row) {
+		
+		List<String> nameList=records.get(0).stream()
+		.filter(st->st.contains("Name"))
+		.collect(Collectors.toList());
+		if(nameList.contains("lastName") && nameList.contains("firstName")){
+		int lastNameIndex =  records.get(0).indexOf("lastName");
+		int firstNameIndex =  records.get(0).indexOf("firstName");
+		String lastName = removeSingleQuotes(row.get(lastNameIndex));
+		String firstName = removeSingleQuotes(row.get(firstNameIndex));
+		row.add(firstName.concat(lastName).concat(DasConstants.EMAIL_PREFIX));
+		} else {
+			int nameIndex = records.get(0).indexOf("name");
+			String name = removeSingleQuotes(row.get(nameIndex));
+			row.add(name.concat(DasConstants.EMAIL_PREFIX));
+		}
+	}
 
   public static void generatePrimaryKeyData(
       List<Field> primaryKeyFields,
