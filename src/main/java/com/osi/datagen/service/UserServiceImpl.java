@@ -3,17 +3,14 @@ package com.osi.datagen.service;
 
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.osi.datagen.intf.IUserService;
 import com.osi.datagen.domain.Role;
 import com.osi.datagen.domain.User;
-import com.osi.datagen.exception.UserNotFoundException;
-import com.osi.datagen.repository.UserInfoRepository;
+import com.osi.datagen.intf.IUserService;
 import com.osi.datagen.repository.UserRepository;
 
 @Service
