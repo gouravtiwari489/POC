@@ -53,7 +53,7 @@ public class GenerateSampleDataUtil {
   }
   
   private static void getEmail(List<List<String>> records, List<String> row) {
-		
+		int count = 0;
 		List<String> nameList=records.get(0).stream()
 		.filter(st->st.contains("Name"))
 		.collect(Collectors.toList());
@@ -63,10 +63,12 @@ public class GenerateSampleDataUtil {
 		String lastName = removeSingleQuotes(row.get(lastNameIndex));
 		String firstName = removeSingleQuotes(row.get(firstNameIndex));
 		row.add(firstName.concat(lastName).concat(DasConstants.EMAIL_PREFIX));
-		} else {
+		} else if (nameList.contains("Name")){
 			int nameIndex = records.get(0).indexOf("name");
 			String name = removeSingleQuotes(row.get(nameIndex));
 			row.add(name.concat(DasConstants.EMAIL_PREFIX));
+		} else {
+			row.add("info"+count+++DasConstants.EMAIL_PREFIX);
 		}
 	}
 
