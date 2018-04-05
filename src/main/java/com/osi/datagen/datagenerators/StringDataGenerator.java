@@ -102,7 +102,7 @@ public class StringDataGenerator implements IDataGenerator, IUniqueDataGenerator
     	return Integer.parseInt(field.getLength()) >=14 ? singleQuote("+" + this.countryCode + " " + generateMobileNumber(10)) :
     		singleQuote(generateMobileNumber(Integer.parseInt(field.getLength())).toString());
     }
-    return randomString(10);
+    return randomString(4, columnName);
   }
   
   public Long generateMobileNumber(int count) {
@@ -114,13 +114,13 @@ public class StringDataGenerator implements IDataGenerator, IUniqueDataGenerator
 	  return Long.parseLong(number.toString());
   }
 
-  public String randomString(int count) {
+  public String randomString(int count, String columnName) {
+	Random rand = new Random();
     StringBuilder builder = new StringBuilder();
     while (count-- != 0) {
-      int character = (int) (Math.random() * DasConstants.ALPHA_NUMERIC_STRING.length());
-      builder.append(DasConstants.ALPHA_NUMERIC_STRING.charAt(character));
+      builder.append(rand.nextInt(10));
     }
-    return singleQuote(builder.toString());
+    return singleQuote(columnName+builder);
   }
   
   private void getLocaleData(String preferredLocale, String domainType) {
