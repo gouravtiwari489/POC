@@ -11,7 +11,7 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude={"rowCount"})
 @ToString
 public class Table {
 
@@ -20,6 +20,7 @@ public class Table {
   private List<Constraint> constraints;
   private List<ForigenKeyConstraint> forigenKeys;
   private List<CheckConstraint> checkConstraints;
+  private int rowCount;
 
   @JsonIgnore
   public List<String> getFieldsNames() {

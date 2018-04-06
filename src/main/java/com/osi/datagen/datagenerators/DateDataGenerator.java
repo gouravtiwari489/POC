@@ -18,7 +18,8 @@ import org.springframework.core.io.Resource;
 import com.osi.datagen.constant.DasConstants;
 import com.osi.datagen.datageneration.service.IDataGenerator;
 import com.osi.datagen.domain.Field;
-
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 public class DateDataGenerator implements IDataGenerator {
 	
 	public static List<String> pastMap = new ArrayList<String>();
@@ -36,7 +37,8 @@ public class DateDataGenerator implements IDataGenerator {
 	        File futureFile = resource1.getFile();
 	        futureMap = FileUtils.readLines(futureFile, "utf-8");
 	    } catch (IOException e) {
-	      e.printStackTrace();
+	     log.error("error while generating date generation",e);
+	     throw new RuntimeException("error while generating date generation");
 	    }
 	}
 	

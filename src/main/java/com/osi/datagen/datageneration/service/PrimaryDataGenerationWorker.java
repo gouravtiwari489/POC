@@ -48,7 +48,8 @@ public class PrimaryDataGenerationWorker implements Runnable {
       }
       log.info("unique field generation completed for table" + table.getTableName());
     } catch (Exception e) {
-      e.printStackTrace();
+      log.error("error while generating data for table: " + table.getTableName(),e);
+      throw new RuntimeException("error while generating data for table: " + table.getTableName());
     }
   }
 

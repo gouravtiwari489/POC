@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.osi.datagen.domain.CustomUserDetails;
 import com.osi.datagen.domain.TableList;
 import com.osi.datagen.utils.ZipUtil;
+import lombok.extern.slf4j.Slf4j;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,6 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class GenerateDataAndDownloadService {
   @Autowired private UserRequestValidator userRequestValidator;
 
@@ -48,11 +50,14 @@ public class GenerateDataAndDownloadService {
       tables = mapper.readValue(updatedMappedData, new TypeReference<TableList>() {});
 
     } catch (JsonParseException e) {
-      e.printStackTrace();
+      log.error("error while parsing tablelist",e);
+     throw new RuntimeException("JsonParseException while converting string to table list");
     } catch (JsonMappingException e) {
-      e.printStackTrace();
+      log.error("error while parsing tablelist",e);
+      throw new RuntimeException("JsonMappingException while converting string to table list");
     } catch (IOException e) {
-      e.printStackTrace();
+      log.error("error while parsing tablelist",e);
+      throw new RuntimeException("IOException while converting string to table list");
     }
     return tables;
   }

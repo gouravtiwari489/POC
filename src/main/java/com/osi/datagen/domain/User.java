@@ -20,7 +20,7 @@ public class User {
   private String password;
   private List<Role> roles;
   @Indexed(unique=true)
-	String emailId;
+  private String emailId;
   @NotNull private String fullName;
   @NotNull private String gender;
 

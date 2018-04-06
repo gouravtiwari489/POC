@@ -10,6 +10,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,6 @@ public class GenerateSampleDataUtil {
       throws ParseException {
     List<List<String>> records = new ArrayList<List<String>>();
     records.add(new ArrayList<String>(table.getFieldsNames()));
-
     for (int i = 1; i <= rowCount; i++) {
       List<String> row = new ArrayList<String>();
       for (Field field : table.getFields()) {
@@ -97,7 +97,16 @@ public class GenerateSampleDataUtil {
                 .collect(Collectors.toList());
         columns.forEach(
             column -> {
-              concurrentMap.put(new Tuple(table.getTableName(), column), data);
+              boolean isUnique=table.getUniqueKeys().stream().anyMatch(c->(c.getColumns().contains(column)));
+              if(isUnique){
+                concurrentMap.put(new Tuple(table.getTableName(), column), data);
+              }else{
+                List<String> depValues=new ArrayList<>();
+                for(int i=0;i<=table.getRowCount();i++){
+                  depValues.add(data.get(new Random().nextInt(data.size())));
+                }
+                concurrentMap.put(new Tuple(table.getTableName(), column), depValues);
+              }
             });
       }
     }
@@ -143,7 +152,17 @@ public class GenerateSampleDataUtil {
                   .collect(Collectors.toList());
           columns.forEach(
               column -> {
-                concurrentMap.put(new Tuple(tableName, column), data);
+                boolean isUnique=table.getUniqueKeys().stream().anyMatch(c->(c.getColumns().contains(column)));
+                if(isUnique){
+                  concurrentMap.put(new Tuple(table.getTableName(), column), data);
+                }else{
+                  List<String> depValues=new ArrayList<>();
+                  for(int i=0;i<=table.getRowCount();i++){
+                    depValues.add(data.get(new Random().nextInt(data.size())));
+                  }
+                  concurrentMap.put(new Tuple(table.getTableName(), column), depValues);
+                }
+               
               });
         }
       }

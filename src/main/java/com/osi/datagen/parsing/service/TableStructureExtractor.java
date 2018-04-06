@@ -143,6 +143,9 @@ public class TableStructureExtractor {
                 uniqueList.add(uqniColumn);
               }
             }
+          }else{
+            String unqKeyColumn = uniquekey.replaceAll("[^\\,_,a-zA-Z0-9]+", "");
+            uniqueList.add(unqKeyColumn);
           }
           constraint.setColumns(uniqueList);
           constraintList.add(constraint);

@@ -36,6 +36,13 @@ file:
   types: csv, xlsx, xml, sql, json
   download:
     path: output\\
+    
+    
+parent:
+  table:
+      rowcount: 
+        percentage: 0.02
+      
   
 
  

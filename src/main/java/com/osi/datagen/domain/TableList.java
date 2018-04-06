@@ -1,6 +1,7 @@
 package com.osi.datagen.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
@@ -12,7 +13,7 @@ import lombok.ToString;
 @Setter
 @EqualsAndHashCode
 @ToString
-public class TableList {
+public class TableList implements Iterable<Table> {
 
   private List<Table> tables;
 
@@ -32,5 +33,10 @@ public class TableList {
                     .stream()
                     .anyMatch(fk -> fk.getReferenceTable().equalsIgnoreCase(table.getTableName())))
         .collect(Collectors.toList());
+  }
+  
+  @Override
+  public Iterator<Table> iterator() {
+      return tables.iterator();
   }
 }
