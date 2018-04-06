@@ -9,7 +9,8 @@ import java.util.StringTokenizer;
 import org.apache.commons.io.FileUtils;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 public class DbDataTypeConfigReader {
 	public static Map<String, String> map = new HashMap<>();
 
@@ -31,7 +32,7 @@ public class DbDataTypeConfigReader {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
+		log.error("exception while reading dbconfig.properties ",e);
 		}
 	}
 

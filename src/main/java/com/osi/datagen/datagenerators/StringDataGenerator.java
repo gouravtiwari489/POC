@@ -18,7 +18,8 @@ import com.osi.datagen.constant.DasConstants;
 import com.osi.datagen.datageneration.service.IDataGenerator;
 import com.osi.datagen.datageneration.service.IUniqueDataGenerator;
 import com.osi.datagen.domain.Field;
-
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 public class StringDataGenerator implements IDataGenerator, IUniqueDataGenerator {
   public static Map<String, List<String>> map = new HashMap<>();
   private int begin = 1000;
@@ -40,7 +41,9 @@ public class StringDataGenerator implements IDataGenerator, IUniqueDataGenerator
       setCountryCode(locale[1]);
       }
     catch (Exception e) {
-      e.printStackTrace();
+     log.error("error while reading data sets",e);
+     throw new RuntimeException("error while reading data sets");
+     
     }
   }
   public StringDataGenerator(String domainType) {
@@ -139,7 +142,8 @@ public class StringDataGenerator implements IDataGenerator, IUniqueDataGenerator
       }
       getCommonData(preferredLocale);
     } catch (IOException e) {
-      e.printStackTrace();
+      log.error("error while reading local data sets",e);
+      throw new RuntimeException("error while reading local data sets");
     }
   }
   
