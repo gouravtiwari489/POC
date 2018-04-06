@@ -2,11 +2,11 @@ Andhra Pradesh
 Arunachal Pradesh
 Assam
 Bihar
-Chandigarh 
+Chandigarh
 Chhattisgarh
-Dadra and Nagar Haveli 
-Daman and Diu 
-National Capital Territory of Delhi 
+Dadra and Nagar Haveli
+Daman and Diu
+National Capital Territory of Delhi
 Goa
 Gujarat
 Haryana
@@ -15,7 +15,7 @@ Jammu and Kashmir
 Jharkhand
 Karnataka
 Kerala
-Lakshadweep 
+Lakshadweep
 Madhya Pradesh
 Maharashtra
 Manipur
@@ -23,7 +23,7 @@ Meghalaya
 Mizoram
 Nagaland
 Odisha
-Puducherry 
+Puducherry
 Punjab
 Rajasthan
 Sikkim
