@@ -1,13 +1,5 @@
 package com.osi.datagen.parsing.service;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
 import com.osi.datagen.constant.DasConstants;
 import com.osi.datagen.domain.CheckConstraint;
 import com.osi.datagen.domain.Constraint;
@@ -15,6 +7,12 @@ import com.osi.datagen.domain.Field;
 import com.osi.datagen.domain.ForigenKeyConstraint;
 import com.osi.datagen.domain.Table;
 import com.osi.datagen.exception.DependencyException;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 @Component
 public class TableStructureExtractor {
@@ -39,7 +37,7 @@ public class TableStructureExtractor {
   private static final String INVERTED_COMMA = "`";
   private static final String NO_SPACE = "";
   private static final String SPACE = " ";
-  
+
   public List<Table> searchforTableName(File file, boolean dependencyCheck)
       throws DependencyException, Exception {
     List<Field> fieldsList = new ArrayList<>();
@@ -57,7 +55,8 @@ public class TableStructureExtractor {
     int fkCount = 1;
     while (scanner.hasNextLine()) {
       final String readLine = scanner.nextLine().trim();
-      String lineFromFile = readLine.replaceAll(COMMENGTEXP, NO_SPACE); //remove Single line comment
+      String lineFromFile =
+          readLine.replaceAll(COMMENGTEXP, NO_SPACE); //remove Single line comment
       //remove Multiline comments
       if (lineFromFile.indexOf(START_COMMENT) > -1) {
         multiLineUncommented = lineFromFile.substring(0, lineFromFile.indexOf(START_COMMENT));
@@ -102,10 +101,17 @@ public class TableStructureExtractor {
             ForigenKeyConstraint fkConstraint = new ForigenKeyConstraint();
             String[] fieldString = lineFromFile.split(FOREIGN_KEY);
             fkConstraint.setConstraintName(
-                fieldString[0].replace(CONSTRAINT, NO_SPACE).replaceAll(INVERTED_COMMA, NO_SPACE).trim());
+                fieldString[0]
+                    .replace(CONSTRAINT, NO_SPACE)
+                    .replaceAll(INVERTED_COMMA, NO_SPACE)
+                    .trim());
             String[] fieldString2 = fieldString[1].split(REFERENCES);
             String test1 =
-                fieldString2[0].replace("(", NO_SPACE).replace(")", NO_SPACE).replace(INVERTED_COMMA, NO_SPACE).replace(SPACE, NO_SPACE);
+                fieldString2[0]
+                    .replace("(", NO_SPACE)
+                    .replace(")", NO_SPACE)
+                    .replace(INVERTED_COMMA, NO_SPACE)
+                    .replace(SPACE, NO_SPACE);
 
             count = 0;
             fkCount++;
@@ -124,7 +130,10 @@ public class TableStructureExtractor {
             CheckConstraint checkConstraint = new CheckConstraint();
             String[] chkConstraintSplit = lineFromFile.split(CHECK);
             checkConstraint.setConstraintName(
-                chkConstraintSplit[0].replace(CONSTRAINT, NO_SPACE).replaceAll(INVERTED_COMMA, NO_SPACE).trim());
+                chkConstraintSplit[0]
+                    .replace(CONSTRAINT, NO_SPACE)
+                    .replaceAll(INVERTED_COMMA, NO_SPACE)
+                    .trim());
             checkConstraint.setValue(chkConstraintSplit[1].replaceAll(CHECKEXP, NO_SPACE).trim());
             checkConstraintsList.add(checkConstraint);
           }
@@ -143,7 +152,7 @@ public class TableStructureExtractor {
                 uniqueList.add(uqniColumn);
               }
             }
-          }else{
+          } else {
             String unqKeyColumn = uniquekey.replaceAll("[^\\,_,a-zA-Z0-9]+", "");
             uniqueList.add(unqKeyColumn);
           }
@@ -183,11 +192,18 @@ public class TableStructureExtractor {
             coulmnField.setDataType(lengthSplit[0].replace(DasConstants.COMMA_SEPRATOR, NO_SPACE));
           }
           if (splitString.length > 2) {
-            coulmnField.setDefaultValue(splitString[2] + SPACE + splitString[3].replace(DasConstants.COMMA_SEPRATOR, NO_SPACE));
-            constraint.setConstraintType(splitString[2] + SPACE + splitString[3].replace(DasConstants.COMMA_SEPRATOR, NO_SPACE));
+            coulmnField.setDefaultValue(
+                splitString[2]
+                    + SPACE
+                    + splitString[3].replace(DasConstants.COMMA_SEPRATOR, NO_SPACE));
+            constraint.setConstraintType(
+                splitString[2]
+                    + SPACE
+                    + splitString[3].replace(DasConstants.COMMA_SEPRATOR, NO_SPACE));
             pkColumList.add(splitString[0]);
             if (splitString.length > 4) {
-              coulmnField.setIncrementValue(splitString[4].replace(DasConstants.COMMA_SEPRATOR, NO_SPACE));
+              coulmnField.setIncrementValue(
+                  splitString[4].replace(DasConstants.COMMA_SEPRATOR, NO_SPACE));
             }
           }
           constraint.setColumns(pkColumList);

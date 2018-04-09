@@ -11,7 +11,7 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@EqualsAndHashCode(exclude={"rowCount"})
+@EqualsAndHashCode(exclude = {"rowCount"})
 @ToString
 public class Table {
 

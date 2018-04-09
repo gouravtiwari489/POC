@@ -40,8 +40,11 @@ file:
     
 parent:
   table:
-      rowcount: 
-        percentage: 0.02
+      minimum:
+        rowcount: 2
+      percentage: 
+        rowcount: 0.02
+        
       
   
 

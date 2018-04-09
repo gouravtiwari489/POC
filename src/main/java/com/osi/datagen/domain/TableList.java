@@ -34,9 +34,9 @@ public class TableList implements Iterable<Table> {
                     .anyMatch(fk -> fk.getReferenceTable().equalsIgnoreCase(table.getTableName())))
         .collect(Collectors.toList());
   }
-  
+
   @Override
   public Iterator<Table> iterator() {
-      return tables.iterator();
+    return tables.iterator();
   }
 }

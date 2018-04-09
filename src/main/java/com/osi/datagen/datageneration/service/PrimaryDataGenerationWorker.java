@@ -27,13 +27,14 @@ public class PrimaryDataGenerationWorker implements Runnable {
       String domainType,
       int rowCount,
       List<Table> childTables,
-      Map<Tuple, List<String>> concurrentMap, DataGenFactory dgf) {
+      Map<Tuple, List<String>> concurrentMap,
+      DataGenFactory dgf) {
     this.table = table;
     this.domainType = domainType;
     this.rowCount = rowCount;
     this.concurrentMap = concurrentMap;
     this.childTables = childTables;
-    this.dataGenFactory=dgf;
+    this.dataGenFactory = dgf;
   }
 
   @Override
@@ -48,22 +49,22 @@ public class PrimaryDataGenerationWorker implements Runnable {
       }
       log.info("unique field generation completed for table" + table.getTableName());
     } catch (Exception e) {
-      log.error("error while generating data for table: " + table.getTableName(),e);
+      log.error("error while generating data for table: " + table.getTableName(), e);
       throw new RuntimeException("error while generating data for table: " + table.getTableName());
     }
   }
 
   private void generateUniqueKeyData() throws ParseException {
 
-	  GenerateSampleDataUtil.generateUniqueData(
-		        table.getUniqueKeyFields(),
-		        table.getTableName(),
-		        rowCount,
-		        domainType,
-		        childTables,
-		        concurrentMap,
-		        dataGenFactory);
-		    generateSelfDependencyData();
+    GenerateSampleDataUtil.generateUniqueData(
+        table.getUniqueKeyFields(),
+        table.getTableName(),
+        rowCount,
+        domainType,
+        childTables,
+        concurrentMap,
+        dataGenFactory);
+    generateSelfDependencyData();
   }
 
   private void generateSelfDependencyData() {

@@ -24,76 +24,101 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 public class DataGenerationService {
-  
-  
-  @Value("${parent.table.rowcount.percentage}")
+
+  @Value("${parent.table.percentage.rowcount}")
   public String rowCountPercentage;
+
+  @Value("${parent.table.minimum.rowcount}")
+  public String minRowCount;
 
   @Autowired LoadFileGenerationObjects fileGenObj;
 
-  public void generateData(TableList tables, String fileType, int rowCount, String domainType, String preferredLocale)
+  public void generateData(
+      TableList tables, String fileType, int rowCount, String domainType, String preferredLocale)
       throws IOException {
-    setTablesRowcount(tables,rowCount);
+    setTablesRowcount(tables, rowCount);
     Map<Tuple, List<String>> concurrentMap = new ConcurrentHashMap<>();
-    DataGenFactory dgf=new DataGenFactory(domainType, preferredLocale);
-    threadServicePrimaryDataGeneration(tables, fileType, domainType, concurrentMap,dgf);
+    DataGenFactory dgf = new DataGenFactory(domainType, preferredLocale);
+    threadServicePrimaryDataGeneration(tables, fileType, domainType, concurrentMap, dgf);
     GenerateDataInterface service = fileGenObj.getGenDataServiceMap().get(fileType);
-    threadService(tables, fileType, domainType, concurrentMap, service,preferredLocale,dgf);
+    threadService(tables, fileType, domainType, concurrentMap, service, preferredLocale, dgf);
   }
+
   private void setTablesRowcount(TableList tables, int rowCount) {
-    for (Table table:tables) {
-      if( table.getForigenKeys()==null || table.getForigenKeys().isEmpty()){
-        double rowsPercentage=Double.parseDouble(rowCountPercentage);
-        int actualRowCount=(int)(rowCount*rowsPercentage);
-        table.setRowCount(actualRowCount);
-        List<Table> childTables=tables.getChildTables(table);
+    for (Table table : tables) {
+      if (table.getForigenKeys() == null || table.getForigenKeys().isEmpty()) {
+        double rowsPercentage = Double.parseDouble(rowCountPercentage);
+        int minRows = Integer.parseInt(minRowCount);
+        int actualRowCount = (int) (rowCount * rowsPercentage);
+        if (actualRowCount == 0) {
+          table.setRowCount(minRows);
+        } else {
+          table.setRowCount(actualRowCount);
+        }
+        List<Table> childTables = tables.getChildTables(table);
         for (Table childTable : childTables) {
-          List<String> columnNames=childTable.getForigenKeys()
-          .stream()
-          .filter(fk->fk.getReferenceTable().equalsIgnoreCase(table.getTableName()))
-          .map(fk->fk.getKeyName())
-          .collect(Collectors.toList());
-          boolean isUnique=childTable.getUniqueKeys().stream().anyMatch(c->(c.getColumns().containsAll(columnNames) && c.getColumns().size() == columnNames.size()));
-          if(isUnique){
+          List<String> columnNames =
+              childTable
+                  .getForigenKeys()
+                  .stream()
+                  .filter(fk -> fk.getReferenceTable().equalsIgnoreCase(table.getTableName()))
+                  .map(fk -> fk.getKeyName())
+                  .collect(Collectors.toList());
+          boolean isUnique =
+              childTable
+                  .getUniqueKeys()
+                  .stream()
+                  .anyMatch(
+                      c ->
+                          (c.getColumns().containsAll(columnNames)
+                              && c.getColumns().size() == columnNames.size()));
+          if (isUnique) {
             childTable.setRowCount(actualRowCount);
-          }else{
-            if(table.getRowCount()==0){
-            childTable.setRowCount(rowCount);
+          } else {
+            if (table.getRowCount() == 0) {
+              childTable.setRowCount(rowCount);
             }
           }
         }
-        
-      }else{
-        if(table.getRowCount()==0){
-        table.setRowCount(rowCount);
+
+      } else {
+        if (table.getRowCount() == 0) {
+          table.setRowCount(rowCount);
         }
       }
-      
     }
   }
+
   private void threadServicePrimaryDataGeneration(
       TableList tables,
       String fileType,
       String domainType,
-      Map<Tuple, List<String>> concurrentMap, DataGenFactory dgf) {
+      Map<Tuple, List<String>> concurrentMap,
+      DataGenFactory dgf) {
     for (Table table : tables.getTables()) {
       ExecutorService executor = Executors.newFixedThreadPool(tables.getTables().size());
       Runnable dataGenerationWorker =
           new PrimaryDataGenerationWorker(
-              table, domainType, table.getRowCount(), tables.getChildTables(table), concurrentMap,dgf);
+              table,
+              domainType,
+              table.getRowCount(),
+              tables.getChildTables(table),
+              concurrentMap,
+              dgf);
       executor.execute(dataGenerationWorker);
       executor.shutdown();
       while (!executor.isTerminated()) {}
     }
   }
 
-  
   public void threadService(
       TableList tableList,
       String fileType,
       String domainType,
       Map<Tuple, List<String>> concurrentMap,
-      GenerateDataInterface service, String preferredLocale, DataGenFactory dgf)
+      GenerateDataInterface service,
+      String preferredLocale,
+      DataGenFactory dgf)
       throws IOException {
     log.info("creating thread pool");
     ExecutorService executor = Executors.newFixedThreadPool(5);
@@ -102,7 +127,15 @@ public class DataGenerationService {
     for (Table table : tableList.getTables()) {
       Runnable dataGenerationWorker =
           new DataGenerationWorker(
-              table, table.getRowCount(), fileType, concurrentMap, domainType, service, user,preferredLocale,dgf);
+              table,
+              table.getRowCount(),
+              fileType,
+              concurrentMap,
+              domainType,
+              service,
+              user,
+              preferredLocale,
+              dgf);
       executor.execute(dataGenerationWorker);
     }
     executor.shutdown();
