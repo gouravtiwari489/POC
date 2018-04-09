@@ -19,16 +19,18 @@ public interface GenerateDataInterface {
 
   default String createFolders(CustomUserDetails user, String fileType, String tableName) {
     String filePath;
-    File userFolder = new File(fileDownloadPath + DasConstants.FILE_SEPRATOR + user.getUsername());
+    File userFolder = new File(fileDownloadPath.
+    		concat(DasConstants.FILE_SEPRATOR).
+    		concat(user.getUsername()));
     File file =
         new File(
-            fileDownloadPath
-                + DasConstants.FILE_SEPRATOR
-                + user.getUsername()
-                + DasConstants.FILE_SEPRATOR
-                + fileType);
+            fileDownloadPath.
+            concat(DasConstants.FILE_SEPRATOR).
+            concat(user.getUsername()).
+            concat(DasConstants.FILE_SEPRATOR).
+            concat(fileType));
     if (!file.exists()) {
-      new File(userFolder.getAbsoluteFile().getPath() + DasConstants.FILE_SEPRATOR + fileType)
+      new File(userFolder.getAbsoluteFile().getPath().concat(DasConstants.FILE_SEPRATOR + fileType))
           .mkdir();
     }
     filePath =
