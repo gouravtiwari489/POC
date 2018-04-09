@@ -1,6 +1,7 @@
 package com.osi.datagen.controller;
 
 import com.osi.datagen.configuration.CustomInMemoryTokenStore;
+import com.osi.datagen.constant.DasConstants;
 import com.osi.datagen.service.LogoutService;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ public class OauthController {
   public ResponseEntity<?> revoketoken(
       HttpSession session, OAuth2Authentication authentication, @RequestParam String userName) {
 
-    logoutService.clearUserData(fileDownloadPath + userName);
+    logoutService.clearUserData(fileDownloadPath +DasConstants.FILE_SEPRATOR+ userName);
     OAuth2AccessToken token = customInMemoryTokenStore.getAccessTokenWhileLogout(authentication);
     if (token != null) {
       consumerTokenServices.revokeToken(token.getValue());
