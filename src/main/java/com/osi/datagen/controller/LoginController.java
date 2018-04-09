@@ -71,13 +71,13 @@ public class LoginController {
         throw new AlreadyLoggedInException("Warning! You already login somewhere");
       }
     }
-    new File("output/" + user.getUsername()).mkdir();
+    new File(fileDownloadPath + DasConstants.FILE_SEPRATOR + user.getUsername()).mkdir();
     return new ResponseEntity<>(user, HttpStatus.OK);
   }
 
   @PostMapping("/clearUserSession")
   public ResponseEntity<HttpStatus> logout(@RequestParam String userName) {
-    logoutService.clearUserData("output/" + userName);
+    logoutService.clearUserData(fileDownloadPath + DasConstants.FILE_SEPRATOR + userName);
     return new ResponseEntity<>(HttpStatus.OK);
   }
 }
