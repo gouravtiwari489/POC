@@ -35,7 +35,7 @@ logging:
 file:
   types: csv, xlsx, xml, sql, json
   download:
-    path: output\\
+    path: output
     
     
 parent:

@@ -5,7 +5,6 @@ import static com.osi.datagen.datageneration.service.DataGenUtil.removeSingleQuo
 import com.google.gson.Gson;
 import com.osi.datagen.domain.CustomUserDetails;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -44,19 +43,7 @@ public enum JsonGenerationUtil implements GenerateDataInterface {
   @Override
   public void writeToFile(Object obj, String tableName, String fileType, CustomUserDetails user)
       throws IOException, FileNotFoundException {
-    String filePath;
-    File resource = new File(fileDownloadPath + user.getUsername());
-    if (!resource.exists()) {
-      new File(fileDownloadPath + user.getUsername()).mkdir();
-    }
-    File file = new File(resource.getAbsoluteFile().getPath() + "/" + fileType);
-    if (!file.exists()) {
-      file.mkdir();
-    }
-    filePath =
-        String.format(
-            "%s\\%s.%s",
-            resource.getAbsoluteFile().getPath() + "\\" + fileType, tableName, fileType);
+    String filePath = createFolders(user, fileType, tableName);
     BufferedWriter jsonFile = new BufferedWriter(new FileWriter(filePath));
 
     jsonFile.write((String) obj);

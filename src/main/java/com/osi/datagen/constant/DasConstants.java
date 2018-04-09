@@ -3,6 +3,7 @@ package com.osi.datagen.constant;
 public interface DasConstants {
 
   String COMMA_SEPRATOR = ",";
+  String FILE_SEPRATOR = "/";
   String NEWLINE_CHARACTER = "\n";
   String ALREADY_LOGGEDIN_EXCEPTION_MESSAGE = "Warning! You already login somewhere";
   String DATE_DATA_GENERATOR_BEGIN_DATE = "2000-01-01 00:00:00";
@@ -36,10 +37,10 @@ public interface DasConstants {
   String SUPPLYCHAINCATEGORY = "SupplyChain-dataset.txt";
   String MANUFACTURINGCATEGORY = "Manufacturing-Categories.txt";
 
-  String DATASETS_PATH = "datasets\\";
-  String COUNTRY_CODES_DATASETS_PATH = "datasets\\Commons\\CountryCode.txt";
-  String PAST_DATES_FIELDSETS_PATH = "datasets\\Commons\\PastDatesFieldsets.txt";
-  String FUTURE_DATES_FIELDSETS_PATH = "datasets\\Commons\\FutureDatesFieldsets.txt";
+  String DATASETS_PATH = "datasets/";
+  String COUNTRY_CODES_DATASETS_PATH = "datasets/Commons/CountryCode.txt";
+  String PAST_DATES_FIELDSETS_PATH = "datasets/Commons/PastDatesFieldsets.txt";
+  String FUTURE_DATES_FIELDSETS_PATH = "datasets/Commons/FutureDatesFieldsets.txt";
 
   String OUTPUT_FILE_NAME = "DAS";
 

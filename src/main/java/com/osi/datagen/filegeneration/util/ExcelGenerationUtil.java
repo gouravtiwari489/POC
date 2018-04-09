@@ -74,19 +74,7 @@ public enum ExcelGenerationUtil implements GenerateDataInterface {
   public void writeToFile(Object obj, String tableName, String fileType, CustomUserDetails user)
       throws IOException, FileNotFoundException {
     log.info(Thread.currentThread().getName() + " " + tableName + " excel write started");
-    String filePath;
-    File resource = new File(fileDownloadPath + user.getUsername());
-    if (!resource.exists()) {
-      new File(fileDownloadPath + user.getUsername()).mkdir();
-    }
-    File file = new File(resource.getAbsoluteFile().getPath() + "/" + fileType);
-    if (!file.exists()) {
-      file.mkdir();
-    }
-    filePath =
-        String.format(
-            "%s\\%s.%s",
-            resource.getAbsoluteFile().getPath() + "\\" + fileType, tableName, fileType);
+    String filePath = createFolders(user, fileType, tableName);
     OutputStream excelFileToCreate = new FileOutputStream(new File(filePath));
     SXSSFWorkbook workbook = (SXSSFWorkbook) obj;
     workbook.write(excelFileToCreate);

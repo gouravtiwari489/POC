@@ -1,5 +1,6 @@
 package com.osi.datagen.utils;
 
+import com.osi.datagen.constant.DasConstants;
 import com.osi.datagen.domain.CustomUserDetails;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -30,9 +31,15 @@ public class ZipUtil {
       throws IOException {
 
     List<String> filePaths = new ArrayList<>();
-    File resource = new File(fileDownloadPath + currentUser.getUsername() + "\\" + fileType);
+    File resource =
+        new File(
+            fileDownloadPath
+                + DasConstants.FILE_SEPRATOR
+                + currentUser.getUsername()
+                + DasConstants.FILE_SEPRATOR
+                + fileType);
     String zipFilePath =
-        String.format("%s\\%s.%s", resource.getAbsoluteFile().getPath(), "DAS", "zip");
+        String.format("%s/%s.%s", resource.getAbsoluteFile().getPath(), "DAS", "zip");
     File folder = new File(resource.getAbsoluteFile().getPath());
     File[] listOfFiles = folder.listFiles();
 
