@@ -24,7 +24,6 @@ public class User {
   private String emailId;
 
   @NotNull private String fullName;
-  @NotNull private String gender;
 
   public User() {}
 
