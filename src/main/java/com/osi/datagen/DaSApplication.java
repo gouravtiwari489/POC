@@ -5,7 +5,6 @@ import com.osi.datagen.domain.CustomUserDetails;
 import com.osi.datagen.domain.Role;
 import com.osi.datagen.domain.User;
 import com.osi.datagen.repository.UserRepository;
-
 import java.io.File;
 import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +15,13 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 
 @SpringBootApplication
 public class DaSApplication {
-	
-	private static String fileDownloadPath;
 
-	  @Value("${file.download.path}")
-	  public void setPath(String path) {
-	    fileDownloadPath = path;
-	  }
+  private static String fileDownloadPath;
+
+  @Value("${file.download.path}")
+  public void setPath(String path) {
+    fileDownloadPath = path;
+  }
 
   public static void main(String[] args) {
     System.out.println("Application Starting...... check the logs in logs/das.log");
@@ -39,7 +38,7 @@ public class DaSApplication {
               DasConstants.DEFAULT_PASSWORD,
               Arrays.asList(new Role("USER"), new Role("ACTUATOR"))));
     }
-    
+
     File outputFolder = new File(fileDownloadPath);
     if (!outputFolder.exists()) {
       new File(fileDownloadPath).mkdir();

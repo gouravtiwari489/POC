@@ -3,6 +3,7 @@ package com.osi.datagen.datagenerators;
 import static com.osi.datagen.datageneration.service.DataGenUtil.singleQuote;
 
 import com.osi.datagen.constant.DasConstants;
+import com.osi.datagen.datageneration.service.GenerateDataAndDownloadService;
 import com.osi.datagen.datageneration.service.IDataGenerator;
 import com.osi.datagen.datageneration.service.IUniqueDataGenerator;
 import com.osi.datagen.domain.Field;
@@ -15,20 +16,25 @@ import java.util.Map;
 import java.util.Random;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 
 @Slf4j
 public class StringDataGenerator implements IDataGenerator, IUniqueDataGenerator {
+
   public static Map<String, List<String>> map = new HashMap<>();
   private int begin = 1000;
   private String countryCode;
 
   public StringDataGenerator(String domainType, String preferredLocale) {
     try {
-      Resource resource = new ClassPathResource("datasets//" + domainType);
-      resource.getFile().getPath();
-      File[] files = new File(resource.getFile().getPath()).listFiles();
+      //Resource resource = new ClassPathResource("datasets//" + domainType);
+      //resource.getFile().getPath();
+      File[] files =
+          new File(
+                  GenerateDataAndDownloadService.fileResourcePath
+                      + DasConstants.FILE_SEPRATOR
+                      + "datasets/"
+                      + domainType)
+              .listFiles();
       for (File file : files) {
         if (!file.isDirectory()) {
           List<String> lines = FileUtils.readLines(file, "utf-8");
@@ -124,13 +130,17 @@ public class StringDataGenerator implements IDataGenerator, IUniqueDataGenerator
   }
 
   private void getLocaleData(String preferredLocale, String domainType) {
-    Resource resource =
-        new ClassPathResource(
-            DasConstants.DATASETS_PATH.concat(domainType).concat("//").concat(preferredLocale));
     try {
-      resource.getFile().getPath();
 
-      File[] files = new File(resource.getFile().getPath()).listFiles();
+      File[] files =
+          new File(
+                  GenerateDataAndDownloadService.fileResourcePath
+                      + DasConstants.FILE_SEPRATOR
+                      + DasConstants.DATASETS_PATH
+                          .concat(domainType)
+                          .concat("/")
+                          .concat(preferredLocale))
+              .listFiles();
 
       for (File file : files) {
         if (!file.isDirectory()) {
@@ -147,9 +157,12 @@ public class StringDataGenerator implements IDataGenerator, IUniqueDataGenerator
 
   public void setCountryCode(String locale) {
 
-    Resource resource = new ClassPathResource(DasConstants.COUNTRY_CODES_DATASETS_PATH);
     try {
-      File file = resource.getFile();
+      File file =
+          new File(
+              GenerateDataAndDownloadService.fileResourcePath
+                  + DasConstants.FILE_SEPRATOR
+                  + DasConstants.COUNTRY_CODES_DATASETS_PATH);
       List<String> countryCodes = FileUtils.readLines(file, DasConstants.DATASETS_CHARACTERSET);
       for (String countryCode : countryCodes) {
         if (countryCode.split(" ")[0].equals(locale)) {
@@ -163,13 +176,16 @@ public class StringDataGenerator implements IDataGenerator, IUniqueDataGenerator
   }
 
   private void getCommonData(String preferredLocale) {
-    Resource resource =
-        new ClassPathResource(
-            DasConstants.DATASETS_PATH + DasConstants.DATASETS_COMMONS + "//" + preferredLocale);
     try {
-      resource.getFile().getPath();
-
-      File[] files = new File(resource.getFile().getPath()).listFiles();
+      File[] files =
+          new File(
+                  GenerateDataAndDownloadService.fileResourcePath
+                      + DasConstants.FILE_SEPRATOR
+                      + DasConstants.DATASETS_PATH
+                      + DasConstants.DATASETS_COMMONS
+                      + "/"
+                      + preferredLocale)
+              .listFiles();
 
       for (File file : files) {
         if (!file.isDirectory()) {

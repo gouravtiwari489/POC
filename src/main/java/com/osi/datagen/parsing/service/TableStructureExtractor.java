@@ -55,8 +55,7 @@ public class TableStructureExtractor {
     int fkCount = 1;
     while (scanner.hasNextLine()) {
       final String readLine = scanner.nextLine().trim();
-      String lineFromFile =
-          readLine.replaceAll(COMMENGTEXP, NO_SPACE); //remove Single line comment
+      String lineFromFile = readLine.replaceAll(COMMENGTEXP, NO_SPACE); //remove Single line comment
       //remove Multiline comments
       if (lineFromFile.indexOf(START_COMMENT) > -1) {
         multiLineUncommented = lineFromFile.substring(0, lineFromFile.indexOf(START_COMMENT));

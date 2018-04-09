@@ -36,7 +36,7 @@ public class OauthController {
   public ResponseEntity<?> revoketoken(
       HttpSession session, OAuth2Authentication authentication, @RequestParam String userName) {
 
-    logoutService.clearUserData(fileDownloadPath +DasConstants.FILE_SEPRATOR+ userName);
+    logoutService.clearUserData(fileDownloadPath + DasConstants.FILE_SEPRATOR + userName);
     OAuth2AccessToken token = customInMemoryTokenStore.getAccessTokenWhileLogout(authentication);
     if (token != null) {
       consumerTokenServices.revokeToken(token.getValue());

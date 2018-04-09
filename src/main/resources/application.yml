@@ -36,6 +36,7 @@ file:
   types: csv, xlsx, xml, sql, json
   download:
     path: output
+  resourcePath : src/main/resources  
     
     
 parent:

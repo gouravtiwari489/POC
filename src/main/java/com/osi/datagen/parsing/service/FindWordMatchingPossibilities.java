@@ -1,5 +1,6 @@
 package com.osi.datagen.parsing.service;
 
+import com.osi.datagen.constant.DasConstants;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -19,6 +20,9 @@ public class FindWordMatchingPossibilities {
 
   @Value("${match.threshold}")
   String threshold;
+
+  @Value("${file.resourcePath}")
+  String fileResourcePath;
 
   private static final String HRMS = "HRMS";
   private static final String SUPPLYCHAIN = "SupplyChain";
@@ -42,7 +46,7 @@ public class FindWordMatchingPossibilities {
       datasetFileName = MANUFACTURINGCATEGORY;
     }
 
-    File file = new File(classLoader.getResource(datasetFileName).getFile());
+    File file = new File(fileResourcePath + DasConstants.FILE_SEPRATOR + datasetFileName);
 
     matchingMap = findForExactWordMatch(wordToFind, matchingMap, file);
 

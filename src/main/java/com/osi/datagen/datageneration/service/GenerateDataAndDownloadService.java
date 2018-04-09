@@ -14,6 +14,7 @@ import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,13 @@ public class GenerateDataAndDownloadService {
   @Autowired private UserRequestValidator userRequestValidator;
 
   @Autowired private DataGenerationService dataGenerationService;
+
+  public static String fileResourcePath;
+
+  @Value("${file.resourcePath}")
+  public void setPath(String path) {
+    fileResourcePath = path;
+  }
 
   public byte[] generateDataAndDownload(
       String fileType, int rowCount, String domainType, String json, String preferredLocale)

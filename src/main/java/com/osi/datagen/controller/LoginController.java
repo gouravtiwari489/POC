@@ -62,10 +62,11 @@ public class LoginController {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
     user.setTables(null);
-    File resource = new File(fileDownloadPath +DasConstants.FILE_SEPRATOR+ user.getUsername());
+    File resource = new File(fileDownloadPath + DasConstants.FILE_SEPRATOR + user.getUsername());
     if (resource.exists()) {
       if (cont) {
-        logoutService.clearUserData(fileDownloadPath +DasConstants.FILE_SEPRATOR+ user.getUsername());
+        logoutService.clearUserData(
+            fileDownloadPath + DasConstants.FILE_SEPRATOR + user.getUsername());
       } else {
         throw new AlreadyLoggedInException("Warning! You already login somewhere");
       }

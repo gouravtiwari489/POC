@@ -3,6 +3,7 @@ package com.osi.datagen.datagenerators;
 import static com.osi.datagen.datageneration.service.DataGenUtil.singleQuote;
 
 import com.osi.datagen.constant.DasConstants;
+import com.osi.datagen.datageneration.service.GenerateDataAndDownloadService;
 import com.osi.datagen.datageneration.service.IDataGenerator;
 import com.osi.datagen.domain.Field;
 import java.io.File;
@@ -15,8 +16,6 @@ import java.util.Date;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 
 @Slf4j
 public class DateDataGenerator implements IDataGenerator {
@@ -26,12 +25,20 @@ public class DateDataGenerator implements IDataGenerator {
 
   public DateDataGenerator() {
 
-    Resource resource = new ClassPathResource(DasConstants.PAST_DATES_FIELDSETS_PATH);
-    Resource resource1 = new ClassPathResource(DasConstants.FUTURE_DATES_FIELDSETS_PATH);
+    //Resource resource = new ClassPathResource(DasConstants.PAST_DATES_FIELDSETS_PATH);
+    //Resource resource1 = new ClassPathResource(DasConstants.FUTURE_DATES_FIELDSETS_PATH);
     try {
-      File pastFile = resource.getFile();
+      File pastFile =
+          new File(
+              GenerateDataAndDownloadService.fileResourcePath
+                  + DasConstants.FILE_SEPRATOR
+                  + DasConstants.PAST_DATES_FIELDSETS_PATH);
       pastMap = FileUtils.readLines(pastFile, "utf-8");
-      File futureFile = resource1.getFile();
+      File futureFile =
+          new File(
+              GenerateDataAndDownloadService.fileResourcePath
+                  + DasConstants.FILE_SEPRATOR
+                  + DasConstants.FUTURE_DATES_FIELDSETS_PATH);
       futureMap = FileUtils.readLines(futureFile, "utf-8");
     } catch (IOException e) {
       log.error("error while generating date generation", e);
