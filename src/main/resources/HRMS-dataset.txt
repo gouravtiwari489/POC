@@ -14,3 +14,4 @@ State-varchar state
 Country-varchar country
 PostalCode-int^number postal_code zip_code postalCode
 territory-varchar
+File_Name-varchar original_file_name duplicate_file_name
