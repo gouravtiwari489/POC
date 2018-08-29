@@ -17,7 +17,7 @@ spring:
   
 
 server:
-  context-path: /datagenerator
+  context-path: /poc
   port: 9080   
   
 security:

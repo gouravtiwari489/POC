@@ -1,7 +1,0 @@
-Amex
-Cash
-Debit Card
-Credit Card
-Net Banking
-Paytm
-Wallet

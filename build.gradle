@@ -33,7 +33,6 @@ compileJava.dependsOn 'googleJavaFormat'
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter')
-	//compile('org.springframework.boot:spring-boot-starter-data-mongodb')
 	compile('org.springframework.boot:spring-boot-starter-data-rest')
 	compileOnly('org.projectlombok:lombok')
 	testCompile('org.springframework.boot:spring-boot-starter-test')

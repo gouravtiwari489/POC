@@ -8,7 +8,7 @@ You can use [Postman](https://www.getpostman.com/) to test it.
 
 ### First you'll need to get the access_token
 
-1. Create a POST request for the address: http://localhost:9080/datagenerator/oauth/token
+1. Create a POST request for the address: http://localhost:9080/poc/oauth/token
 
 2. You have to pass Basic Auth too, this is the client credentials, not the user. 
 In this example the username is "client" and password "clientpassword" (without quotes).
@@ -45,7 +45,7 @@ When you hit the send button, you'll get something like that:
 
 Now you are able to call the API using the access token
 
-1. Create a GET request in Postman with the URL http://localhost:9080/datagenerator/extractor
+1. Create a GET request in Postman with the URL http://localhost:9080/poc/extractor
 
 2. Set the Authorization header with Bearer <token>
 
@@ -56,28 +56,6 @@ Value: Bearer bd999429-898b-4201-908e-40e846ec0105
 That's all! When you hit the Send button, you'll receive:
 
 ```json
-[
-  {
-    "customers": {
-        "customerNumber": "int(11)",
-        "customerName": "varchar(50)",
-        "contactLastName": "varchar(50)",
-        "contactFirstName": "varchar(50)",
-        "phone": "varchar(50)",
-        "addressLine1": "varchar(50)",
-        "addressLine2": "varchar(50)",
-        "city": "varchar(50)",
-        "state": "varchar(50)",
-        "postalCode": "varchar(15)",
-        "country": "varchar(50)",
-        "salesRepEmployeeNumber": "int(11)",
-        "creditLimit": "decimal(102)",
-        "PK": "customerNumber",
-        "FK1->salesRepEmployeeNumber": "employees(employeeNumber)"
-    }
-    .
-    .
-    .
-]
+
 ```
  
