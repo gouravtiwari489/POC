@@ -6,5 +6,5 @@ public interface IUserService {
 
   public User createUser(User user);
 
-  public User findByEmailId(String emailId);
+  public User findByUserName(String userName);
 }

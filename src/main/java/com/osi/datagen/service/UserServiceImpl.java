@@ -21,24 +21,29 @@ public class UserServiceImpl implements IUserService {
     return userRepository.save(buildUserEntity(user));
   }
 
-  public User findByEmailId(String emailId) {
+ /* public User findByEmailId(String emailId) {
     return userRepository.findByEmailId(emailId);
-  }
+  }*/
 
   private User buildUserEntity(User user) {
     Role roles = new Role();
-    roles.setName(USER);
+    roles.setUserRole(USER);
     List<Role> defaultRoles = new ArrayList<>();
     defaultRoles.add(roles);
     if (user.getUsername() == "" || null == user.getUsername()) {
       //user.setEmailId(user.getEmailId());
-      user.setUsername(user.getEmailId());
+      user.setUsername(user.getUsername());
     } else /* {
            	user.setUsername(user.getUsername());
-           }*/ user.setFullName(user.getFullName());
+           }*/ user.setUsername(user.getUsername());
     ;
     user.setPassword(user.getPassword());
-    user.setRoles(defaultRoles);
+    user.setRole(defaultRoles.get(0));
     return user;
   }
+
+@Override
+public User findByUserName(String userName) {
+	return userRepository.findByUsername(userName);
+}
 }

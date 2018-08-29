@@ -33,9 +33,9 @@ public class CustomUserDetails implements UserDetails {
     this.password = byUserName.getPassword();
 
     List<GrantedAuthority> auths = new ArrayList<>();
-    for (Role role : byUserName.getRoles()) {
-      auths.add(new SimpleGrantedAuthority(role.getName().toUpperCase()));
-    }
+    //for (Role role : byUserName.getRoles()) {
+      auths.add(new SimpleGrantedAuthority(byUserName.getRole().getUserRole().toUpperCase()));
+    //}
     this.authorities = auths;
   }
 

@@ -1,17 +1,41 @@
 package com.osi.datagen.domain;
 
-import lombok.Data;
-import org.springframework.data.mongodb.core.mapping.Document;
+import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-@Document
-@Data
-public class Role {
+@Entity
+@Table(name = "role")
+public class Role implements Serializable {
 
-  private String name;
+  private Integer roleId;
+  private String userRole;
 
   public Role() {}
 
-  public Role(String name) {
-    this.name = name;
+  public Role(String userRole, Integer roleId) {
+    this.userRole = userRole;
+    this.roleId = roleId;
+  }
+
+  @Id
+  @Column(name = "role_id")
+  public Integer getRoleId() {
+    return roleId;
+  }
+
+  public void setRoleId(Integer roleId) {
+    this.roleId = roleId;
+  }
+
+  @Column(name = "user_role")
+  public String getUserRole() {
+    return userRole;
+  }
+
+  public void setUserRole(String userRole) {
+    this.userRole = userRole;
   }
 }

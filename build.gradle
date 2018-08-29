@@ -33,7 +33,7 @@ compileJava.dependsOn 'googleJavaFormat'
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter')
-	compile('org.springframework.boot:spring-boot-starter-data-mongodb')
+	//compile('org.springframework.boot:spring-boot-starter-data-mongodb')
 	compile('org.springframework.boot:spring-boot-starter-data-rest')
 	compileOnly('org.projectlombok:lombok')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
@@ -52,6 +52,8 @@ dependencies {
 	compile group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: '2.2.1.RELEASE'
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-oauth2', version: '1.2.2.RELEASE'
     compile group: 'eu.bitwalker', name: 'UserAgentUtils', version: '1.21'
+    compile('org.springframework.boot:spring-boot-starter-data-jpa')
+    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.11'
 }
 
 

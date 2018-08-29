@@ -18,10 +18,10 @@ public class UserController {
 
   @PostMapping("/users")
   public ResponseEntity<?> createUser(@RequestBody User user) {
-    User userEmailIDExists = userService.findByEmailId(user.getEmailId());
-    if (userEmailIDExists != null) {
-      System.out.println("A emailId with " + user.getEmailId() + " already exist");
-      return new ResponseEntity<>((user.getEmailId() + " already exist"), HttpStatus.CONFLICT);
+    User usernameExists = userService.findByUserName(user.getUsername());
+    if (usernameExists != null) {
+      System.out.println("A emailId with " + user.getUsername() + " already exist");
+      return new ResponseEntity<>((user.getUsername() + " already exist"), HttpStatus.CONFLICT);
     }
     User userInfo = userService.createUser(user);
     log.info(userInfo.getUsername() + " user created successfully");

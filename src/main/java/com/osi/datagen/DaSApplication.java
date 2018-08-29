@@ -35,8 +35,8 @@ public class DaSApplication {
       repo.save(
           new User(
               DasConstants.DEFAULT_USER,
-              DasConstants.DEFAULT_PASSWORD,
-              Arrays.asList(new Role("USER"), new Role("ACTUATOR"))));
+              DasConstants.DEFAULT_PASSWORD/*,
+              Arrays.asList(new Role("USER"), new Role("ACTUATOR"))*/));
     }
 
     File outputFolder = new File(fileDownloadPath);

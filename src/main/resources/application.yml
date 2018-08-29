@@ -4,16 +4,17 @@ match:
 spring:
   application:
     name: data-generator
-  data:
-    mongodb:
-      repositories:
-        enabled: true
-      database: datagenerator
-      host: localhost
-      port: 27017
-  config:
-    name: application,dbconfig
-    location: classpath:/dbconfig/,classpath:/ 
+  datasource: 
+    url:    jdbc:mysql://localhost:3306/test
+    username: root
+    password: Epam123$$
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties: 
+      hibernate: 
+        dialect: org.hibernate.dialect.MySQL5Dialect
+  
 
 server:
   context-path: /datagenerator
