@@ -4,7 +4,6 @@ import com.poc.gourav.domain.Role;
 import com.poc.gourav.domain.User;
 import com.poc.gourav.intf.IUserService;
 import com.poc.gourav.repository.UserRepository;
-
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,7 @@ public class UserServiceImpl implements IUserService {
     return userRepository.save(buildUserEntity(user));
   }
 
- /* public User findByEmailId(String emailId) {
+  /* public User findByEmailId(String emailId) {
     return userRepository.findByEmailId(emailId);
   }*/
 
@@ -43,8 +42,8 @@ public class UserServiceImpl implements IUserService {
     return user;
   }
 
-@Override
-public User findByUserName(String userName) {
-	return userRepository.findByUsername(userName);
-}
+  @Override
+  public User findByUserName(String userName) {
+    return userRepository.findByUsername(userName);
+  }
 }

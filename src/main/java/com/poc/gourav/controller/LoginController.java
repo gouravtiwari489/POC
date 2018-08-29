@@ -5,7 +5,6 @@ import com.poc.gourav.domain.CustomUserDetails;
 import com.poc.gourav.domain.User;
 import com.poc.gourav.exception.AlreadyLoggedInException;
 import com.poc.gourav.service.LogoutService;
-
 import java.io.File;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;

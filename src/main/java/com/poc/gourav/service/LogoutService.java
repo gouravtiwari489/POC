@@ -1,11 +1,9 @@
 package com.poc.gourav.service;
 
 import java.io.File;
-import java.util.List;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import com.poc.gourav.domain.CustomUserDetails;
 
 @Slf4j
 @Service

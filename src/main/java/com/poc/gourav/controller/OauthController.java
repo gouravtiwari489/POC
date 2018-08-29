@@ -3,7 +3,6 @@ package com.poc.gourav.controller;
 import com.poc.gourav.configuration.CustomInMemoryTokenStore;
 import com.poc.gourav.constant.PocConstants;
 import com.poc.gourav.service.LogoutService;
-
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

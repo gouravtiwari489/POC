@@ -24,7 +24,6 @@ public class CustomUserDetails implements UserDetails {
 
   Collection<? extends GrantedAuthority> authorities;
 
-
   private Map<String, Integer> map;
 
   public CustomUserDetails(User byUserName) {
@@ -33,7 +32,7 @@ public class CustomUserDetails implements UserDetails {
 
     List<GrantedAuthority> auths = new ArrayList<>();
     //for (Role role : byUserName.getRoles()) {
-      auths.add(new SimpleGrantedAuthority(byUserName.getRole().getUserRole().toUpperCase()));
+    auths.add(new SimpleGrantedAuthority(byUserName.getRole().getUserRole().toUpperCase()));
     //}
     this.authorities = auths;
   }

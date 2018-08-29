@@ -32,7 +32,7 @@ public class SwaggerConfig {
 
   private String clientId = "client";
   private String clientSecret = "clientpassword";
-  private String authLink = "http://localhost:9080/datagenerator/";
+  private String authLink = "http://localhost:9080/poc/";
 
   @Bean
   public Docket api() {
@@ -59,7 +59,7 @@ public class SwaggerConfig {
 
     return new Docket(DocumentationType.SWAGGER_2)
         .select()
-        .apis(RequestHandlerSelectors.basePackage("com.datagenerator.demo.controller"))
+        .apis(RequestHandlerSelectors.basePackage("com.poc.gourav.controller"))
         .paths(PathSelectors.any())
         .build()
         .securitySchemes(Collections.singletonList(securitySchema()))
@@ -88,7 +88,7 @@ public class SwaggerConfig {
   private SecurityContext securityContext() {
     return SecurityContext.builder()
         .securityReferences(defaultAuth())
-        .forPaths(PathSelectors.ant("/datagenerator/**"))
+        .forPaths(PathSelectors.ant("/poc/**"))
         .build();
   }
 
@@ -109,12 +109,12 @@ public class SwaggerConfig {
 
   private ApiInfo apiInfo() {
     return new ApiInfoBuilder()
-        .title("Data Generator")
+        .title("POC")
         .description("")
-        .termsOfServiceUrl("http://localhost:9080/datagenerator")
+        .termsOfServiceUrl("http://localhost:9080/poc")
         .contact(
             new Contact(
-                "Data generator", "http://localhost:9080/datagenerator", "ositechportal@gmail.com"))
+                "POC", "http://localhost:9080/poc", "poc@gmail.com"))
         .license("Open Source")
         .licenseUrl("https://www.example.com")
         .version("1.0.0")

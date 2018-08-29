@@ -2,12 +2,11 @@ package com.poc.gourav;
 
 import com.poc.gourav.constant.PocConstants;
 import com.poc.gourav.domain.CustomUserDetails;
-import com.poc.gourav.domain.Role;
+
 import com.poc.gourav.domain.User;
 import com.poc.gourav.repository.UserRepository;
-
 import java.io.File;
-import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -33,10 +32,7 @@ public class PocApplication {
   public void authenticationManager(AuthenticationManagerBuilder builder, UserRepository repo)
       throws Exception {
     if (repo.count() == 0) {
-      repo.save(
-          new User(
-              PocConstants.DEFAULT_USER,
-              PocConstants.DEFAULT_PASSWORD/*,
+      repo.save(new User(PocConstants.DEFAULT_USER, PocConstants.DEFAULT_PASSWORD /*,
               Arrays.asList(new Role("USER"), new Role("ACTUATOR"))*/));
     }
 

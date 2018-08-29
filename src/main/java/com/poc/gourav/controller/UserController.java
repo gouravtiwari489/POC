@@ -2,7 +2,6 @@ package com.poc.gourav.controller;
 
 import com.poc.gourav.domain.User;
 import com.poc.gourav.intf.IUserService;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

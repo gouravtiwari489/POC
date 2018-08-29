@@ -6,10 +6,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TestController {
 
-	 @GetMapping("/hello")
-	  public String getPOC() throws Exception {
-		 
-		 return "Hello";
-	 }
+  @GetMapping("/hello")
+  public String getPOC() throws Exception {
 
+    return "Hello";
+  }
 }
